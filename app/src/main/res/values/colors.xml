@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#b70101</color>
+    <color name="StatusBarColor">#ffffff</color>
+    <color name="colorAccent">#b70101</color>
+    <color name="colorAccentRed">#b70101</color>
+
+    <color name="default_grey">#c9c9c9</color>
+    <color name="colorRed">#b70101</color>
+    <color name="colorWhite">#fff</color>
+
+    <color name="colorGreen">#46de00</color>
+
+    <color name="colorBlack">#000000</color>
+
+
+</resources>

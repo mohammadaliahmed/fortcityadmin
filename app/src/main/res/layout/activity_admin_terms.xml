@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Terms">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Terms of offer and Conditions"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Job title"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Working schedule"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Employment Relationship"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cash Compensation"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Salary"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tax withholding EPF / ETF"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tax advice EPF/ ETF"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Bonus (or commission) potential"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Employee benefits"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Privacy and Confidentiality Agreements"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Conflict of Interest policy"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Termination Conditions"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Interpretation, Amendment and Enforcement"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cookies"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="License"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Hyperlinking to our Content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="iFrames"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Content Liability"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Reservation of Rights"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Removal of links from our Application"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Disclaimer"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/e24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Other"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textSize="12sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/update"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:background="@drawable/btn_bg_red"
+            android:text="Update"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+</ScrollView>

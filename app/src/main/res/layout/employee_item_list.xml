@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="#fff">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_profile_placeholder" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp"
+        android:text="Name: "
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginLeft="70dp"
+        android:lines="2"
+        android:text="Phone: "
+        android:textSize="12sp" />
+
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phone"
+        android:layout_margin="5dp"
+        android:text="Address: "
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/phone_dial"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/phone"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:src="@drawable/ic_phone_dial" />
+
+    <ImageView
+        android:id="@+id/whatsapp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/phone"
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:src="@drawable/ic_whatsapp" />
+    <Switch
+        android:id="@+id/switchh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="Inactive/Active " />
+    <CheckBox
+        android:text="Approve"
+        android:layoutDirection="rtl"
+        android:layout_margin="10dp"
+        android:id="@+id/approve"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="#cfcfcf"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+</RelativeLayout>

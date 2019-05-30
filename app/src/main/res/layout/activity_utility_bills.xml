@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/electricCityBill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Electricity bill"
+                android:inputType="number"
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/waterBill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Water Bill"
+                android:inputType="number"
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/internetBill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:hint="Internet Bill"
+                android:inputType="number"
+
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/staffInternetBill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:hint="Staff Internet Bill"
+                android:inputType="number"
+
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/officeTelephoneBill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:hint="Office Telephone Bill"
+                android:inputType="number"
+
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/staffMobileBill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:hint="Staff Mobile Bill"
+                android:inputType="number"
+
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/governmentTax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:hint="Government Tax"
+                android:inputType="number"
+
+                android:textSize="14sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorRed"
+        android:text="Save"
+        android:textColor="@color/colorWhite" />
+</RelativeLayout>

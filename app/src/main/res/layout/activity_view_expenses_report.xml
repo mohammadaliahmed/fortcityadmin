@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
+
+        <RelativeLayout
+            android:id="@+id/ll_linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:padding="5dp">
+
+            <include
+                android:id="@+id/expenses"
+                layout="@layout/expenses_item_layout" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/expenses"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Salaries"
+                android:textColor="@color/colorRed" />
+
+            <TextView
+                android:id="@+id/totalSalaries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/expenses"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Rs 0"
+                android:textColor="@color/colorRed" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/totalSalaries"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/default_grey" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/salariesRecycler"
+                android:layout_width="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/totalSalaries"
+                android:layout_marginTop="5dp"
+                android:visibility="visible"></android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/salariesRecycler"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Transportation"
+                android:textColor="@color/colorRed" />
+
+            <TextView
+                android:id="@+id/transportationTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/salariesRecycler"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:text="Rs 0"
+                android:textColor="@color/colorRed" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/salariesRecycler"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/default_grey" />
+
+            <GridLayout
+                android:id="@+id/grid1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view4"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/textView2"
+                android:layout_toRightOf="@+id/textView2"
+                android:columnCount="2"
+                android:rowCount="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="right"
+                    android:text="Office Transportation\nStaff Transportation\nOffice Fuel\nStaff Fuel\nShipping\nDelivery"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/transportation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Rent"
+                android:textColor="@color/colorRed" />
+
+            <TextView
+                android:id="@+id/rentTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid1"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:text="Rs 0"
+                android:textColor="@color/colorRed" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/grid1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/default_grey" />
+
+            <GridLayout
+                android:id="@+id/grid2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view5"
+                android:layout_alignEnd="@+id/grid1"
+                android:layout_alignRight="@+id/grid1"
+                android:layout_marginTop="10dp"
+                android:columnCount="2"
+                android:rowCount="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="Office Rent\nRent A Car/Lorry/Van"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/rent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Utility Bills"
+                android:textColor="@color/colorRed" />
+
+            <TextView
+                android:id="@+id/billsTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid2"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:text="Rs 0"
+                android:textColor="@color/colorRed" />
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/grid2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/default_grey" />
+
+            <GridLayout
+                android:id="@+id/grid3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view6"
+                android:layout_alignEnd="@+id/grid1"
+                android:layout_alignRight="@+id/grid1"
+                android:columnCount="2"
+                android:rowCount="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:text="Electrcity Bill\nWater Bill\nInternet Bill\nStaff Internet bill\nOffice telefone bill\nStaff mobile bill\nGovernment tax"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/bills"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Stationaries"
+                android:textColor="@color/colorRed" />
+
+            <TextView
+                android:id="@+id/stationariesTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid3"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:text="Rs 0"
+                android:textColor="@color/colorRed" />
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/grid3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/default_grey" />
+
+            <GridLayout
+                android:id="@+id/grid4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view7"
+                android:layout_alignEnd="@+id/grid1"
+                android:layout_alignRight="@+id/grid1"
+                android:layout_marginTop="10dp"
+                android:columnCount="2"
+                android:rowCount="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="Office Stationaries\nStaff Stationaries\nAdvertising/Brochures\nBill Books Print\nPacking Material\nBusiness Card print"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/stationaries"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid4"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Miscellaneous"
+                android:textColor="@color/colorRed" />
+
+            <TextView
+                android:id="@+id/miscellaneousTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid4"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:text="Rs 0"
+                android:textColor="@color/colorRed" />
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/grid4"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/default_grey" />
+
+            <GridLayout
+                android:id="@+id/grid5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view8"
+                android:layout_alignEnd="@+id/grid1"
+                android:layout_alignRight="@+id/grid1"
+                android:layout_marginTop="10dp"
+                android:columnCount="2"
+                android:rowCount="1">
+
+
+                <TextView
+                    android:id="@+id/remarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="right"
+                    android:text="Remarks"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:id="@+id/miscellaneous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+            <View
+                android:layout_width="130dp"
+                android:layout_height="1dp"
+
+                android:layout_below="@id/grid5"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/colorBlack" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid5"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="55dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="50dp"
+                android:text="Checked &amp; Approved"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/shopAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/grid5"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Checked &amp; Approved"
+                android:textSize="10sp" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

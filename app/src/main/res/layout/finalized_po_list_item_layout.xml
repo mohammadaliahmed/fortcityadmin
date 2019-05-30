@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="10dp"
+    android:elevation="1dp"
+    app:cardCornerRadius="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/date"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="#aaa" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="13 purchases"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/which"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:text="13 purchases"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="Janurary"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/purchase"
+            android:layout_alignBottom="@+id/purchase"
+            android:layout_alignLeft="@+id/count"
+            android:layout_alignStart="@+id/count"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:text="13 purchases" />
+
+        <TextView
+            android:id="@+id/purchase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/view2"
+            android:layout_marginBottom="12dp"
+            android:layout_toEndOf="@+id/date"
+            android:layout_toRightOf="@+id/date"
+            android:text="13 purchases" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

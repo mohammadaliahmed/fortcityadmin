@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/promoCode"
+                android:textSize="13sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Promo code"
+                android:inputType="textCapSentences|textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/easyCheckout"
+                android:textSize="13sp"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Easy checkout"
+                android:inputType="textCapSentences|textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/cashOnDelivery"
+                android:layout_width="match_parent"
+                android:textSize="13sp"
+
+                android:layout_height="wrap_content"
+                android:hint="Cash on delivery"
+                android:inputType="textCapSentences|textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/onlinePayments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+
+                android:hint="Online payments"
+                android:inputType="textCapSentences|textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/paypalOptions"
+                android:layout_width="match_parent"
+                android:textSize="13sp"
+
+                android:layout_height="wrap_content"
+                android:hint="PayPal options"
+                android:inputType="textCapSentences|textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+
+            android:id="@+id/update"
+            android:layout_width="200dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@drawable/btn_bg_red"
+            android:inputType="text"
+            android:text="Update"
+            android:textColor="#fff" />
+    </LinearLayout>
+</ScrollView>

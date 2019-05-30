@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/user"
+            android:title="Home" />
+        <item
+            android:id="@+id/salarySheets"
+            android:icon="@drawable/ic_dollar"
+            android:title="Salary sheets" />
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/user"
+            android:title="Account Management" />
+        <item
+            android:id="@+id/openSlider"
+            android:icon="@drawable/ic_slider"
+            android:title="Open Slider" />
+    </group>
+
+    <item android:title="Help and support">
+        <menu>
+            <item
+                android:id="@+id/contactUs"
+                android:icon="@drawable/phone_call"
+                android:title="Contact Us" />
+            <item
+                android:id="@+id/aboutUs"
+                android:icon="@drawable/ic_about"
+                android:title="About Us" />
+
+            <item
+                android:id="@+id/terms"
+                android:icon="@drawable/ic_terms"
+                android:title="Terms &amp; Condition" />
+            <item
+                android:id="@+id/signout"
+                android:icon="@drawable/power"
+                android:title="Sign Out" />
+        </menu>
+    </item>
+
+</menu>
