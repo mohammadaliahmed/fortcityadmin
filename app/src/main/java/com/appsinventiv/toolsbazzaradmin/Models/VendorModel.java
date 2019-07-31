@@ -5,8 +5,10 @@ package com.appsinventiv.toolsbazzaradmin.Models;
  */
 
 public class VendorModel {
-    String vendorId, vendorName, vendorPhone, vendorAddress, vendorEmail, isActive;
+    String vendorId, vendorName, vendorPhone, vendorAddress, vendorEmail;
     long time;
+    String picUrl;
+    boolean active;
 
 
     String username, email, password, phone, telNumber, address, city, country, fcmKey;
@@ -21,7 +23,7 @@ public class VendorModel {
     public VendorModel(String vendorId, String vendorName, String vendorPhone,
                        String vendorAddress, long time,
                        String vendorEmail,
-                       String isActive
+                       boolean active
     ) {
         this.vendorId = vendorId;
         this.vendorName = vendorName;
@@ -29,7 +31,23 @@ public class VendorModel {
         this.vendorAddress = vendorAddress;
         this.time = time;
         this.vendorEmail = vendorEmail;
-        this.isActive = isActive;
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
     public String getUsername() {
@@ -163,13 +181,6 @@ public class VendorModel {
     public VendorModel() {
     }
 
-    public String getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
-    }
 
     public String getVendorEmail() {
         return vendorEmail;

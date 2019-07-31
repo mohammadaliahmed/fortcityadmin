@@ -14,6 +14,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.appsinventiv.toolsbazzaradmin.Adapters.OrdersAdapter;
@@ -46,15 +47,18 @@ public class OrdersFragment extends Fragment {
     DatabaseReference mDatabase;
     String by;
     private SwipeToDeleteCallback swipeController;
+    String storeUsername;
 
+    ImageView noOrder;
 
     public OrdersFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public OrdersFragment(String orderStatus, String by) {
+    public OrdersFragment(String orderStatus, String by, String storeUsername) {
         this.orderStatus = orderStatus;
+        this.storeUsername = storeUsername;
         this.by = by;
 
     }
@@ -78,6 +82,7 @@ public class OrdersFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_orders, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_orders);
         progress = rootView.findViewById(R.id.progress);
+        noOrder = rootView.findViewById(R.id.noOrder);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new OrdersAdapter(context, arrayList, new OrdersAdapter.UpdateOrderStatus() {
@@ -135,7 +140,8 @@ public class OrdersFragment extends Fragment {
                 "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mDatabase.child("Orders").child(orderId).child("orderStatus").setValue("Cancelled").addOnSuccessListener(new OnSuccessListener<Void>() {
+                        mDatabase.child("Orders").child(orderId).child("orderStatus")
+                                .setValue("Cancelled").addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 CommonUtils.showToast("Order status updated");
@@ -231,6 +237,7 @@ public class OrdersFragment extends Fragment {
                 "No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        adapter.cancelledPressed();
                         dialog.cancel();
                     }
                 });
@@ -256,13 +263,57 @@ public class OrdersFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         OrderModel model = snapshot.getValue(OrderModel.class);
                         if (model != null) {
-                            if (model.getOrderStatus().equalsIgnoreCase(orderStatus)) {
-                                if (model.getOrderFor() == null) {
-                                    arrayList.add(model);
+                            if (!model.getOrderStatus().equalsIgnoreCase("")) {
+                                if (storeUsername != null && !storeUsername.equalsIgnoreCase("")) {
+                                    if (!storeUsername.equalsIgnoreCase("Fort City")) {
+                                        if (model.getOrderStatus().equalsIgnoreCase(orderStatus)) {
+                                            if (model.getOrderFor() != null) {
+                                                if (model.getOrderFor().equalsIgnoreCase("seller")) {
+                                                    if (model.getVendor() != null) {
+                                                        if (model.getVendor().getUsername().equalsIgnoreCase(storeUsername)) {
+                                                            arrayList.add(model);
+                                                        }
+                                                    }
+                                                    if (arrayList.size() < 1) {
+                                                        noOrder.setVisibility(View.VISIBLE);
+                                                    }else{
+                                                        noOrder.setVisibility(View.GONE);
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (arrayList.size() < 1) {
+                                            noOrder.setVisibility(View.VISIBLE);
+                                        }else{
+                                            noOrder.setVisibility(View.GONE);
+
+                                        }
+                                    } else if (storeUsername.equalsIgnoreCase("Fort City")) {
+                                        if (model.getOrderFor() != null) {
+                                            if (model.getOrderFor().equalsIgnoreCase("admin")) {
+                                                if (model.getOrderStatus().equalsIgnoreCase(orderStatus)) {
+                                                    arrayList.add(model);
+                                                }
+                                            }
+                                            if (arrayList.size() < 1) {
+                                                noOrder.setVisibility(View.VISIBLE);
+                                            }else{
+                                                noOrder.setVisibility(View.GONE);
+
+                                            }
+                                        }
+                                    }
+                                    if (arrayList.size() < 1) {
+                                        noOrder.setVisibility(View.VISIBLE);
+                                    }else{
+                                        noOrder.setVisibility(View.GONE);
+
+                                    }
                                 }
-                                if (model.getOrderFor() != null && model.getOrderFor().equalsIgnoreCase("admin")) {
-                                    arrayList.add(model);
-                                }
+//                                if (model.getOrderFor() != null && model.getOrderFor().equalsIgnoreCase("admin")) {
+//                                    arrayList.add(model);
+//                                }
 
 
                             } else {
@@ -272,6 +323,13 @@ public class OrdersFragment extends Fragment {
                             }
                         }
                     }
+                    if (arrayList.size() < 1) {
+                        noOrder.setVisibility(View.VISIBLE);
+                    }else{
+                        noOrder.setVisibility(View.GONE);
+
+                    }
+
                     Collections.sort(arrayList, new Comparator<OrderModel>() {
                         @Override
                         public int compare(OrderModel listData, OrderModel t1) {

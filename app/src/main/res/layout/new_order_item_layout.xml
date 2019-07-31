@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#fff"
+    android:layout_height="80dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="60dp"
+        android:id="@+id/image"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:src="@drawable/admin_logo" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="80dp"
+        android:background="#b9b9b9" />
+
+    <TextView
+
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:text="Fort City"
+        android:textColor="#000" />
+
+    <TextView
+
+        android:id="@+id/sellerStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+
+        android:layout_marginTop="40dp"
+        android:text=""
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:textSize="11sp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/badge_green"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="#fff" />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/count"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="10dp"
+        android:text="Orders"
+        android:textSize="11sp" />
+</RelativeLayout>

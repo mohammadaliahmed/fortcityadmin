@@ -32,6 +32,7 @@ import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
+import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToRejectCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -55,7 +56,7 @@ public class VendorProductsListFragment extends Fragment {
     private ArrayList<Product> productList = new ArrayList<>();
     TabCountCallbacks callbacks;
     int pendingProductsCount = 0;
-    private SwipeToDeleteCallback swipeController;
+    private SwipeToRejectCallback swipeController;
 
     public VendorProductsListFragment() {
         // Required empty public constructor
@@ -137,7 +138,7 @@ public class VendorProductsListFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
-        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
+        swipeController = new SwipeToRejectCallback(new SwipeControllerActions() {
             @Override
             public void onRightClicked(final int position) {
                 rejectProduct(productList.get(position).getId());

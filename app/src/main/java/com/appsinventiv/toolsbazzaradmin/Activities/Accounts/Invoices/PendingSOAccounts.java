@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.TransferToAccountsDone;
 import com.appsinventiv.toolsbazzaradmin.Adapters.InvoiceListAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.InvoiceModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +40,7 @@ public class PendingSOAccounts extends Fragment {
     DatabaseReference mDatabase;
     ArrayList<InvoicesSelected> invoicesSelectedList = new ArrayList<>();
     Button finalized;
+    TextView companyName;
 
     public PendingSOAccounts() {
         // Required empty public constructor
@@ -60,6 +63,8 @@ public class PendingSOAccounts extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_pending_po_accounts, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
         finalized = rootView.findViewById(R.id.finalized);
+        companyName = rootView.findViewById(R.id.companyName);
+        companyName.setText(Constants.STORE_NAME + " SO");
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new InvoiceListAdapter(context, itemList, 1, "pending", new InvoiceListAdapter.SelectInvoices() {
@@ -196,8 +201,26 @@ public class PendingSOAccounts extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         InvoiceModel model = snapshot.getValue(InvoiceModel.class);
                         if (model != null) {
-//                            if (model.getInvoiceStatus().equalsIgnoreCase("pendingSO")) {
-                            itemList.add(model);
+
+
+                            if (model.getDeliveryBy().equalsIgnoreCase("")) {
+                                if (model.getOrder().getVendor().getStoreName().equalsIgnoreCase(Constants.STORE_NAME)) {
+                                    itemList.add(model);
+
+                                }
+                            }else{
+                                if(Constants.STORE_NAME.equalsIgnoreCase("Fort City")){
+                                    itemList.add(model);
+                                }
+                            }
+//                            else if (Constants.STORE_NAME.equalsIgnoreCase("Fort City")) {
+//                                if (!model.getDeliveryBy().equalsIgnoreCase("")) {
+//                                    itemList.add(model);
+//
+//                                }
+//                            }
+//                            if (model.getDeliveryBy().eq.equalsIgnoreCase("pendingSO")) {
+//                                itemList.add(model);
 //                            }
 
 //                            progress.setVisibility(View.GONE);

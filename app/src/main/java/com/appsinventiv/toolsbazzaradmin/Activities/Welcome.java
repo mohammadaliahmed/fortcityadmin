@@ -71,13 +71,17 @@ public class Welcome extends AppCompatActivity {
 
         layouts = new int[]{
                 R.layout.welcome_slide1,
+                R.layout.welcome_slide2,
+                R.layout.welcome_slide3
 
         };
 
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         dotsIndicator.setViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(10);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +130,11 @@ public class Welcome extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
             pageNumber = position;
+            if(pageNumber>0){
+                btnBack.setVisibility(View.VISIBLE);
+            }else{
+                btnBack.setVisibility(View.GONE);
+            }
 
         }
 
@@ -154,6 +163,7 @@ public class Welcome extends AppCompatActivity {
 
             View view = layoutInflater.inflate(layouts[position], container, false);
             container.addView(view);
+
             return view;
         }
 

@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage.Banners;
+import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ShippingCarriers.ListOfShippingCarriers;
 import com.appsinventiv.toolsbazzaradmin.Activities.Locations.ListOfCountries;
 import com.appsinventiv.toolsbazzaradmin.R;
 
 public class Settings extends AppCompatActivity {
-    RelativeLayout aboutUs, terms, banner, deliveryCharges, company, cod, commissions, languages, fort_features;
+    RelativeLayout aboutUs, terms, banner, deliveryCharges, company, cod, commissions, languages, fort_features, shippingCarrier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class Settings extends AppCompatActivity {
         }
 
         aboutUs = findViewById(R.id.aboutUs);
+        shippingCarrier = findViewById(R.id.shippingCarrier);
         banner = findViewById(R.id.banner);
         terms = findViewById(R.id.terms);
         company = findViewById(R.id.company);
@@ -35,6 +38,13 @@ public class Settings extends AppCompatActivity {
         cod = findViewById(R.id.cod);
         languages = findViewById(R.id.languages);
 
+        shippingCarrier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Settings.this, ListOfShippingCarriers.class);
+                startActivity(i);
+            }
+        });
         languages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

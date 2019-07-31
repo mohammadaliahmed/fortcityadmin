@@ -46,7 +46,8 @@ public class Vendors extends AppCompatActivity {
         setContentView(R.layout.activity_vendors);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Vendors");
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -56,25 +57,13 @@ public class Vendors extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new VendorsListAdapter(this, vendorModelArrayList, new VendorsListAdapter.DeleteVendor() {
-            @Override
-            public void onDelete(final VendorModel model) {
-              deleteVendor(model);
-            }
-
+        adapter = new VendorsListAdapter(this, vendorModelArrayList, new VendorsListAdapter.VendorListCallBacks() {
             @Override
             public void onChangeStatus(VendorModel model, boolean abc) {
-                String status;
-                if (abc) {
-                    status = "yes";
-                } else {
-                    status = "no";
-                }
-                mDatabase.child("Vendors").child(model.getVendorId()).child("isActive").setValue(status).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("Vendors").child(model.getVendorId()).child("active").setValue(abc).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Vendor status changed");
-                        adapter.notifyDataSetChanged();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -84,6 +73,34 @@ public class Vendors extends AppCompatActivity {
                 });
             }
         });
+//        adapter = new VendorsListAdapter(this, vendorModelArrayList, new VendorsListAdapter.DeleteVendor() {
+//            @Override
+//            public void onDelete(final VendorModel model) {
+//              deleteVendor(model);
+//            }
+//
+//            @Override
+//            public void onChangeStatus(VendorModel model, boolean abc) {
+//                String status;
+//                if (abc) {
+//                    status = "yes";
+//                } else {
+//                    status = "no";
+//                }
+//                mDatabase.child("Vendors").child(model.getVendorId()).child("isActive").setValue(status).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        CommonUtils.showToast("Vendor status changed");
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        CommonUtils.showToast(e.getMessage());
+//                    }
+//                });
+//            }
+//        });
         recyclerView.setAdapter(adapter);
         swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
             @Override

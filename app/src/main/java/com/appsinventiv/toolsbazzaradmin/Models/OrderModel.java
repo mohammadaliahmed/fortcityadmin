@@ -15,15 +15,15 @@ public class OrderModel {
     String instructions;
     String date,chosenTime;
     String orderStatus;
-    boolean isInvoiced;
     long invoiceNumber;
-
+    boolean invoiced;
     String trackingNumber;
     String carrier;
     float shippingCharges,deliveryCharges;
     String deliveryBy,receiverName,receiverNameCredit,creditDueDate;
     String orderFor;
 
+    VendorModel vendor;
 
 
 
@@ -31,7 +31,7 @@ public class OrderModel {
     public OrderModel() {
     }
 
-    public OrderModel(String orderId, long time, Customer customer, ArrayList<ProductCountModel> countModelArrayList, float totalPrice, String instructions, String date, String chosenTime, String orderStatus, boolean isInvoiced, long invoiceNumber) {
+    public OrderModel(String orderId, long time, Customer customer, ArrayList<ProductCountModel> countModelArrayList, float totalPrice, String instructions, String date, String chosenTime, String orderStatus, boolean invoiced, long invoiceNumber) {
         this.orderId = orderId;
         this.time = time;
         this.customer = customer;
@@ -41,8 +41,18 @@ public class OrderModel {
         this.date = date;
         this.chosenTime = chosenTime;
         this.orderStatus = orderStatus;
-        this.isInvoiced = isInvoiced;
+        this.invoiced = invoiced;
         this.invoiceNumber = invoiceNumber;
+    }
+
+
+
+    public VendorModel getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(VendorModel vendor) {
+        this.vendor = vendor;
     }
 
     public String getOrderFor() {
@@ -118,11 +128,11 @@ public class OrderModel {
     }
 
     public boolean isInvoiced() {
-        return isInvoiced;
+        return invoiced;
     }
 
     public void setInvoiced(boolean invoiced) {
-        isInvoiced = invoiced;
+        this.invoiced = invoiced;
     }
 
     public long getInvoiceNumber() {

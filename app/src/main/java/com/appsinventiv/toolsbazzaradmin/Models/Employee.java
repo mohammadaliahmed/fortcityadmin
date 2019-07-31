@@ -5,7 +5,7 @@ package com.appsinventiv.toolsbazzaradmin.Models;
  */
 
 public class Employee {
-    String username, name, email, password, phone, fcmKey;
+    String username, name, email, password, phone, fcmKey,picUrl;
     int role;
     long time;
     int code;
@@ -30,6 +30,14 @@ public class Employee {
         this.active = active;
         this.approved=approved;
 
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
     public boolean isApproved() {

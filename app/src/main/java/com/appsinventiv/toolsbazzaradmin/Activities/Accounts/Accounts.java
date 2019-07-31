@@ -19,6 +19,7 @@ public class Accounts extends AppCompatActivity implements WhichKey{
     ArrayList<String> accountsList = new ArrayList<>();
     int id;
     Menu menu;
+    int page;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,7 @@ public class Accounts extends AppCompatActivity implements WhichKey{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
         }
+        page=getIntent().getIntExtra("page",0);
         this.setTitle("Accounts");
         ViewPager viewPager = findViewById(R.id.viewpager);
         accountsList.add("Pending PO");
@@ -39,6 +41,7 @@ public class Accounts extends AppCompatActivity implements WhichKey{
         viewPager.setAdapter(adapter);
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        viewPager.setCurrentItem(page);
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorRed));
@@ -46,8 +49,7 @@ public class Accounts extends AppCompatActivity implements WhichKey{
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(Accounts.this, MainActivity.class);
-        startActivity(i);
+
         finish();
     }
 
@@ -68,8 +70,10 @@ public class Accounts extends AppCompatActivity implements WhichKey{
 
     @Override
     public void which(String key) {
-        MenuItem menuItem = menu.findItem(R.id.which);
-        menuItem.setTitle(key);
+        if(menu!=null) {
+            MenuItem menuItem = menu.findItem(R.id.which);
+            menuItem.setTitle(key);
+        }
 
     }
     @Override

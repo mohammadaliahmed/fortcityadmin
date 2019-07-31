@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannerSettings">
+    tools:context="com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage.BannerSettings">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"

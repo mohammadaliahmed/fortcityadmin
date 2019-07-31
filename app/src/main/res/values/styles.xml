@@ -23,6 +23,11 @@
 
     </style>
 
+
+    <style name="WhiteText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#fff</item>
+    </style>
+
     <style name="AppThemeRed.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -173,9 +173,11 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
                     message.setText(null);
                     final String key = mDatabase.push().getKey();
                     mDatabase.child("Chats/ClientChats").child(username).child(key)
-                            .setValue(new ChatModel(key, msg, SharedPrefs.getUsername()
+                            .setValue(new ChatModel(key, msg,"admin" //TODO
                                     , System.currentTimeMillis(), "sending", username,
-                                    customer.getName(), "")).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    customer.getName(), "",
+                                    SharedPrefs.getEmployee().getName()
+                            )).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
 

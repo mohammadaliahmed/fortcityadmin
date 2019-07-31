@@ -33,7 +33,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
 
-        return new OrdersFragment(arrayList.get(position), by);
+        return new OrdersFragment(arrayList.get(position), by,"");
 
 
     }

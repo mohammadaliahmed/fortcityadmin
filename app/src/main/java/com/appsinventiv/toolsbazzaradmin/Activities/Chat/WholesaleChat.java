@@ -173,9 +173,10 @@ public class WholesaleChat extends AppCompatActivity implements NotificationObse
                     message.setText(null);
                     final String key = mDatabase.push().getKey();
                     mDatabase.child("Chats/WholesaleChats").child(username).child(key)
-                            .setValue(new ChatModel(key, msg, SharedPrefs.getUsername()
+                            .setValue(new ChatModel(key, msg, "admin" //TODO
                                     , System.currentTimeMillis(), "sending", username,
-                                    customer.getName(),""
+                                    customer.getName(),"",
+                                    SharedPrefs.getEmployee().getName()
                             )).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

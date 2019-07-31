@@ -70,7 +70,7 @@ public class VendorProductsAdapter extends RecyclerView.Adapter<VendorProductsAd
             }
         }
         if(model.getVendor()!=null) {
-            holder.vendorName.setText("Vendor: " + model.getVendor().getVendorName());
+            holder.vendorName.setText("Vendor: " + model.getVendor().getStoreName());
         }
 
         holder.switchh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

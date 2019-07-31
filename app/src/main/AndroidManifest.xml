@@ -48,7 +48,8 @@
         <activity android:name=".Activities.AppSettings.Languages" />
         <activity android:name=".Activities.Products.EditProduct" />
         <activity android:name=".Activities.Vendors.Vendors" />
-        <activity android:name=".Activities.Vendors.AddVendors" />
+        <activity android:name=".Activities.Vendors.AddVendors"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Activities.AppSettings.Settings" />
         <activity
             android:name=".Activities.AppSettings.AboutUs"
@@ -71,7 +72,7 @@
         <activity
             android:name=".Activities.Login.Register"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activities.Login.Splash"
             android:theme="@style/AppTheme.NoActionBar">
@@ -83,30 +84,43 @@
         </activity>
         <activity android:name=".Activities.Employees.ListOfEmployees" />
         <activity android:name=".Activities.Employees.ViewEmployee" />
-        <activity android:name=".Activities.AppSettings.BannerSettings" />
-        <activity android:name=".Activities.AppSettings.HomeBannerSettings" />
+        <activity android:name=".Activities.AppSettings.BannersPackage.BannerSettings" />
+        <activity android:name=".Activities.AppSettings.BannersPackage.HomeBannerSettings" />
         <activity android:name=".Activities.Employees.PendingApproval" />
         <activity android:name=".Utils.NoInternet" />
         <activity android:name=".Activities.Purchases.EditPurchase" />
+        <activity android:name=".Activities.AppSettings.BannersPackage.ClientBanners" />
+        <activity android:name=".Activities.AppSettings.BannersPackage.SellerBanners" />
+        <activity android:name=".Activities.Products.Reviews.ProductReviews" />
+        <activity android:name=".Activities.Products.Reviews.ProductComments" />
         <activity android:name=".Activities.Invoicing.ListOfInvoices" />
         <activity android:name=".Activities.AppSettings.AddLocationAndCharges" />
         <activity android:name=".Activities.AppSettings.ListOfLocationAndCharges" />
+        <activity
+            android:name=".Activities.Employees.ProfileSettings"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Activities.Accounts.Accounts" />
         <activity
             android:name=".Activities.AppSettings.CompanySettings"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activities.Orders.OrdersDelivery" />
         <activity android:name=".Activities.Orders.OrdersCourier" />
         <activity android:name=".Activities.Orders.ViewUnderProcessOrder" />
         <activity android:name=".Activities.Orders.ViewDeliveryShippedOrder" />
         <activity
+            android:name=".Activities.AppSettings.ShippingCarriers.AddShippingCarriers"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Activities.AppSettings.ShippingCarriers.ListOfShippingCarriers" />
+        <activity
             android:name=".Activities.Accounts.ExpensesAndRevenue.Salaries"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Transportation" />
         <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Rent" />
-        <activity android:name=".Activities.AppSettings.FortCityFeatures"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Activities.AppSettings.Banners" />
+        <activity
+            android:name=".Activities.AppSettings.FortCityFeatures"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Activities.AppSettings.BannersPackage.Banners" />
         <activity android:name=".Activities.AppSettings.TermsSettings" />
         <activity android:name=".Activities.Accounts.ExpensesAndRevenue.UtilityBills" />
         <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Stationaries" />
@@ -122,13 +136,16 @@
             android:name=".Activities.Products.AddSubCategories"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activities.Products.ChooseCategory" />
-        <activity android:name=".Activities.Customers.ViewCustomer"
-            android:theme="@style/AppThemeRed.NoActionBar"/>
-        <activity android:name=".Activities.AppSettings.DealsBanner" />
+        <activity
+            android:name=".Activities.Customers.ViewCustomer"
+            android:theme="@style/AppThemeRed.NoActionBar" />
+        <activity android:name=".Activities.AppSettings.BannersPackage.DealsBanner" />
         <activity android:name=".Activities.Products.AddProductWeight" />
         <activity android:name=".Activities.Accounts.TransferToAccountsDone" />
         <activity android:name=".Activities.Products.AddMainCategories" />
         <activity android:name=".Activities.Products.ChooseMainCategory" />
+        <activity android:name=".Activities.Employees.CheckedActivity" />
+        <activity android:name=".Activities.Accounts.SODetails.NewSOScreen" />
         <activity
             android:name=".Activities.Locations.AddProvinces"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -141,22 +158,24 @@
         <activity android:name=".Activities.Locations.ListOfCountries" />
         <activity android:name=".Activities.Locations.AddCountry" />
         <activity android:name=".Activities.Customers.Customers" />
-        <activity android:name=".Activities.Customers.ViewSeller"
-            android:theme="@style/AppThemeRed.NoActionBar"/>
+        <activity
+            android:name=".Activities.Customers.ViewSeller"
+            android:theme="@style/AppThemeRed.NoActionBar" />
         <activity android:name=".Activities.SellerOrders.SellerOrders" />
         <activity
             android:name=".Activities.Welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.AppSettings.Commissions" />
-        <activity android:name=".Activities.Accounts.NewAccountsScreen"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activities.AppSettings.CODLimit" />
         <activity
-            android:name=".Activities.Orders.NewOrderScreen"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.AppSettings.ViewTerms"
+            android:name=".Activities.Accounts.NewAccounts.NewAccountsScreen"
+           />
+        <activity android:name=".Activities.AppSettings.CODLimit" />
+        <activity android:name=".Activities.Orders.NewOrder.NewOrderScreen" />
+        <activity
+            android:name=".Activities.AppSettings.ViewTerms"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activities.AppSettings.ViewAboutUs"
+        <activity
+            android:name=".Activities.AppSettings.ViewAboutUs"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

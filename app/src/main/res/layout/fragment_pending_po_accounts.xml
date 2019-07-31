@@ -7,10 +7,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/companyName"
+            android:textSize="18sp"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="Company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_above="@id/finalized"
+            android:layout_below="@id/companyName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >

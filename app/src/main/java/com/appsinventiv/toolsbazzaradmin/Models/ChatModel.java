@@ -9,12 +9,13 @@ public class ChatModel {
     long time;
     String status,initiator;
     String picUrl;
+    String whoReplied;
 
 
     public ChatModel(String id, String text, String username, long time,
                      String status, String initiator,
                      String nameToShow,
-                     String picUrl
+                     String picUrl,String whoReplied
     ) {
         this.id = id;
         this.text = text;
@@ -24,10 +25,19 @@ public class ChatModel {
         this.initiator = initiator;
         this.nameToShow = nameToShow;
         this.picUrl=picUrl;
+        this.whoReplied=whoReplied;
 
     }
 
     public ChatModel() {
+    }
+
+    public String getWhoReplied() {
+        return whoReplied;
+    }
+
+    public void setWhoReplied(String whoReplied) {
+        this.whoReplied = whoReplied;
     }
 
     public String getPicUrl() {

@@ -1,4 +1,4 @@
-package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings;
+package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +10,13 @@ import android.widget.RelativeLayout;
 
 import com.appsinventiv.toolsbazzaradmin.R;
 
-public class Banners extends AppCompatActivity {
-    private RelativeLayout banner, dealsBanner,homeBanner;
+public class ClientBanners extends AppCompatActivity {
+    private RelativeLayout banner, dealsBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_banners);
+        setContentView(R.layout.activity_client_banner);
         this.setTitle("Banners Settings");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -27,26 +27,20 @@ public class Banners extends AppCompatActivity {
 
         banner = findViewById(R.id.banner);
         dealsBanner = findViewById(R.id.dealsBanner);
-        homeBanner = findViewById(R.id.homeBanner);
 
+
+//
         banner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Banners.this, BannerSettings.class);
+                Intent i = new Intent(ClientBanners.this, BannerSettings.class);
                 startActivity(i);
             }
         });
         dealsBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Banners.this, DealsBanner.class);
-                startActivity(i);
-            }
-        });
-        homeBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Banners.this, HomeBannerSettings.class);
+                Intent i = new Intent(ClientBanners.this, DealsBanner.class);
                 startActivity(i);
             }
         });

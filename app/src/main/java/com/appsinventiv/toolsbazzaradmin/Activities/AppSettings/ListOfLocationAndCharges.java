@@ -37,7 +37,7 @@ public class ListOfLocationAndCharges extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
         }
-        this.setTitle("List of Location and Charges");
+        this.setTitle("List of Shipping carrier");
         fab=findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

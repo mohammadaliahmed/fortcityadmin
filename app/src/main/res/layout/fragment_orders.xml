@@ -18,6 +18,13 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/noOrder"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:src="@drawable/no_orders"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
 
 
 </RelativeLayout>

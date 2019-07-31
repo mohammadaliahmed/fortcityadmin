@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.TransferToAccountsDone;
+import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ShippingCarriers.ShippingCompanyModel;
 import com.appsinventiv.toolsbazzaradmin.Activities.Invoicing.ViewInvoice;
 import com.appsinventiv.toolsbazzaradmin.Adapters.OrderedProductsAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
@@ -76,7 +77,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         setContentView(R.layout.activity_view_order);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -279,7 +281,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         price.setText("Rs " + model.getTotalPrice());
                         deliveryCharges = model.getDeliveryCharges();
                         shippingCharges = model.getShippingCharges();
-                        totalPrice=model.getTotalPrice();
+                        totalPrice = model.getTotalPrice();
 
                         username.setText("" + model.getCustomer().getName());
                         phone.setText("" + model.getCustomer().getPhone());
@@ -326,7 +328,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                                 }
 
                             }
-                        },0);
+                        }, 0);
                         recyclerView.setAdapter(adapter);
 
                         if (model.getOrderStatus().equalsIgnoreCase("under process")) {
@@ -411,7 +413,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                                 list.size(),
                                 model.getDeliveryBy(),
                                 0,
-                                "pendingSO"
+                                "pendingSO", model, new ShippingCompanyModel()
 
 
                         ))
@@ -421,8 +423,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                                 updateInvoicesCount();
                                 updateOrderStatus();
                                 CommonUtils.showToast("Moved to accounts");
-                                Intent i=new Intent(ViewOrder.this,TransferToAccountsDone.class);
-                                i.putExtra("orderId",orderIdFromIntent);
+                                Intent i = new Intent(ViewOrder.this, TransferToAccountsDone.class);
+                                i.putExtra("orderId", orderIdFromIntent);
                                 startActivity(i);
 
 

@@ -38,6 +38,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         this.updateOrderStatus = updateOrderStatus;
     }
 
+    public void cancelledPressed(){
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +54,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final OrderModel model = itemList.get(position);
 
+        holder.checkbox.setChecked(false);
 
         if (model.getOrderStatus().equalsIgnoreCase("Cancelled")
                 || model.getOrderStatus().equalsIgnoreCase("Pending")) {
@@ -85,7 +90,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             holder.orderTime.setText(CommonUtils.getFormattedDate(model.getTime()));
             holder.customerName.setText(model.getCustomer().getName());
             holder.paymentMethod.setText("Not Available");
-            holder.customerType.setText("Customer type: "+model.getCustomer().getCustomerType());
+            holder.customerType.setText("Customer type: " + model.getCustomer().getCustomerType());
 //            holder.address.setText(model.getCustomer().getAddress() + ", " + model.getCustomer().getCity() + ", " + model.getCustomer().getCountry());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

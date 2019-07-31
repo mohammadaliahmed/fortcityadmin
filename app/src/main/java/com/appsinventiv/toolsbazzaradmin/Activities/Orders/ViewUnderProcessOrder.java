@@ -24,8 +24,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ShippingCarriers.ShippingCompanyModel;
 import com.appsinventiv.toolsbazzaradmin.Activities.Invoicing.ViewInvoice;
 import com.appsinventiv.toolsbazzaradmin.Adapters.OrderedProductsAdapter;
+import com.appsinventiv.toolsbazzaradmin.Models.ChatModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.Models.InvoiceModel;
@@ -44,13 +46,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ViewUnderProcessOrder extends AppCompatActivity {
     Button markAsCourier, markAsShipped, markAsOutOfStock;
     Spinner chooseDeliveryBoy;
-    EditText carrier, trackingNumber;
+    EditText trackingNumber;
 
     ArrayList<Employee> employeeArrayList = new ArrayList<>();
+    ArrayList<ShippingCompanyModel> shippingList = new ArrayList<>();
     Employee employee;
     TextView orderId, orderTime, quantity, price, username, phone, address, city, ship_country, instructions;
     String orderIdFromIntent;
@@ -59,7 +63,6 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     OrderedProductsAdapter adapter;
     ArrayList<ProductCountModel> list = new ArrayList<>();
-    Button button, button_refused;
 
     String s_orderId, s_quantity, s_price, s_username;
     String userFcmKey;
@@ -71,12 +74,10 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
 
     ArrayList<ProductCountModel> newList = new ArrayList<>();
     long totalPrice;
-    private Float deliveryCharges = 0.0f;
-    private Float shippingCharges = 0.0f;
-    long grandTotal = 0;
+
+    Spinner shippingAgent;
     CardView shipping_card, order_card, shipping_info_card, delivered_card;
-    Button markAsCOD, markAsDeliveredCredit, markAsRefused;
-    EditText dueDate;
+    private ShippingCompanyModel shippingCarrier;
 
 
     @Override
@@ -85,7 +86,8 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         setContentView(R.layout.activity_view_under_process_order);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Intent intent = getIntent();
@@ -93,7 +95,8 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
 
         this.setTitle("Order # " + orderIdFromIntent);
 
-        carrier = findViewById(R.id.carrier);
+
+        shippingAgent = findViewById(R.id.shippingAgent);
         selectAll = findViewById(R.id.selectAll);
         trackingNumber = findViewById(R.id.trackingNumber);
         orderId = findViewById(R.id.order_id);
@@ -122,7 +125,8 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    newList.addAll(model.getCountModelArrayList());
+                    newList.clear();
+                    newList.addAll(list);
                     adapter.selectAll(1);
                 } else {
                     adapter.selectAll(0);
@@ -136,11 +140,12 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        mDatabase.child("Orders").child(orderIdFromIntent).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Orders").child(orderIdFromIntent).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
                     model = dataSnapshot.getValue(OrderModel.class);
+
                     if (model != null) {
                         orderId.setText("" + model.getOrderId());
                         orderTime.setText("" + CommonUtils.getFormattedDate(model.getTime()));
@@ -162,25 +167,24 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
                                 model.getCustomer().getCustomerType(),
                                 1,
                                 new OrderedProductsAdapter.OnProductSelected() {
-                            @Override
-                            public void onChecked(ProductCountModel product, int position) {
-                                newList.add(product);
+                                    @Override
+                                    public void onChecked(ProductCountModel product, int position) {
+                                        newList.add(product);
 
 
-                            }
+                                    }
 
-                            @Override
-                            public void onUnChecked(ProductCountModel product, int position) {
-                                try {
-                                    newList.remove(position);
-                                }
-                                catch (IndexOutOfBoundsException e){
-                                    e.printStackTrace();
-                                }
+                                    @Override
+                                    public void onUnChecked(ProductCountModel product, int position) {
+                                        try {
+                                            newList.remove(position);
+                                        } catch (IndexOutOfBoundsException e) {
+                                            e.printStackTrace();
+                                        }
 
 
-                            }
-                        },0);
+                                    }
+                                }, 0);
                         recyclerView.setAdapter(adapter);
 
 
@@ -216,8 +220,8 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         markAsCourier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (carrier.getText().length() == 0) {
-                    carrier.setError("Please enter carrier");
+                if (shippingCarrier == null) {
+                    CommonUtils.showToast("Enter shipping carrier");
                 } else if (trackingNumber.getText().length() == 0) {
                     trackingNumber.setError("Please enter tracking number");
                 } else {
@@ -279,11 +283,14 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
 
 
         getDeliveryBoysFromDb();
+        getShippingCompaniesFromDb();
         getInvoiceCountFromDb();
 
     }
 
     private void addToInvoice() {
+
+
         mDatabase.child("Accounts/PendingInvoices").child("" + invoiceNumber)
                 .setValue(new InvoiceModel(
 
@@ -301,7 +308,9 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
                         list.size(),
                         model.getDeliveryBy(),
                         0,
-                        "waiting"
+                        "waiting",
+                        model,
+                        shippingCarrier
 
                 ))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -412,8 +421,10 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
     }
 
     private void updateInvoiceStatus() {
-        mDatabase.child("Orders").child(orderIdFromIntent).child("isInvoiced").setValue(true);
-        mDatabase.child("Orders").child(orderIdFromIntent).child("invoiceNumber").setValue(invoiceNumber);
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("invoiced",true);
+        map.put("invoiceNumber",invoiceNumber);
+        mDatabase.child("Orders").child(orderIdFromIntent).updateChildren(map);
 
 
     }
@@ -428,19 +439,19 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                mDatabase.child("Orders").child(orderIdFromIntent).child("orderStatus").setValue("Shipped");
-                mDatabase.child("Orders").child(orderIdFromIntent).child("deliveryBy").setValue(employee.getName()).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("orderStatus", "Shipped");
+                map.put("deliveryBy", employee.getName());
+
+
+                mDatabase.child("Orders").child(orderIdFromIntent).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        CommonUtils.showToast("Order Marked as shipped");
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
+                        CommonUtils.showToast("Marked as shipped");
                     }
                 });
+
 
             }
         });
@@ -478,6 +489,57 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         });
     }
 
+    private void getShippingCompaniesFromDb() {
+
+        mDatabase.child("Settings").child("ShippingCompanies").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    shippingList.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        ShippingCompanyModel model = snapshot.getValue(ShippingCompanyModel.class);
+                        if (model != null) {
+                            shippingList.add(model);
+                        }
+                    }
+                    setUpShippingCompanySpinner();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setUpShippingCompanySpinner() {
+        ArrayList<String> items = new ArrayList<>();
+        for (int i = 0; i < shippingList.size(); i++) {
+            items.add("" + shippingList.get(i).getName());
+
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        shippingAgent.setAdapter(adapter);
+
+        shippingAgent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+
+                shippingCarrier = shippingList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+    }
+
+
     private void setUpDeliveryBoySpinner() {
         ArrayList<String> items = new ArrayList<>();
         for (int i = 0; i < employeeArrayList.size(); i++) {
@@ -511,12 +573,11 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
                 mDatabase.child("Orders").child(orderIdFromIntent).child("orderStatus").setValue("Out Of Stock").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Order marked as out of stock");
-                        finish();
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -541,11 +602,16 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("orderStatus", "Shipped By Courier");
+                map.put("carrier", shippingCarrier.getName());
+                map.put("trackingNumber", trackingNumber.getText().toString());
 
-                mDatabase.child("Orders").child(orderIdFromIntent).child("orderStatus").setValue("Shipped By Courier").addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                mDatabase.child("Orders").child(orderIdFromIntent).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        insertOtherValues();
+                        CommonUtils.showToast("Marked as courier");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -563,16 +629,6 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
 
     }
 
-    private void insertOtherValues() {
-        mDatabase.child("Orders").child(orderIdFromIntent).child("carrier").setValue(carrier.getText().toString());
-        mDatabase.child("Orders").child(orderIdFromIntent).child("trackingNumber").setValue(trackingNumber.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                CommonUtils.showToast("Order marked as courier");
-                finish();
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -22,7 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.NewAccountsScreen;
+import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.NewAccounts.NewAccountsScreen;
+import com.appsinventiv.toolsbazzaradmin.Activities.Employees.ProfileSettings;
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings;
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ViewAboutUs;
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ViewTerms;
@@ -30,7 +31,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Chat.Chats;
 import com.appsinventiv.toolsbazzaradmin.Activities.Customers.Customers;
 import com.appsinventiv.toolsbazzaradmin.Activities.Employees.ListOfEmployees;
 import com.appsinventiv.toolsbazzaradmin.Activities.Login.Login;
-import com.appsinventiv.toolsbazzaradmin.Activities.Orders.NewOrderScreen;
+import com.appsinventiv.toolsbazzaradmin.Activities.Orders.NewOrder.NewOrderScreen;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.OrdersCourier;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.OrdersDelivery;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.ListOfProducts;
@@ -51,7 +52,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -465,6 +465,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.salarySheets) {
 
         } else if (id == R.id.profile) {
+            startActivity(new Intent(MainActivity.this,ProfileSettings.class));
 
         } else if (id == R.id.openSlider) {
             PrefManager prefManager = new PrefManager(MainActivity.this);

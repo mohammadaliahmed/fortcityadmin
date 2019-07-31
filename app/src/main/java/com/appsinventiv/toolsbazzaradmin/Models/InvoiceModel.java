@@ -1,5 +1,7 @@
 package com.appsinventiv.toolsbazzaradmin.Models;
 
+import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ShippingCarriers.ShippingCompanyModel;
+
 import java.util.ArrayList;
 
 /**
@@ -21,13 +23,15 @@ public class InvoiceModel {
     int orderItems;
     int outOfStock;
     String invoiceStatus;
+    OrderModel order;
+    ShippingCompanyModel shipping;
 
     public InvoiceModel() {
     }
 
     public InvoiceModel(long id,
                         ArrayList<ProductCountModel> countModelArrayList,
-                        ArrayList<ProductCountModel> newCountModelArrayList, 
+                        ArrayList<ProductCountModel> newCountModelArrayList,
                         Customer customer,
                         float totalPrice,
                         long time,
@@ -39,7 +43,8 @@ public class InvoiceModel {
                         int orderItems,
                         String deliveryBy,
                         int outOfStock,
-                        String invoiceStatus
+                        String invoiceStatus,
+                        OrderModel order,ShippingCompanyModel shipping
     ) {
         this.id = id;
         this.countModelArrayList = countModelArrayList;
@@ -56,6 +61,24 @@ public class InvoiceModel {
         this.deliveryBy = deliveryBy;
         this.outOfStock = outOfStock;
         this.invoiceStatus=invoiceStatus;
+        this.order=order;
+        this.shipping=shipping;
+    }
+
+    public OrderModel getOrder() {
+        return order;
+    }
+
+    public ShippingCompanyModel getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(ShippingCompanyModel shipping) {
+        this.shipping = shipping;
+    }
+
+    public void setOrder(OrderModel order) {
+        this.order = order;
     }
 
     public String getInvoiceStatus() {

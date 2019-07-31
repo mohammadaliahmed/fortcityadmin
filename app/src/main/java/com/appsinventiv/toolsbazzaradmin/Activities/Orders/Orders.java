@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class Orders extends AppCompatActivity {
     ArrayList<String> orderStatusList = new ArrayList<>();
 
+    String storeUsername,storename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,14 +29,17 @@ public class Orders extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
         }
+        storeUsername=getIntent().getStringExtra("username");
+        storename=getIntent().getStringExtra("storename");
 
-        this.setTitle("Orders");
+        this.setTitle(storename+" Orders");
         ViewPager viewPager = findViewById(R.id.viewpager);
         orderStatusList.add("Pending");
         orderStatusList.add("Under Process");
         orderStatusList.add("Invoice");
         orderStatusList.add("Cancelled");
-        OrdersFragmentAdapter adapter = new OrdersFragmentAdapter(this, orderStatusList, getSupportFragmentManager());
+        OrdersFragmentAdapter adapter = new OrdersFragmentAdapter(this, orderStatusList,
+                getSupportFragmentManager(),storeUsername);
         viewPager.setAdapter(adapter);
 
         // Give the TabLayout the ViewPager
@@ -50,8 +54,7 @@ public class Orders extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(Orders.this, MainActivity.class);
-        startActivity(i);
+
         finish();
     }
 
@@ -59,8 +62,7 @@ public class Orders extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (item.getItemId() == android.R.id.home) {
-            Intent i = new Intent(Orders.this, MainActivity.class);
-            startActivity(i);
+
             finish();
         }
 

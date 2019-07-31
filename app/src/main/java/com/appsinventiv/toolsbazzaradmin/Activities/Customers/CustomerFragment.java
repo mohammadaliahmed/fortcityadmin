@@ -150,15 +150,17 @@ public class CustomerFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Customer customer = snapshot.getValue(Customer.class);
                         if (customer != null) {
-                            if (customer.getCustomerType().equalsIgnoreCase(type)) {
-                                if (!customer.isDeleted()) {
-                                    arrayList.add(customer);
-                                    map.put(customer.getUsername(), customer.isOnline());
-                                    adapter.setUserStatus(map);
+                            if (customer.getName() != null) {
+                                if (customer.getCustomerType().equalsIgnoreCase(type)) {
+                                    if (!customer.isDeleted()) {
+                                        arrayList.add(customer);
+                                        map.put(customer.getUsername(), customer.isOnline());
+                                        adapter.setUserStatus(map);
 //                                    getUserStatus(customer.getUsername());
+                                    }
                                 }
-                            }
 
+                            }
                         }
                     }
                     Collections.sort(arrayList, new Comparator<Customer>() {

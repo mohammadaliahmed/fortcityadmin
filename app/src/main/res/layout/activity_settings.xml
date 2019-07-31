@@ -9,6 +9,7 @@
     tools:context="com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings">
 
     <LinearLayout
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -16,256 +17,395 @@
         <RelativeLayout
             android:id="@+id/company"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
                 android:src="@drawable/ic_setting_black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="Manage Company"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Update company name, phone, email"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/deliveryCharges"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_delivery_black" />
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_delivery_settings" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="Delivery Charge"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Create Countries &amp; Delivery Charges"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/shippingCarrier"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_shipping_carrier" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
+                android:text="Shipping Carrier"
+                android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Shipping Company Details"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
+                android:layout_alignParentBottom="true"
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/languages"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
                 android:padding="2dp"
-                android:src="@drawable/ic_world" />
+                android:src="@drawable/translate" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="Languages"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Create Languages"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/aboutUs"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_info_black" />
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/support" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="About Us"
                 android:textColor="#000" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Update Companies Vision"
+                />
             <View
                 android:layout_width="match_parent"
+                android:layout_marginLeft="65dp"
+
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/terms"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
                 android:src="@drawable/terms" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="Term &amp; Condition"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Update Terms &amp; Condition"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/fort_features"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_features" />
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+
+                android:src="@drawable/lightbulb" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="FortCity features"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Update Features &amp; Services"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
 
         <RelativeLayout
             android:id="@+id/banner"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
                 android:src="@drawable/ic_banner" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="Banner"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Upload User, Seller &amp; Admin Banners"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
 
         <RelativeLayout
             android:id="@+id/cod"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_limit" />
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/fence" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="COD limit"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Update the Minimum COD Amount"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/commissions"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="65dp"
+            android:layout_marginBottom="20dp"
+
+            android:layout_marginTop="15dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_percent" />
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/commission" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+               android:layout_marginTop="12dp"
+                android:layout_marginLeft="65dp"
                 android:text="MultVendor commissions"
                 android:textColor="#000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:textColor="#aaa"
+                android:layout_marginTop="30dp"
+                android:textSize="11sp"
+                android:text="Update Seller Product Commitions"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginLeft="65dp"
+
                 android:layout_alignParentBottom="true"
-                android:background="@color/default_grey" />
+                android:background="@color/light_grey" />
         </RelativeLayout>
     </LinearLayout>
 

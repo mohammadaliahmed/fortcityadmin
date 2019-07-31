@@ -1,4 +1,4 @@
-package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings;
+package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,20 +6,18 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
+import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings;
 import com.appsinventiv.toolsbazzaradmin.Adapters.SelectedImagesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.BannerPicsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.SelectedAdImages;
@@ -44,7 +42,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BannerSettings extends AppCompatActivity {
+public class SellerBanners extends AppCompatActivity {
 
 
     DatabaseReference mDatabase;
@@ -94,10 +92,10 @@ public class BannerSettings extends AppCompatActivity {
                             selectedAdImages.clear();
                             imageUrl.clear();
                         }
-                        Matisse.from(BannerSettings.this)
+                        Matisse.from(SellerBanners.this)
                                 .choose(MimeType.allOf())
                                 .countable(true)
-                                .maxSelectable(8)
+                                .maxSelectable(20)
                                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                                 .thumbnailScale(0.85f)
@@ -123,7 +121,7 @@ public class BannerSettings extends AppCompatActivity {
 
                     }
                     CommonUtils.showToast("Uploaded");
-                    Intent i = new Intent(BannerSettings.this, Settings.class);
+                    Intent i = new Intent(SellerBanners.this, Settings.class);
                     startActivity(i);
                 }
             }
@@ -134,9 +132,9 @@ public class BannerSettings extends AppCompatActivity {
 
     private void setUpAlreadyPics() {
         LinearLayoutManager horizontalLayoutManagaer
-                = new LinearLayoutManager(BannerSettings.this, LinearLayoutManager.HORIZONTAL, false);
+                = new LinearLayoutManager(SellerBanners.this, LinearLayoutManager.HORIZONTAL, false);
         recyclerviewPics.setLayoutManager(horizontalLayoutManagaer);
-        SelectedImagesAdapter adapter = new SelectedImagesAdapter(BannerSettings.this, banners, new SelectedImagesAdapter.ChooseOption() {
+        SelectedImagesAdapter adapter = new SelectedImagesAdapter(SellerBanners.this, banners, new SelectedImagesAdapter.ChooseOption() {
             @Override
             public void onDeleteClicked(SelectedAdImages images, int position) {
 
@@ -146,7 +144,7 @@ public class BannerSettings extends AppCompatActivity {
     }
 
     private void getPicsFromDb() {
-        mDatabase.child("Settings").child("Banners").addChildEventListener(new ChildEventListener() {
+        mDatabase.child("Settings").child("SellerBanners").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getValue() != null) {
@@ -199,7 +197,7 @@ public class BannerSettings extends AppCompatActivity {
                         // Get a URL to the uploaded content
 
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        mDatabase.child("Settings").child("Banners").child("" + count)
+                        mDatabase.child("Settings").child("SellerBanners").child("" + count)
                                 .setValue(new BannerPicsModel("" + count, "" + downloadUrl, "", count)).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -234,7 +232,7 @@ public class BannerSettings extends AppCompatActivity {
                         mSelected) {
                     selectedAdImages.add(new SelectedAdImages("" + img));
                     adapter.notifyDataSetChanged();
-                    CompressImage compressImage = new CompressImage(BannerSettings.this);
+                    CompressImage compressImage = new CompressImage(SellerBanners.this);
                     imageUrl.add(compressImage.compressImage("" + img));
                 }
 
@@ -247,9 +245,9 @@ public class BannerSettings extends AppCompatActivity {
     private void showPickedPictures() {
         selectedAdImages = new ArrayList<>();
         LinearLayoutManager horizontalLayoutManagaer
-                = new LinearLayoutManager(BannerSettings.this, LinearLayoutManager.HORIZONTAL, false);
+                = new LinearLayoutManager(SellerBanners.this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        adapter = new SelectedImagesAdapter(BannerSettings.this, selectedAdImages, new SelectedImagesAdapter.ChooseOption() {
+        adapter = new SelectedImagesAdapter(SellerBanners.this, selectedAdImages, new SelectedImagesAdapter.ChooseOption() {
             @Override
             public void onDeleteClicked(SelectedAdImages images, int position) {
 
@@ -285,7 +283,7 @@ public class BannerSettings extends AppCompatActivity {
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;

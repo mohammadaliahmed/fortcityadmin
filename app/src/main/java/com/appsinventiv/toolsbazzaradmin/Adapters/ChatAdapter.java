@@ -53,6 +53,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         ChatModel model = chatList.get(position);
         holder.msgtext.setText(model.getText());
         holder.time.setText("" + CommonUtils.getFormattedDate(model.getTime()));
+        if (model.getWhoReplied() != null) {
+            holder.whoReplied.setText(model.getWhoReplied() + ", replied");
+        } else {
+            holder.whoReplied.setText("");
+        }
         if (model.getStatus().equals("sent")) {
             holder.status.setImageResource(R.drawable.ic_sent);
         } else if (model.getStatus().equals("sending")) {
@@ -68,7 +73,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         ChatModel model = chatList.get(position);
-        if (model.getUsername().equals(SharedPrefs.getUsername())) {
+        if (model.getUsername().equals("admin")) {
             return RIGHT_CHAT;
         } else {
             return LEFT_CHAT;
@@ -82,7 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView msgtext, time;
+        TextView msgtext, whoReplied, time;
         ImageView status;
 
         public ViewHolder(View itemView) {
@@ -90,6 +95,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             msgtext = itemView.findViewById(R.id.msgtext);
             time = itemView.findViewById(R.id.time);
             status = itemView.findViewById(R.id.status);
+            whoReplied = itemView.findViewById(R.id.whoReplied);
         }
     }
 }

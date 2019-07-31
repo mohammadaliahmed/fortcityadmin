@@ -99,6 +99,6 @@ public class CommonUtils {
     }
 
     public static String[] rolesList = new String[]{"Select Role", "Admin", "Sales & Marketing",
-            "Accountant/Cashier", "Purchasing Officer", "Operation Executive", "Delivery Boy", "Family"};
+            "Accountant", "Purchasing Officer", "Operation Executive", "Delivery Boy", "Family"};
 
 }

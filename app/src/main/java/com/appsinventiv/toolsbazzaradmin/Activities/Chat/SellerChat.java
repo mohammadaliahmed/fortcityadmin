@@ -174,9 +174,10 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
                     message.setText(null);
                     final String key = mDatabase.push().getKey();
                     mDatabase.child("Chats/SellerChats").child(username).child(key)
-                            .setValue(new ChatModel(key, msg, SharedPrefs.getUsername()
+                            .setValue(new ChatModel(key, msg, "admin"//TODO
                                     , System.currentTimeMillis(), "sending", username,
-                                    seller.getStoreName(),seller.getPicUrl()
+                                    seller.getStoreName(),seller.getPicUrl(),
+                                    SharedPrefs.getEmployee().getName()
                             )).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

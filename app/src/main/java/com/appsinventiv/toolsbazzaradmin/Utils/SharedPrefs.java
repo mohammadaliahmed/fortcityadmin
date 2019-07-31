@@ -7,6 +7,8 @@ import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+
 
 /**
  * Created by AliAh on 20/02/2018.
@@ -18,6 +20,20 @@ public class SharedPrefs {
     private SharedPrefs() {
 
     }
+
+    public static void setCommentsCount(HashMap<String,Double> model) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(model);
+        preferenceSetter("commentsCount", json);
+    }
+
+    public static HashMap<String,Double> getCommentsCount() {
+        Gson gson = new Gson();
+        HashMap<String,Double> map = gson.fromJson(preferenceGetter("commentsCount"), HashMap.class);
+        return map;
+    }
+
 
     public static void setEmployee(Employee model) {
 

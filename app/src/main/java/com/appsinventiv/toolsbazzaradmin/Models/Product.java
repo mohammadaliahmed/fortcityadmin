@@ -28,6 +28,14 @@ public class Product {
     String dimen;
     String sellerProductStatus;
     String uploadedBy;
+    int salesCount, likesCount;
+
+    int ratingCount;
+    int positiveCount,neutralCount,negativeCount;
+
+
+
+
 
     public Product() {
     }
@@ -102,6 +110,54 @@ public class Product {
         this.dimen=dimen;
         this.uploadedBy=uploadedBy;
         this.sellerProductStatus=sellerProductStatus;
+    }
+
+    public int getSalesCount() {
+        return salesCount;
+    }
+
+    public void setSalesCount(int salesCount) {
+        this.salesCount = salesCount;
+    }
+
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+
+    public int getPositiveCount() {
+        return positiveCount;
+    }
+
+    public void setPositiveCount(int positiveCount) {
+        this.positiveCount = positiveCount;
+    }
+
+    public int getNeutralCount() {
+        return neutralCount;
+    }
+
+    public void setNeutralCount(int neutralCount) {
+        this.neutralCount = neutralCount;
+    }
+
+    public int getNegativeCount() {
+        return negativeCount;
+    }
+
+    public void setNegativeCount(int negativeCount) {
+        this.negativeCount = negativeCount;
     }
 
     public String getUploadedBy() {

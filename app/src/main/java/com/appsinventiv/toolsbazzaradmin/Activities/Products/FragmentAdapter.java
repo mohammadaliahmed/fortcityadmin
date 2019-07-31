@@ -37,17 +37,20 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(final int position) {
 
-        if (position == 0) {
-            return new ProductsListFragment();
-        } else {
-            return new VendorProductsListFragment(new TabCountCallbacks() {
-                @Override
-                public void newCount(int count,int po) {
-                    callbacks.newCount(count,position);
-                }
-            });
+        return  new ProductsListFragment(arrayList.get(position));
 
-        }
+
+//        if (position == 0) {
+//            return new ProductsListFragment();
+//        } else {
+//            return new VendorProductsListFragment(new TabCountCallbacks() {
+//                @Override
+//                public void newCount(int count,int po) {
+//                    callbacks.newCount(count,position);
+//                }
+//            });
+//
+//        }
 
     }
 

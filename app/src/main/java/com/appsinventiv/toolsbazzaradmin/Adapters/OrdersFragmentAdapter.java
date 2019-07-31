@@ -20,9 +20,11 @@ public class OrdersFragmentAdapter extends FragmentPagerAdapter {
     Context mContext;
     ArrayList<String> arrayList;
 
-    public OrdersFragmentAdapter(Context context, ArrayList<String> arrayList, FragmentManager fm) {
+    String storeUsername;
+    public OrdersFragmentAdapter(Context context, ArrayList<String> arrayList, FragmentManager fm,String storeUsername) {
         super(fm);
         this.mContext = context;
+        this.storeUsername = storeUsername;
         this.arrayList = arrayList;
     }
 
@@ -33,7 +35,7 @@ public class OrdersFragmentAdapter extends FragmentPagerAdapter {
         if (position == 2) {
             return new InvoiceListFragment();
         } else {
-            return new OrdersFragment(arrayList.get(position), "");
+            return new OrdersFragment(arrayList.get(position), "",storeUsername);
 
         }
 

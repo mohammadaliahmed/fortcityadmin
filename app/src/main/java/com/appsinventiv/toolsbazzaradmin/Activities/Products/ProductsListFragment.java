@@ -1,5 +1,6 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.Products;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.TransferToAccountsDone;
 import com.appsinventiv.toolsbazzaradmin.Adapters.InvoiceListAdapter;
@@ -45,6 +47,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ProductsListFragment extends Fragment {
@@ -52,7 +56,8 @@ public class ProductsListFragment extends Fragment {
     DatabaseReference mDatabase;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
-    ProductsAdapter adapter;
+    //    ProductsAdapter adapter;
+    NewProductsAdapter adapter;
     private Drawable icon;
     private ColorDrawable background;
     SwipeToDeleteCallback swipeController = null;
@@ -60,10 +65,20 @@ public class ProductsListFragment extends Fragment {
 
     Context context;
     private ArrayList<Product> productArrayList = new ArrayList<>();
+    private ArrayList<NewProductsModel> itemList = new ArrayList<>();
+    String productStatus;
+    HashMap<String, NewProductsModel> map = new HashMap<>();
+    ProgressBar progress;
 
 
     public ProductsListFragment() {
         // Required empty public constructor
+    }
+
+    @SuppressLint("ValidFragment")
+    public ProductsListFragment(String productStatus) {
+        // Required empty public constructor
+        this.productStatus = productStatus;
     }
 
 
@@ -81,169 +96,121 @@ public class ProductsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.product_list_fragment_layout, container, false);
-
+        progress = rootView.findViewById(R.id.progress);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        FloatingActionButton addProduct =  rootView.findViewById(R.id.addProduct);
+        FloatingActionButton addProduct = rootView.findViewById(R.id.addProduct);
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(context,AddProduct.class);
+                Intent i = new Intent(context, AddProduct.class);
                 startActivity(i);
             }
         });
         layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(adapter);
-
-        adapter = new ProductsAdapter(context, productArrayList, new ProductsAdapter.OnProductStatusChanged() {
-            @Override
-            public void onStatusChanged(Product product, final boolean status) {
-                mDatabase.child("Products").child(product.getId()).child("isActive").setValue("" + status)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                if (status) {
-                                    CommonUtils.showToast("Product is now active");
-                                } else {
-                                    CommonUtils.showToast("Product is now inactive");
-                                }
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        CommonUtils.showToast("There was some error");
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void onDelete(final Product product) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setMessage("Delete product?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                deleteProduct(product.getId());
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-        });
 
 
+        adapter = new NewProductsAdapter(context, itemList);
         recyclerView.setAdapter(adapter);
-        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
-            @Override
-            public void onRightClicked(final int position) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setMessage("Delete product?");
-                builder1.setCancelable(true);
 
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                deleteProduct(productArrayList.get(position).getId());
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-
-            }
-        });
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
-
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
-
+        getDataFromDb();
         return rootView;
 
-    }
-
-    private void deleteProduct(String id) {
-
-        mDatabase.child("Products").child(id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                CommonUtils.showToast("Product deleted");
-            }
-        });
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        getDataFromDb();
     }
 
     private void getDataFromDb() {
-        mDatabase.child("Products").addValueEventListener(new ValueEventListener() {
+
+
+        mDatabase.child("Products").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     productArrayList.clear();
-//                    context.setTitle(dataSnapshot.getChildrenCount()+" Products");
+                    map.clear();
+                    int count = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Product product = snapshot.getValue(Product.class);
                         if (product != null) {
+
                             if (product.getUploadedBy() != null) {
                                 if (product.getUploadedBy().equalsIgnoreCase("admin")) {
-                                    productArrayList.add(product);
+                                    if (map.get("Fort City") != null) {
+                                        count = map.get("Fort City").getCount();
+
+                                    } else {
+                                        count = 0;
+                                    }
+
+                                    if (map.containsKey("Fort City")) {
+                                        count=count+1;
+                                        map.put("Fort City", new NewProductsModel(
+                                                "Fort City", "Fort City", productStatus, "", count
+                                        ));
+                                    } else {
+                                        map.put("Fort City", new NewProductsModel(
+                                                "Fort City", "Fort City", productStatus, "", 1
+                                        ));
+                                    }
+
+                                } else if (product.getUploadedBy().equalsIgnoreCase("seller")) {
+                                    if (map.get(product.getVendor().getStoreName()) != null) {
+                                        count = map.get(product.getVendor().getStoreName()).getCount();
+                                    } else {
+                                        count = 0;
+                                    }
+
+                                    if (map.containsKey(product.getVendor().getStoreName())) {
+                                        count = count + 1;
+//                                        if(product.getSellerProductStatus()!=null){
+                                        if (product.getSellerProductStatus().equalsIgnoreCase(productStatus)) {
+                                            map.put(product.getVendor().getStoreName(), new NewProductsModel(
+                                                    product.getVendor().getUsername(),
+                                                    product.getVendor().getStoreName(),
+                                                    productStatus,
+                                                    product.getVendor().getPicUrl(),
+                                                    count
+                                            ));
+
+                                        }
+                                    } else {
+                                        if (product.getSellerProductStatus().equalsIgnoreCase(productStatus)) {
+                                            map.put(product.getVendor().getStoreName(), new NewProductsModel(
+                                                    product.getVendor().getUsername(),
+                                                    product.getVendor().getStoreName(),
+                                                    productStatus,
+                                                    product.getVendor().getPicUrl(),
+                                                    1
+                                            ));
+
+                                        }
+                                    }
                                 }
-                            } else {
-                                productArrayList.add(product);
+
+
                             }
-
-
                         }
+
+
                     }
-                    Collections.sort(productArrayList, new Comparator<Product>() {
-                        @Override
-                        public int compare(Product listData, Product t1) {
-                            String ob1 = listData.getTitle();
-                            String ob2 = t1.getTitle();
+                    if (map.size() > 0)
 
-                            return ob1.compareTo(ob2);
-
+                    {
+                        itemList.clear();
+                        for (Map.Entry<String, NewProductsModel> entry : map.entrySet()) {
+                            itemList.add(entry.getValue());
+                            progress.setVisibility(View.GONE);
                         }
-                    });
-                    adapter.updatelist(productArrayList);
+                        adapter.updatelist(itemList);
+                        adapter.notifyDataSetChanged();
 
-                    adapter.notifyDataSetChanged();
+                    }
+
                 }
             }
 
@@ -252,6 +219,8 @@ public class ProductsListFragment extends Fragment {
 
             }
         });
+
+
     }
 
 
@@ -311,8 +280,6 @@ public class ProductsListFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-//            Intent i = new Intent(MainActivity.this, Search.class);
-//            startActivity(i);
 
 
             return true;
@@ -320,78 +287,5 @@ public class ProductsListFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-//
-//    public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
-//        ProductsAdapter adapter;
-//
-//
-//        public SwipeToDeleteCallback(ProductsAdapter adapter) {
-//            super(0, ItemTouchHelper.LEFT );
-//            this.adapter = adapter;
-//            icon = ContextCompat.getDrawable(context,
-//                    R.drawable.ic_cancel);
-//
-//            background = new ColorDrawable(Color.RED);
-//        }
-//
-//        @Override
-//        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-//            return false;
-//        }
-//
-//        @Override
-//        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//            int position = viewHolder.getAdapterPosition();
-//            CommonUtils.showToast(""+position);
-////            adapter.deleteItem(position);
-//        }
-//
-//        @Override
-//        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//            super.onChildDraw(c, recyclerView, viewHolder, dX,
-//                    dY, actionState, isCurrentlyActive);
-//            View itemView = viewHolder.itemView;
-//            int backgroundCornerOffset = 20;
-////            if (dX > 0) { // Swiping to the right
-////                background.setBounds(itemView.getLeft(), itemView.getTop(),
-////                        itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
-////                        itemView.getBottom());
-////
-////            } else
-//                if (dX < 0) { // Swiping to the left
-//                background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
-//                        itemView.getTop(), itemView.getRight(), itemView.getBottom());
-//            } else { // view is unSwiped
-//                background.setBounds(0, 0, 0, 0);
-//            }
-//            background.draw(c);
-//            int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-//            int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-//            int iconBottom = iconTop + icon.getIntrinsicHeight();
-//
-////            if (dX > 0) { // Swiping to the right
-////                int iconLeft = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();
-////                int iconRight = itemView.getLeft() + iconMargin;
-////                icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-////
-////                background.setBounds(itemView.getLeft(), itemView.getTop(),
-////                        itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
-////                        itemView.getBottom());
-////            } else
-////
-//                if (dX < 0) { // Swiping to the left
-//                int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
-//                int iconRight = itemView.getRight() - iconMargin;
-//                icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-//
-//                background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
-//                        itemView.getTop(), itemView.getRight(), itemView.getBottom());
-//            } else { // view is unSwiped
-//                background.setBounds(0, 0, 0, 0);
-//            }
-//
-//            background.draw(c);
-//            icon.draw(c);
-//        }
-//    }
+
 }

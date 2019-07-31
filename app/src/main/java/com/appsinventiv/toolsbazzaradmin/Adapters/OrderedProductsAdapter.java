@@ -30,15 +30,16 @@ public class OrderedProductsAdapter extends RecyclerView.Adapter<OrderedProducts
     OnProductSelected onProductSelected;
     int flag;
     int abc;
+
     public OrderedProductsAdapter(Context context, ArrayList<ProductCountModel> productList, String customerType, int flag
-            , OnProductSelected onProductSelected,int abc
+            , OnProductSelected onProductSelected, int abc
     ) {
         this.context = context;
         this.productList = productList;
         this.customerType = customerType;
         this.onProductSelected = onProductSelected;
         this.flag = flag;
-        this.abc=abc;
+        this.abc = abc;
     }
 
     @NonNull
@@ -50,10 +51,11 @@ public class OrderedProductsAdapter extends RecyclerView.Adapter<OrderedProducts
     }
 
 
-    public void selectAll(int abc){
-        this.abc=abc;
-       notifyDataSetChanged();
+    public void selectAll(int abc) {
+        this.abc = abc;
+        notifyDataSetChanged();
     }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final ProductCountModel model = productList.get(position);
@@ -88,10 +90,10 @@ public class OrderedProductsAdapter extends RecyclerView.Adapter<OrderedProducts
         }
 
         Glide.with(context).load(model.getProduct().getThumbnailUrl()).into(holder.image);
-        if(abc==1){
+        if (abc == 1) {
             holder.checkBox.setChecked(true);
 
-        }else{
+        } else {
             holder.checkBox.setChecked(false);
 
         }
@@ -104,12 +106,14 @@ public class OrderedProductsAdapter extends RecyclerView.Adapter<OrderedProducts
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        model.setIsSelected(1);
-                        onProductSelected.onChecked(model, position);
-                    } else {
-                        model.setIsSelected(0);
-                        onProductSelected.onUnChecked(model, position);
+                    if (compoundButton.isPressed()) {
+                        if (b) {
+                            model.setIsSelected(1);
+                            onProductSelected.onChecked(model, position);
+                        } else {
+                            model.setIsSelected(0);
+                            onProductSelected.onUnChecked(model, position);
+                        }
                     }
                 }
             });

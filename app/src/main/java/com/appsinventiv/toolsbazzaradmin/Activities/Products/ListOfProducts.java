@@ -61,35 +61,18 @@ public class ListOfProducts extends AppCompatActivity {
         }
         this.setTitle("List of Products");
         ViewPager viewPager = findViewById(R.id.viewpager);
-        orderStatusList.add("List of products");
-        orderStatusList.add("Seller products");
+        orderStatusList.add("Approved");
+        orderStatusList.add("Pending");
+        orderStatusList.add("Rejected");
+        orderStatusList.add("Out Of Stock");
         FragmentAdapter adapter = new FragmentAdapter(this, orderStatusList, getSupportFragmentManager());
 
         viewPager.setAdapter(adapter);
 
-        // Give the TabLayout the ViewPager
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
-        LinearLayout tabone = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        final TextView countt = (TextView) tabone.findViewById(R.id.txtview);
-        TextView title = (TextView) tabone.findViewById(R.id.tabTitle);
-        title.setText("Seller products");
-        countt.setText("1");
-
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorRed));
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        tabLayout.getTabAt(1).setCustomView(tabone);
-        adapter.setListener(new TabCountCallbacks() {
-            @Override
-            public void newCount(int count, int po) {
-                if (count > 0) {
-                    countt.setVisibility(View.VISIBLE);
-                    countt.setText("" + count);
-                } else {
-                    countt.setVisibility(View.GONE);
-                }
-            }
-        });
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
 
     }

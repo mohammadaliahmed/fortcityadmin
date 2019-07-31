@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/banner"
+            android:id="@+id/adminBanner"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp">
@@ -24,14 +24,14 @@
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_banner" />
+                android:src="@drawable/admin_logo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
-                android:text="Banner"
+                android:text="Admin Banner"
                 android:textColor="#000" />
 
             <View
@@ -42,7 +42,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/dealsBanner"
+            android:id="@+id/clientBanner"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp">
@@ -52,14 +52,14 @@
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_banner" />
+                android:src="@drawable/app_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
-                android:text="Deals Banner"
+                android:text="Client Banner"
                 android:textColor="#000" />
 
             <View
@@ -70,7 +70,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/homeBanner"
+            android:id="@+id/sellerBanner"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp">
@@ -80,14 +80,14 @@
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_banner" />
+                android:src="@drawable/fort_city_green" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
-                android:text="Home Banner"
+                android:text="Seller Banner"
                 android:textColor="#000" />
 
             <View
