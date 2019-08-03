@@ -53,6 +53,8 @@ import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -287,6 +289,37 @@ public class MainActivity extends AppCompatActivity
         initViewPager();
         getBannerImagesFromDb();
     }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Exiting")
+                    .setContentText("Are you sure you want to exit?")
+                    .setCancelText("No, cancel!")
+                    .setConfirmText("Yes, exit!")
+                    .showCancelButton(true)
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            finish();
+
+                        }
+                    })
+                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.cancel();
+                        }
+                    })
+                    .show();
+
+        }
+
+    }
 
     private void initViewPager() {
 
@@ -414,22 +447,22 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
+//    @Override
+//    public void onBackPressed() {
+////        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+////        if (drawer.isDrawerOpen(GravityCompat.START)) {
+////            drawer.closeDrawer(GravityCompat.START);
+////        } else {
+//        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+//            super.onBackPressed();
+//            return;
 //        } else {
-        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
-            super.onBackPressed();
-            return;
-        } else {
-            Toast.makeText(getBaseContext(), "Tap back button in order to exit", Toast.LENGTH_SHORT).show();
-        }
-
-        mBackPressed = System.currentTimeMillis();
+//            Toast.makeText(getBaseContext(), "Tap back button in order to exit", Toast.LENGTH_SHORT).show();
 //        }
-    }
+//
+//        mBackPressed = System.currentTimeMillis();
+////        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
