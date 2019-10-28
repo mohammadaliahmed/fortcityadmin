@@ -1,25 +1,34 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.Employees;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.MainPage.MainActivity;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,11 +50,17 @@ public class ViewEmployee extends AppCompatActivity {
     TextView name, role, employeeRole, phone, email, user_name, password;
     Button update, assignRole;
     String number;
+    String roleId;
+    ScrollView mScrollView;
+    LinearLayout mStitchingWorksListView;
+    EditText salary;
     Spinner spinner;
-    int roleId;
+
+
+    boolean oldValue;
     String[] rolesList = new String[]{"Select Role", "Admin", "Sales & Marketing",
             "Accountant/Cashier", "Purchasing Officer", "Operation Executive", "Delivery Boy", "Family"};
-    String[] newRoleList = new String[]{"CEO", "IT Department", "Accounts Manager", "Accounting Team Leader",
+    public static String[] newRoleList = new String[]{"CEO", "IT Department", "Accounts Manager", "Accounting Team Leader",
             "Accounting Supervisor", "Senior Accountant", "Accountant", "Sales & Marketing Manager", "Sales & Marketing Leader"
             , "Sales & Marketing Supervisor", "Senior Sales & Marketing Executive", "Sales Executive", "Customer Care Manager",
             "Customer Care Leader", "Customer Care Supervisor", "Senior Customer Care Executive", "Customer Care Executive",
@@ -54,6 +70,8 @@ public class ViewEmployee extends AppCompatActivity {
             "Procurement Executive", "Purchasing Officer"};
     CircleImageView userImage;
     TextView textName, textRole;
+
+    Switch approveSwitch;
 
 
     private Button btn;
@@ -66,6 +84,7 @@ public class ViewEmployee extends AppCompatActivity {
     private ArrayList<HashMap<String, String>> parentItems;
     private ArrayList<ArrayList<HashMap<String, String>>> childItems;
     private MyCategoriesExpandableListAdapter myCategoriesExpandableListAdapter;
+    private Employee employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,28 +97,34 @@ public class ViewEmployee extends AppCompatActivity {
         }
         Intent i = getIntent();
         username = i.getStringExtra("username");
-        this.setTitle("Employee: " + username);
+//        this.setTitle(username);
 
+        mStitchingWorksListView = findViewById(R.id.mStitchingWorksListView);
+        mScrollView = findViewById(R.id.mScrollView);
         name = findViewById(R.id.name);
+
+
         employeeRole = findViewById(R.id.employeeRole);
+        spinner = findViewById(R.id.spinner);
         phone = findViewById(R.id.phone);
+        salary = findViewById(R.id.salary);
         email = findViewById(R.id.email);
         update = findViewById(R.id.update);
-        spinner = findViewById(R.id.roles);
         assignRole = findViewById(R.id.assignRole);
         user_name = findViewById(R.id.username);
         password = findViewById(R.id.password);
         userImage = findViewById(R.id.userImage);
         textRole = findViewById(R.id.textRole);
         textName = findViewById(R.id.textName);
+        approveSwitch = findViewById(R.id.approveSwitch);
 
 
-        setUpSpinner();
-
-        assignRole.setOnClickListener(new View.OnClickListener() {
+        approveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                updateNewRole();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isPressed()) {
+                    shwoAlert(b);
+                }
             }
         });
 
@@ -109,8 +134,13 @@ public class ViewEmployee extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    Employee employee = dataSnapshot.getValue(Employee.class);
+                    employee = dataSnapshot.getValue(Employee.class);
                     if (employee != null) {
+                        ViewEmployee.this.setTitle(employee.getName());
+
+                        if(SharedPrefs.getEmployee().getUsername().equalsIgnoreCase(employee.getUsername())){
+                            SharedPrefs.setEmployee(employee);
+                        }
                         name.setText(employee.getName());
                         phone.setText(employee.getPhone());
                         email.setText(employee.getEmail());
@@ -118,19 +148,34 @@ public class ViewEmployee extends AppCompatActivity {
                         user_name.setText(employee.getUsername());
                         password.setText(employee.getPassword());
                         textName.setText(employee.getName());
+                        salary.setText("" + employee.getSalary());
+
+                        setupReferences();
+
+
+                        if (employee.isApproved()) {
+                            approveSwitch.setChecked(true);
+                            oldValue = true;
+                        }
 
                         if (employee.getPicUrl() != null) {
-                            Glide.with(ViewEmployee.this).load(employee.getPicUrl()).into(userImage);
+                            try {
+                                Glide.with(ViewEmployee.this).load(employee.getPicUrl()).into(userImage);
+
+                            } catch (Exception e) {
+
+                            }
                         }
-                        if (employee.getRole() == 0) {
+                        if (employee.getRole() == null) {
                             employeeRole.setText("No role assigned");
                             textRole.setText("No role assigned");
                         } else {
-                            employeeRole.setText(rolesList[employee.getRole()]);
-                            textRole.setText(rolesList[employee.getRole()]);
+                            employeeRole.setText(employee.getRole());
+                            textRole.setText(employee.getRole());
 
                         }
                     }
+
                 }
             }
 
@@ -139,26 +184,108 @@ public class ViewEmployee extends AppCompatActivity {
 
             }
         });
-        update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-
         btn = findViewById(R.id.btn);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewEmployee.this, CheckedActivity.class);
-                startActivity(intent);
+            public void onClick(View view) {
+//                long sala = 0;
+//                String sal = salary.getText().toString();
+//                if (sal.equalsIgnoreCase("")) {
+//                    sala = Long.parseLong(sal);
+//                }
+
+                mDatabase.child("Admin").child("Employees").child(username).child("role").setValue(roleId).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Roles updated");
+                        Employee employee = SharedPrefs.getEmployee();
+                        employee.setRole(roleId);
+                        SharedPrefs.setEmployee(employee);
+                    }
+                });
             }
         });
 
-        setupReferences();
 
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateEmployeRolesToDB();
+//                Intent intent = new Intent(ViewEmployee.this, CheckedActivity.class);
+//                startActivity(intent);
+            }
+        });
+
+
+//        setupReferences();
+        setUpSpinner();
+
+    }
+
+
+    private void updateEmployeRolesToDB() {
+        int count = 0;
+        List<String> roles = new ArrayList<>();
+        for (int i = 0; i < MyCategoriesExpandableListAdapter.parentItems.size(); i++) {
+
+            String isChecked = MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.IS_CHECKED);
+
+            if (isChecked.equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+//                tvParent.setText(tvParent.getText() + MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.CATEGORY_NAME));
+            }
+
+            for (int j = 0; j < MyCategoriesExpandableListAdapter.childItems.get(i).size(); j++) {
+                count++;
+                String isChildChecked = MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.IS_CHECKED);
+
+                if (isChildChecked.equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+                    roles.add(ViewEmployee.newRoleList[count]);
+//                    tvChild.setText(tvChild.getText() + " , " + MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.CATEGORY_NAME) + " " + (j + 1));
+                }
+
+            }
+
+        }
+        if (roles.size() > 0) {
+            mDatabase.child("Admin").child("Employees").child(username).child("roles").setValue(roles).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    CommonUtils.showToast("Roles updated");
+                }
+            });
+        }
+    }
+
+    private void shwoAlert(final boolean b) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ViewEmployee.this);
+        builder.setTitle("Alert");
+        builder.setMessage(b ? "Approve employee" : "Un Approve employee?");
+
+        // add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabase.child("Admin").child("Employees").child(username).child("approved").setValue(b).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast(b ? "Approved" : "Un Approved");
+                    }
+                });
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                approveSwitch.setChecked(oldValue);
+
+            }
+        });
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setupReferences() {
@@ -178,7 +305,12 @@ public class ViewEmployee extends AppCompatActivity {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(i));
-            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+
+            if (employee.getRoles() != null && employee.getRoles().contains(newRoleList[i])) {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
             subCategoryItem.setSubCategoryName(newRoleList[i]);
             arSubCategory.add(subCategoryItem);
         }
@@ -195,7 +327,12 @@ public class ViewEmployee extends AppCompatActivity {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(j));
-            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            if (employee.getRoles() != null && employee.getRoles().contains(newRoleList[j])) {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
             subCategoryItem.setSubCategoryName(newRoleList[j]);
             arSubCategory.add(subCategoryItem);
         }
@@ -210,7 +347,12 @@ public class ViewEmployee extends AppCompatActivity {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(k));
-            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            if (employee.getRoles() != null && employee.getRoles().contains(newRoleList[k])) {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
             subCategoryItem.setSubCategoryName(newRoleList[k]);
             arSubCategory.add(subCategoryItem);
         }
@@ -227,7 +369,12 @@ public class ViewEmployee extends AppCompatActivity {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(k));
-            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            if (employee.getRoles() != null && employee.getRoles().contains(newRoleList[k])) {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
             subCategoryItem.setSubCategoryName(newRoleList[k]);
             arSubCategory.add(subCategoryItem);
         }
@@ -244,7 +391,12 @@ public class ViewEmployee extends AppCompatActivity {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(k));
-            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            if (employee.getRoles() != null && employee.getRoles().contains(newRoleList[k])) {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
             subCategoryItem.setSubCategoryName(newRoleList[k]);
             arSubCategory.add(subCategoryItem);
         }
@@ -261,8 +413,14 @@ public class ViewEmployee extends AppCompatActivity {
 
             SubCategoryItem subCategoryItem = new SubCategoryItem();
             subCategoryItem.setCategoryId(String.valueOf(k));
-            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+//            subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            if (employee.getRoles() != null && employee.getRoles().contains(newRoleList[k])) {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
             subCategoryItem.setSubCategoryName(newRoleList[k]);
+
             arSubCategory.add(subCategoryItem);
         }
 
@@ -313,23 +471,6 @@ public class ViewEmployee extends AppCompatActivity {
         lvCategory.setAdapter(myCategoriesExpandableListAdapter);
     }
 
-    private void updateNewRole() {
-        mDatabase.child("Admin").child("Employees").child(username).child("role").setValue(roleId)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        if (roleId != 0) {
-                            CommonUtils.showToast("New role assigned to " + username + "  as " + rolesList[roleId]);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                CommonUtils.showToast("Error " + e.getMessage());
-            }
-        });
-    }
-
     private void setUpSpinner() {
         final String[] items = new String[]{"Disable", "Admin", "Sales & Marketing",
                 "Accountant/Cashier", "Purchasing Officer", "Operation Executive", "Delivery Boy", "Family"};
@@ -343,7 +484,7 @@ public class ViewEmployee extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-                roleId = position;
+                roleId = items[position];
             }
 
             @Override

@@ -12,13 +12,15 @@ import android.view.Window;
 import com.appsinventiv.toolsbazzaradmin.Activities.MainPage.MainActivity;
 import com.appsinventiv.toolsbazzaradmin.Adapters.OrdersFragmentAdapter;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 
 import java.util.ArrayList;
 
 public class Orders extends AppCompatActivity {
     ArrayList<String> orderStatusList = new ArrayList<>();
 
-    String storeUsername,storename;
+    String storeUsername, storename;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,19 +29,20 @@ public class Orders extends AppCompatActivity {
         setContentView(R.layout.activity_orders);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
-        storeUsername=getIntent().getStringExtra("username");
-        storename=getIntent().getStringExtra("storename");
+        storeUsername = getIntent().getStringExtra("username");
+        storename = getIntent().getStringExtra("storename");
 
-        this.setTitle(storename+" Orders");
+        this.setTitle(storename + " Orders");
         ViewPager viewPager = findViewById(R.id.viewpager);
         orderStatusList.add("Pending");
         orderStatusList.add("Under Process");
         orderStatusList.add("Invoice");
         orderStatusList.add("Cancelled");
         OrdersFragmentAdapter adapter = new OrdersFragmentAdapter(this, orderStatusList,
-                getSupportFragmentManager(),storeUsername);
+                getSupportFragmentManager(), storeUsername);
         viewPager.setAdapter(adapter);
 
         // Give the TabLayout the ViewPager
@@ -48,6 +51,8 @@ public class Orders extends AppCompatActivity {
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryDark));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        viewPager.setCurrentItem(Constants.TAB);
+
 
 
     }

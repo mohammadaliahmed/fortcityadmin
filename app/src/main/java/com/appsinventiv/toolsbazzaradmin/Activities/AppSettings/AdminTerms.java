@@ -38,6 +38,7 @@ public class AdminTerms extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_terms);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        this.setTitle("Admin T&C");
 
 
         if (getSupportActionBar() != null) {
@@ -84,7 +85,6 @@ public class AdminTerms extends AppCompatActivity {
         });
 
 
-        this.setTitle("Edit: Terms and Conditions");
 
 
         getTermsFromDb();

@@ -70,6 +70,9 @@ public class SellerListAdapter extends RecyclerView.Adapter<SellerListAdapter.Vi
         holder.status.setText(model.isApproved() ? "Approved" : "Unapproved");
         if(model.getPicUrl()!=null){
             Glide.with(context).load(model.getPicUrl()).into(holder.imageView2);
+        }else{
+            Glide.with(context).load(R.drawable.ic_fort_placeholder).into(holder.imageView2);
+
         }
 
         if (model.isStatus()) {

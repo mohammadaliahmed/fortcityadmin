@@ -13,7 +13,9 @@ public class AboutUsModel {
         this.mission = mission;
         this.values = values;
         this.contact = contact;
+
     }
+
 
     public AboutUsModel() {
     }

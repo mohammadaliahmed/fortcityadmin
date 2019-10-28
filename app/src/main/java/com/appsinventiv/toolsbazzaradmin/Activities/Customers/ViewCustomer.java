@@ -13,11 +13,14 @@ import com.appsinventiv.toolsbazzaradmin.Adapters.InvoiceListAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewCustomer extends AppCompatActivity {
     DatabaseReference mDatabase;
@@ -25,6 +28,7 @@ public class ViewCustomer extends AppCompatActivity {
     Button back;
     TextView name, username, lastOrder, totalOrders, customerSince, customerName,
             type, storeName, email, shipping, city, country, telephone, mobile, password;
+    CircleImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,8 @@ public class ViewCustomer extends AppCompatActivity {
         this.setTitle("Customer info");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();
         name = findViewById(R.id.name);
@@ -42,6 +47,7 @@ public class ViewCustomer extends AppCompatActivity {
         city = findViewById(R.id.city);
         country = findViewById(R.id.country);
         telephone = findViewById(R.id.telephone);
+        image = findViewById(R.id.image);
         mobile = findViewById(R.id.mobile);
         country = findViewById(R.id.country);
         lastOrder = findViewById(R.id.lastOrder);
@@ -93,7 +99,12 @@ public class ViewCustomer extends AppCompatActivity {
                         storeName.setText(customer.getStoreName());
                         customerName.setText(customer.getName());
                         password.setText(customer.getPassword());
+                        try {
+                            Glide.with(ViewCustomer.this).load(customer.getPicUrl()).into(image);
 
+                        } catch (Exception e) {
+
+                        }
                         totalOrders.setText("" + dataSnapshot.child("Orders").getChildrenCount());
                     }
 

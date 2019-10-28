@@ -1,6 +1,7 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +20,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings;
+import com.appsinventiv.toolsbazzaradmin.Adapters.PickedPicturesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Adapters.SelectedImagesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.BannerPicsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.SelectedAdImages;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
+import com.appsinventiv.toolsbazzaradmin.Utils.CompressImagePNG;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -31,6 +35,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,17 +50,18 @@ import java.util.List;
 public class HomeBannerSettings extends AppCompatActivity {
 
 
+
     DatabaseReference mDatabase;
     StorageReference mStorageRef;
     private static final int REQUEST_CODE_CHOOSE = 23;
-    SelectedImagesAdapter adapter;
+    PickedPicturesAdapter adapter;
     RecyclerView recyclerView;
     Bundle extras;
 
     List<Uri> mSelected;
     ArrayList<String> imageUrl = new ArrayList<>();
-    ArrayList<SelectedAdImages> banners = new ArrayList<>();
-    ArrayList<SelectedAdImages> selectedAdImages = new ArrayList<>();
+    ArrayList<BannerPicsModel> banners = new ArrayList<>();
+    ArrayList<String> selectedAdImages = new ArrayList<>();
 
     Button update, pick;
     RecyclerView recyclerviewPics;
@@ -95,7 +101,7 @@ public class HomeBannerSettings extends AppCompatActivity {
                         Matisse.from(HomeBannerSettings.this)
                                 .choose(MimeType.allOf())
                                 .countable(true)
-                                .maxSelectable(8)
+                                .maxSelectable(20)
                                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                                 .thumbnailScale(0.85f)
@@ -114,15 +120,14 @@ public class HomeBannerSettings extends AppCompatActivity {
                 if (mSelected == null) {
                     CommonUtils.showToast("Please choose banners");
                 } else {
-                    for (String img : imageUrl) {
+                    for (String img : selectedAdImages) {
 
                         putPictures(img, "" + "", count);
                         count++;
 
                     }
-                    CommonUtils.showToast("Uploaded");
-                    Intent i = new Intent(HomeBannerSettings.this, Settings.class);
-                    startActivity(i);
+                    CommonUtils.showToast("Uploading..");
+
                 }
             }
         });
@@ -136,41 +141,57 @@ public class HomeBannerSettings extends AppCompatActivity {
         recyclerviewPics.setLayoutManager(horizontalLayoutManagaer);
         SelectedImagesAdapter adapter = new SelectedImagesAdapter(HomeBannerSettings.this, banners, new SelectedImagesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-
+            public void onDeleteClicked(BannerPicsModel images, int position) {
+                showDeleteAlert(images);
             }
+
+
         });
         recyclerviewPics.setAdapter(adapter);
     }
 
-    private void getPicsFromDb() {
-        mDatabase.child("Settings").child("HomeBanners").addChildEventListener(new ChildEventListener() {
+    private void showDeleteAlert(final BannerPicsModel bannerPicsModel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeBannerSettings.this);
+        builder.setTitle("Alert");
+        builder.setMessage("Do you want to delete this banner? ");
+
+        // add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    recyclerviewPics.setVisibility(View.VISIBLE);
-                    BannerPicsModel model = dataSnapshot.getValue(BannerPicsModel.class);
-                    if (model != null) {
-                        banners.add(new SelectedAdImages(model.getUrl()));
-                        adapter.notifyDataSetChanged();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabase.child("Settings/HomeBanners").child("" + bannerPicsModel.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Deleted");
                     }
+                });
+
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void getPicsFromDb() {
+        mDatabase.child("Settings").child("HomeBanners").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    banners.clear();
+                    recyclerviewPics.setVisibility(View.VISIBLE);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        BannerPicsModel model = snapshot.getValue(BannerPicsModel.class);
+                        if (model != null) {
+                            banners.add(model);
+
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
 
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -195,10 +216,10 @@ public class HomeBannerSettings extends AppCompatActivity {
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-
+                        String key = mDatabase.push().getKey();
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        mDatabase.child("Settings").child("HomeBanners").child("" + count)
-                                .setValue(new BannerPicsModel("" + count, "" + downloadUrl, "", count)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        mDatabase.child("Settings").child("HomeBanners").child(key)
+                                .setValue(new BannerPicsModel(key, "" + downloadUrl, "", count)).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
 
@@ -230,11 +251,12 @@ public class HomeBannerSettings extends AppCompatActivity {
                 mSelected = Matisse.obtainResult(data);
                 for (Uri img :
                         mSelected) {
-                    selectedAdImages.add(new SelectedAdImages("" + img));
+//                    selectedAdImages.add(new BannerPicsModel());
                     adapter.notifyDataSetChanged();
-                    CompressImage compressImage = new CompressImage(HomeBannerSettings.this);
-                    imageUrl.add(compressImage.compressImage("" + img));
+                    CompressImagePNG compressImage = new CompressImagePNG(HomeBannerSettings.this);
+                    selectedAdImages.add(compressImage.compressImage("" + img));
                 }
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -247,11 +269,14 @@ public class HomeBannerSettings extends AppCompatActivity {
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(HomeBannerSettings.this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        adapter = new SelectedImagesAdapter(HomeBannerSettings.this, selectedAdImages, new SelectedImagesAdapter.ChooseOption() {
+        adapter = new PickedPicturesAdapter(HomeBannerSettings.this, selectedAdImages, new PickedPicturesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-
+            public void onDeleteClicked(int position) {
+                selectedAdImages.remove(position);
+                adapter.notifyDataSetChanged();
             }
+
+
         });
         recyclerView.setAdapter(adapter);
     }
@@ -283,7 +308,7 @@ public class HomeBannerSettings extends AppCompatActivity {
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;

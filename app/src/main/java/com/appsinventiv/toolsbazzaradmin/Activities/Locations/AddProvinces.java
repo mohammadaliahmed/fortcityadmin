@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddMainCategories;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;

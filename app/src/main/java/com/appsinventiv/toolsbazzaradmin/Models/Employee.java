@@ -1,22 +1,27 @@
 package com.appsinventiv.toolsbazzaradmin.Models;
 
+import java.util.List;
+
 /**
  * Created by AliAh on 10/09/2018.
  */
 
 public class Employee {
     String username, name, email, password, phone, fcmKey,picUrl;
-    int role;
+    String role;
     long time;
     int code;
     boolean codeVerified;
     boolean active;
     boolean approved;
+    boolean blocked;
+    List<String> roles;
+    long salary;
 
 
-    public Employee(String username, String name, String email, String password, String phone, String fcmKey, int role,
+    public Employee(String username, String name, String email, String password, String phone, String fcmKey, String role,
                     long time, int code,
-                    boolean codeVerified, boolean active,boolean approved) {
+                    boolean codeVerified, boolean active,boolean approved,boolean blocked) {
         this.username = username;
         this.name = name;
         this.email = email;
@@ -29,7 +34,33 @@ public class Employee {
         this.codeVerified = codeVerified;
         this.active = active;
         this.approved=approved;
+        this.blocked=blocked;
 
+    }
+
+
+    public long getSalary() {
+        return salary;
+    }
+
+    public void setSalary(long salary) {
+        this.salary = salary;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public String getPicUrl() {
@@ -131,11 +162,11 @@ public class Employee {
         this.fcmKey = fcmKey;
     }
 
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }

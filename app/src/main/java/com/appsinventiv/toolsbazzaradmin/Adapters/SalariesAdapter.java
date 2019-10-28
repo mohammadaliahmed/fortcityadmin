@@ -57,7 +57,7 @@ public class SalariesAdapter extends RecyclerView.Adapter<SalariesAdapter.ViewHo
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Employee employee = itemList.get(position);
         holder.name.setText((position + 1) + ". " + employee.getName());
-        holder.role.setText("(Role: " + CommonUtils.rolesList[employee.getRole()] + ")");
+        holder.role.setText("(Role: " + employee.getRole());
 
         if (salaryAlreadyList.size() > 0) {
             for (int i = 0; i < salaryAlreadyList.size(); i++) {

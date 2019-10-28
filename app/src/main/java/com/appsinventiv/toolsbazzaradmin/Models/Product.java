@@ -1,6 +1,7 @@
 package com.appsinventiv.toolsbazzaradmin.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  */
 
 public class Product {
-    String id, title, subtitle, isActive, thumbnailUrl, mainCategory, subCategory;
+    String id, title, subtitle, thumbnailUrl, mainCategory, subCategory;
     long time;
     float costPrice, wholeSalePrice, retailPrice;
     long minOrderQuantity;
@@ -24,17 +25,17 @@ public class Product {
     ArrayList<String> pictures;
     ArrayList<String> category;
     int quantityAvailable;
-    String brandName,productContents,warrantyType,productWeight;
+    String brandName, productContents, warrantyType, productWeight;
     String dimen;
     String sellerProductStatus;
     String uploadedBy;
     int salesCount, likesCount;
 
     int ratingCount;
-    int positiveCount,neutralCount,negativeCount;
-
-
-
+    int positiveCount, neutralCount, negativeCount;
+    boolean active;
+    String warrantyPeriod, warrantyPolicy, dangerousGood;
+    HashMap<String, String> productAttributes;
 
 
     public Product() {
@@ -64,7 +65,7 @@ public class Product {
         return id != null ? id.hashCode() : 0;
     }
 
-    public Product(String id, String title, String subtitle, String isActive,
+    public Product(String id, String title, String subtitle, boolean active,
                    int sku, String thumbnailUrl, String mainCategory, String subCategory,
                    long time, float costPrice, float wholeSalePrice, float retailPrice,
                    long minOrderQuantity, String measurement, VendorModel vendor, String sellingTo,
@@ -74,15 +75,19 @@ public class Product {
                    List<String> colorList,
                    float oldWholeSalePrice, float oldRetailPrice
             , float rating,
-                   ArrayList<String> category,int quantityAvailable,
-                   String brandName, String productContents,String warrantyType,String productWeight,
-                   String dimen,String uploadedBy,String sellerProductStatus
+                   ArrayList<String> category, int quantityAvailable,
+                   String brandName, String productContents, String warrantyType, String productWeight,
+                   String dimen, String uploadedBy, String sellerProductStatus,
+                   String warrantyPeriod, String warrantyPolicy, String dangerousGood
+
 
     ) {
+        this.warrantyPeriod = warrantyPeriod;
+        this.warrantyPolicy = warrantyPolicy;
+        this.dangerousGood = dangerousGood;
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
-        this.isActive = isActive;
         this.sku = sku;
         this.thumbnailUrl = thumbnailUrl;
         this.mainCategory = mainCategory;
@@ -90,6 +95,7 @@ public class Product {
         this.time = time;
         this.costPrice = costPrice;
         this.wholeSalePrice = wholeSalePrice;
+        this.active = active;
         this.retailPrice = retailPrice;
         this.minOrderQuantity = minOrderQuantity;
         this.measurement = measurement;
@@ -102,14 +108,38 @@ public class Product {
         this.oldWholeSalePrice = oldWholeSalePrice;
         this.rating = rating;
         this.category = category;
-        this.quantityAvailable=quantityAvailable;
-        this.brandName=brandName;
-        this.productContents=productContents;
-        this.warrantyType=warrantyType;
-        this.productWeight=productWeight;
-        this.dimen=dimen;
-        this.uploadedBy=uploadedBy;
-        this.sellerProductStatus=sellerProductStatus;
+        this.quantityAvailable = quantityAvailable;
+        this.brandName = brandName;
+        this.productContents = productContents;
+        this.warrantyType = warrantyType;
+        this.productWeight = productWeight;
+        this.dimen = dimen;
+        this.uploadedBy = uploadedBy;
+        this.sellerProductStatus = sellerProductStatus;
+    }
+
+    public String getWarrantyPeriod() {
+        return warrantyPeriod;
+    }
+
+    public void setWarrantyPeriod(String warrantyPeriod) {
+        this.warrantyPeriod = warrantyPeriod;
+    }
+
+    public String getWarrantyPolicy() {
+        return warrantyPolicy;
+    }
+
+    public void setWarrantyPolicy(String warrantyPolicy) {
+        this.warrantyPolicy = warrantyPolicy;
+    }
+
+    public String getDangerousGood() {
+        return dangerousGood;
+    }
+
+    public void setDangerousGood(String dangerousGood) {
+        this.dangerousGood = dangerousGood;
     }
 
     public int getSalesCount() {
@@ -329,12 +359,12 @@ public class Product {
         this.subtitle = subtitle;
     }
 
-    public String getIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getSku() {

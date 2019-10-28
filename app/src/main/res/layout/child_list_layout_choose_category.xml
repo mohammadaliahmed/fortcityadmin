@@ -47,10 +47,11 @@
 
             <CheckBox
                 android:id="@+id/cbSubCategory"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:button="@drawable/custom_checkbox_theme" />
+                 />
 
         </LinearLayout>
     </LinearLayout>
@@ -58,6 +59,7 @@
     <View
         android:id="@+id/viewDivider"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="0.5dp"
         android:background="@color/colorBlack"/>
 </LinearLayout>

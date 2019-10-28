@@ -10,11 +10,13 @@ import android.widget.RelativeLayout;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage.Banners;
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ShippingCarriers.ListOfShippingCarriers;
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.CategoryAndAttributes;
 import com.appsinventiv.toolsbazzaradmin.Activities.Locations.ListOfCountries;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseWarrenty;
 import com.appsinventiv.toolsbazzaradmin.R;
 
 public class Settings extends AppCompatActivity {
-    RelativeLayout aboutUs, terms, banner, deliveryCharges, company, cod, commissions, languages, fort_features, shippingCarrier;
+    RelativeLayout aboutUs, terms, banner, deliveryCharges, categoryAndAttributes, appIcons, company, cod, commissions, languages, fort_features, shippingCarrier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +29,29 @@ public class Settings extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
 
+
+        appIcons = findViewById(R.id.appIcons);
         aboutUs = findViewById(R.id.aboutUs);
         shippingCarrier = findViewById(R.id.shippingCarrier);
         banner = findViewById(R.id.banner);
         terms = findViewById(R.id.terms);
+        categoryAndAttributes = findViewById(R.id.categoryAndAttributes);
         company = findViewById(R.id.company);
         deliveryCharges = findViewById(R.id.deliveryCharges);
         commissions = findViewById(R.id.commissions);
         fort_features = findViewById(R.id.fort_features);
         cod = findViewById(R.id.cod);
         languages = findViewById(R.id.languages);
+
+
+        categoryAndAttributes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Settings.this, CategoryAndAttributes.class);
+                startActivity(i);
+            }
+        });
+
 
         shippingCarrier.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +95,6 @@ public class Settings extends AppCompatActivity {
             }
         });
 
-
         aboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +128,15 @@ public class Settings extends AppCompatActivity {
         company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Settings.this, CompanySettings.class);
+                Intent i = new Intent(Settings.this, CompanyScreen.class);
+                startActivity(i);
+            }
+        });
+
+        appIcons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Settings.this, AppIcons.class);
                 startActivity(i);
             }
         });

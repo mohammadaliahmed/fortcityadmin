@@ -13,8 +13,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryImages;
+import com.appsinventiv.toolsbazzaradmin.Activities.Employees.PendingApproval;
+import com.appsinventiv.toolsbazzaradmin.Activities.MainPage.MainActivity;
+import com.appsinventiv.toolsbazzaradmin.Activities.ProductImages;
+import com.appsinventiv.toolsbazzaradmin.Activities.TestActivity;
 import com.appsinventiv.toolsbazzaradmin.Activities.Welcome;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 
 public class Splash extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 4000;
@@ -33,7 +39,7 @@ public class Splash extends AppCompatActivity {
         }
 
 
-        ImageView myImageView= (ImageView)findViewById(R.id.logo);
+        ImageView myImageView = (ImageView) findViewById(R.id.logo);
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         myImageView.startAnimation(myFadeInAnimation);
         new Handler().postDelayed(new Runnable() {
@@ -47,11 +53,25 @@ public class Splash extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(Splash.this, Welcome.class);
-                startActivity(i);
+                if (SharedPrefs.getEmployee() != null) {
+                    if (!SharedPrefs.getEmployee().isApproved()) {
+                        Intent i = new Intent(Splash.this, PendingApproval.class);
+                        startActivity(i);
+                    } else {
+                        Intent i = new Intent(Splash.this, MainActivity.class);
+//                        Intent i = new Intent(Splash.this, CategoryImages.class);
+                        startActivity(i);
+                        finish();
+                    }
+                } else {
+//                Intent i = new Intent(Splash.this, TestActivity.class);
+                    Intent i = new Intent(Splash.this, Welcome.class);
+                    startActivity(i);
 
-                // close this activity
-                finish();
+
+                    // close this activity
+                    finish();
+                }
             }
         }, SPLASH_TIME_OUT);
     }

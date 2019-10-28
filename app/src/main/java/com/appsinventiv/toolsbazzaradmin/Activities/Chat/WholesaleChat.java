@@ -3,7 +3,9 @@ package com.appsinventiv.toolsbazzaradmin.Activities.Chat;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 
 import com.appsinventiv.toolsbazzaradmin.Adapters.ChatAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.ChatModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.KeyboardUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationAsync;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationObserver;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
@@ -45,6 +49,7 @@ public class WholesaleChat extends AppCompatActivity implements NotificationObse
     String username;
     private Customer customer;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +70,17 @@ public class WholesaleChat extends AppCompatActivity implements NotificationObse
         message = findViewById(R.id.message);
         sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         soundId = sp.load(WholesaleChat.this, R.raw.tick_sound, 1);
+        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener()
+        {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible)
+            {
+                recyclerView.getLayoutManager().scrollToPosition(adapter.getItemCount() - 1);
 
+                recyclerView.scrollToPosition(chatModelArrayList.size() - 1);
+
+            }
+        });
 
     }
 
@@ -124,7 +139,11 @@ public class WholesaleChat extends AppCompatActivity implements NotificationObse
         recyclerView = findViewById(R.id.chats);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        layoutManager.setReverseLayout(true);
+
         adapter = new ChatAdapter(WholesaleChat.this, chatModelArrayList);
+        layoutManager.setStackFromEnd(true);
+
         recyclerView.setAdapter(adapter);
 
         mDatabase.child("Chats/WholesaleChats").child(username).addValueEventListener(new ValueEventListener() {
@@ -149,15 +168,7 @@ public class WholesaleChat extends AppCompatActivity implements NotificationObse
 
             }
         });
-        message.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    recyclerView.scrollToPosition(chatModelArrayList.size() - 1);
-                }
 
-            }
-        });
 
     }
 

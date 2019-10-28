@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Locations.CountryModel;
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.MainCategoryModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.google.android.gms.tasks.OnSuccessListener;

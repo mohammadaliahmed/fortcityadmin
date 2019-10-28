@@ -118,6 +118,7 @@ public class Welcome extends AppCompatActivity {
         }
         Intent i = new Intent(Welcome.this, Login.class);
         startActivity(i);
+        finish();
     }
 
     private int getItem(int i) {

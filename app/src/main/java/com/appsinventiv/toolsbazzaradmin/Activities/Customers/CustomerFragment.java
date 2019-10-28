@@ -110,7 +110,7 @@ public class CustomerFragment extends Fragment {
     }
 
     private void deleteUser(String username) {
-        mDatabase.child("Customers").child(username).child("isDeleted").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("Customers").child(username).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 CommonUtils.showToast("User deleted");

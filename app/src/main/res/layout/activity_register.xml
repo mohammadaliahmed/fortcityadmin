@@ -166,6 +166,7 @@
                         android:layout_alignParentLeft="true"
 
                         android:layout_marginLeft="30dp"
+                        app:passwordToggleTint="@color/default_grey"
                         android:layout_marginTop="10dp"
                         android:textColorHint="@color/default_grey"
                         app:passwordToggleEnabled="true">

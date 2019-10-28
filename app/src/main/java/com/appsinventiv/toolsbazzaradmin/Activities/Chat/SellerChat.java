@@ -3,7 +3,9 @@ package com.appsinventiv.toolsbazzaradmin.Activities.Chat;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,9 +18,11 @@ import android.widget.ImageView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Customers.SellerModel;
 import com.appsinventiv.toolsbazzaradmin.Adapters.ChatAdapter;
+import com.appsinventiv.toolsbazzaradmin.Adapters.SellerChatAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.ChatModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.KeyboardUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationAsync;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationObserver;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
@@ -38,7 +42,7 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
     ImageView send;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
-    ChatAdapter adapter;
+    SellerChatAdapter adapter;
     ArrayList<ChatModel> chatModelArrayList = new ArrayList<>();
     int soundId;
     SoundPool sp;
@@ -46,6 +50,7 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
     String username;
     private SellerModel seller;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +71,16 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
         sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         soundId = sp.load(SellerChat.this, R.raw.tick_sound, 1);
 
+        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener()
+        {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible)
+            {
+                recyclerView.getLayoutManager().scrollToPosition(adapter.getItemCount() - 1);
 
+                recyclerView.scrollToPosition(chatModelArrayList.size() - 1);
+            }
+        });
     }
 
     @Override
@@ -87,6 +101,7 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
                     if (seller != null) {
                         userFcmKey = seller.getFcmKey();
                         SellerChat.this.setTitle(seller.getStoreName());
+                        adapter.setSeller(seller);
                     }
                 }
             }
@@ -125,7 +140,9 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
         recyclerView = findViewById(R.id.chats);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ChatAdapter(SellerChat.this, chatModelArrayList);
+        adapter = new SellerChatAdapter(SellerChat.this, chatModelArrayList);
+        layoutManager.setStackFromEnd(true);
+
         recyclerView.setAdapter(adapter);
 
         mDatabase.child("Chats/SellerChats").child(username).addValueEventListener(new ValueEventListener() {
@@ -150,15 +167,7 @@ public class SellerChat extends AppCompatActivity implements NotificationObserve
 
             }
         });
-        message.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    recyclerView.scrollToPosition(chatModelArrayList.size() - 1);
-                }
 
-            }
-        });
 
     }
 

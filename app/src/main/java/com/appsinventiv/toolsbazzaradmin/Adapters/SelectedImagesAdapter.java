@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appsinventiv.toolsbazzaradmin.Models.BannerPicsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.SelectedAdImages;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.bumptech.glide.Glide;
@@ -19,14 +20,14 @@ import java.util.List;
  */
 
 public class SelectedImagesAdapter extends RecyclerView.Adapter<SelectedImagesAdapter.ViewHolder> {
-    List<SelectedAdImages> mobileAds;
+    List<BannerPicsModel> mobileAds;
     Context context;
     ChooseOption option;
     //    private List<String> adTitlesList = Collections.emptyList();
     private LayoutInflater mInflater;
 
     // data is passed into the constructor
-    public SelectedImagesAdapter(Context context, List<SelectedAdImages> mobileAds, ChooseOption option) {
+    public SelectedImagesAdapter(Context context, List<BannerPicsModel> mobileAds, ChooseOption option) {
         this.mInflater = LayoutInflater.from(context);
         this.mobileAds = mobileAds;
         this.context = context;
@@ -42,11 +43,11 @@ public class SelectedImagesAdapter extends RecyclerView.Adapter<SelectedImagesAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SelectedAdImages model = mobileAds.get(position);
+        final BannerPicsModel model = mobileAds.get(position);
 
         Glide.with(context).load(model.getUrl()).into(holder.adImageView);
-        position = position + 1;
-        holder.picCount.setText("" + position);
+
+        holder.picCount.setText("" + (position + 1));
 
 
         final int finalPosition = position;
@@ -88,7 +89,8 @@ public class SelectedImagesAdapter extends RecyclerView.Adapter<SelectedImagesAd
     }
 
     public interface ChooseOption {
-        public void onDeleteClicked(SelectedAdImages images,int position);
+        public void onDeleteClicked(BannerPicsModel images, int position);
+
     }
 
 

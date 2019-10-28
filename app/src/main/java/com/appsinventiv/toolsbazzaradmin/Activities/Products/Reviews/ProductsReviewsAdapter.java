@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -121,6 +123,8 @@ public class ProductsReviewsAdapter extends RecyclerView.Adapter<ProductsReviews
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(context);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 View layout = layoutInflater.inflate(R.layout.popup_approve_design, null);
@@ -129,13 +133,22 @@ public class ProductsReviewsAdapter extends RecyclerView.Adapter<ProductsReviews
 
                 TextView title = layout.findViewById(R.id.title);
                 Switch approveSwitch = layout.findViewById(R.id.approveSwitch);
+                Switch active = layout.findViewById(R.id.active);
+                ImageView img = layout.findViewById(R.id.img);
 
-                title.setText("Choose option for " + (model.getTitle().length()>30?model.getTitle().substring(0,30)+"...":model.getTitle()));
+                Glide.with(context).load(model.getThumbnailUrl()).into(img);
+
+                title.setText("" + (model.getTitle().length() > 30 ? model.getTitle().substring(0, 30) + "..." : model.getTitle()));
 
                 if (model.getSellerProductStatus().equalsIgnoreCase("Approved")) {
                     approveSwitch.setChecked(true);
                 } else if (model.getSellerProductStatus().equalsIgnoreCase("Pending")) {
                     approveSwitch.setChecked(false);
+                }
+                if (model.isActive()) {
+                    active.setChecked(true);
+                } else {
+                    active.setChecked(false);
                 }
                 approveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -143,6 +156,16 @@ public class ProductsReviewsAdapter extends RecyclerView.Adapter<ProductsReviews
                         if (compoundButton.isPressed()) {
 //                            callbacks.onChangeStatus(model, b);
                             callbacks.onStatusChange(model, b ? "Approved" : "Pending");
+                        }
+                    }
+                });
+                active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (compoundButton.isPressed()) {
+                            model.setActive(b);
+
+                            callbacks.onActiveStatusChange(model, b);
                         }
                     }
                 });
@@ -186,6 +209,8 @@ public class ProductsReviewsAdapter extends RecyclerView.Adapter<ProductsReviews
 
     public interface SellerProductsAdapterCallbacks {
         public void onStatusChange(Product product, String status);
+
+        public void onActiveStatusChange(Product product, boolean status);
 
         public void onReject(Product product);
     }

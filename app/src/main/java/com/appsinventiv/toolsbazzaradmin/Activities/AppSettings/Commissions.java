@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.MainCategoryModel;
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.MainCategoryModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.google.android.gms.tasks.OnSuccessListener;

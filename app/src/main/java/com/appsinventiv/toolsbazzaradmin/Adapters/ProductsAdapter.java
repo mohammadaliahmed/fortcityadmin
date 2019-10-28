@@ -60,11 +60,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.subtitle.setText(model.getSubtitle());
         Glide.with(context).load(model.getThumbnailUrl()).into(holder.image);
 
-        if (model.getIsActive().equalsIgnoreCase("true")) {
+        if (model.isActive()) {
             holder.switchh.setChecked(true);
-        } else if (model.getIsActive().equalsIgnoreCase("false")) {
-            holder.switchh.setChecked(false);
-        } else {
+        } else{
             holder.switchh.setChecked(false);
 //            holder.switchh.setVisibility(View.GONE);
         }

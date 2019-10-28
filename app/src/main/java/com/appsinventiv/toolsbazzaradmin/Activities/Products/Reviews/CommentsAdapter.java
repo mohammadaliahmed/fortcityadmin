@@ -67,7 +67,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     public int getItemViewType(int position) {
         CommentsModel model = arrayList.get(position);
         if (product != null) {
-            if (model.getName().equalsIgnoreCase(product.getVendor().getVendorName())) {
+            if (model.getName().equalsIgnoreCase(product.getVendor().getVendorName()) || model.getName().equalsIgnoreCase("Fort City")) {
                 return RIGHT_CHAT;
             } else {
                 return LEFT_CHAT;
@@ -82,9 +82,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CommentsModel model = arrayList.get(position);
         if (getItemViewType(position) == RIGHT_CHAT) {
-            holder.name.setText(product.getVendor().getStoreName());
-            if (vendor != null && vendor.getPicUrl() != null) {
-                Glide.with(context).load(vendor.getPicUrl()).into(holder.pic);
+            if (model.getName().equalsIgnoreCase("Fort City")) {
+                holder.name.setText("Fort City");
+                Glide.with(context).load(R.drawable.admin_logo).into(holder.pic);
+            } else {
+                holder.name.setText(product.getVendor().getStoreName());
+                if (vendor != null && vendor.getPicUrl() != null) {
+                    Glide.with(context).load(vendor.getPicUrl()).into(holder.pic);
+                }
             }
         } else {
             holder.name.setText(model.getName());

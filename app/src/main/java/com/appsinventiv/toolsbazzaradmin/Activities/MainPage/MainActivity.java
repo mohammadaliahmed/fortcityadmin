@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.NewAccounts.NewAccountsScreen;
+import com.appsinventiv.toolsbazzaradmin.Activities.Employees.AccountBlocked;
 import com.appsinventiv.toolsbazzaradmin.Activities.Employees.ProfileSettings;
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings;
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ViewAboutUs;
@@ -31,6 +32,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Chat.Chats;
 import com.appsinventiv.toolsbazzaradmin.Activities.Customers.Customers;
 import com.appsinventiv.toolsbazzaradmin.Activities.Employees.ListOfEmployees;
 import com.appsinventiv.toolsbazzaradmin.Activities.Login.Login;
+import com.appsinventiv.toolsbazzaradmin.Activities.Login.Splash;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.NewOrder.NewOrderScreen;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.OrdersCourier;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.OrdersDelivery;
@@ -39,11 +41,13 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Purchases.Purchases;
 import com.appsinventiv.toolsbazzaradmin.Activities.Vendors.Vendors;
 import com.appsinventiv.toolsbazzaradmin.Activities.Welcome;
 import com.appsinventiv.toolsbazzaradmin.Models.AdminModel;
+import com.appsinventiv.toolsbazzaradmin.Models.CompanyDetailsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.PrefManager;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,9 +55,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity
 
 
     LinearLayout aboutUsMain, contactUsMain, termsMain, signoutMain, settingsMain;
+    private TextView navSubtitle;
 
 
     @Override
@@ -141,21 +148,39 @@ public class MainActivity extends AppCompatActivity
         termsMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,ViewTerms.class));
+                startActivity(new Intent(MainActivity.this, ViewTerms.class));
             }
         });
         signoutMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    // clearing app data
-                    String packageName = getApplicationContext().getPackageName();
-                    Runtime runtime = Runtime.getRuntime();
-                    runtime.exec("pm clear " + packageName);
+                // clearing app data
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Sign out")
+                        .setContentText("Are you sure you want to sign out?")
+                        .setCancelText("No, cancel!")
+                        .setConfirmText("Yes, sign out!")
+                        .showCancelButton(true)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                String packageName = getApplicationContext().getPackageName();
+                                Runtime runtime = Runtime.getRuntime();
+                                try {
+                                    runtime.exec("pm clear " + packageName);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
         settingsMain.setOnClickListener(new View.OnClickListener() {
@@ -179,15 +204,33 @@ public class MainActivity extends AppCompatActivity
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    // clearing app data
-                    String packageName = getApplicationContext().getPackageName();
-                    Runtime runtime = Runtime.getRuntime();
-                    runtime.exec("pm clear " + packageName);
+                // clearing app data
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Sign out")
+                        .setContentText("Are you sure you want to sign out?")
+                        .setCancelText("No, cancel!")
+                        .setConfirmText("Yes, sign out!")
+                        .showCancelButton(true)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                String packageName = getApplicationContext().getPackageName();
+                                Runtime runtime = Runtime.getRuntime();
+                                try {
+                                    runtime.exec("pm clear " + packageName);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -284,11 +327,54 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        getUserObjectFromDB();
         initDrawer();
         initViewPager();
         getBannerImagesFromDb();
+
+        if (SharedPrefs.getEmployee() != null) {
+            mDatabase.child("Admin").child("Employees").child(SharedPrefs.getEmployee().getUsername()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        Employee employee = dataSnapshot.getValue(Employee.class);
+                        if (employee != null) {
+                            SharedPrefs.setEmployee(employee);
+                            if (employee.isBlocked()) {
+                                startActivity(new Intent(MainActivity.this, AccountBlocked.class));
+                                finish();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        getCompanyDataFromDb();
     }
+
+    private void getCompanyDataFromDb() {
+        mDatabase.child("Settings").child("CompanyDetails").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    CompanyDetailsModel model = dataSnapshot.getValue(CompanyDetailsModel.class);
+                    if (model != null) {
+                        SharedPrefs.setCompanyDetails(model);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -306,7 +392,6 @@ public class MainActivity extends AppCompatActivity
                         @Override
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
                             finish();
-
                         }
                     })
                     .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -389,25 +474,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void getUserObjectFromDB() {
-        mDatabase.child("Admin").child("Employees").child(SharedPrefs.getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    Employee employee = dataSnapshot.getValue(Employee.class);
-                    if (employee != null) {
-                        SharedPrefs.setEmployee(employee);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     private void initDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -419,7 +485,19 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.name_drawer);
-        TextView navSubtitle = (TextView) headerView.findViewById(R.id.customerType);
+         navSubtitle = (TextView) headerView.findViewById(R.id.customerType);
+        CircleImageView imageView = headerView.findViewById(R.id.imageView);
+
+        if (SharedPrefs.getEmployee() != null && (SharedPrefs.getEmployee().getPicUrl() != null && !SharedPrefs.getEmployee().getPicUrl().equalsIgnoreCase(""))) {
+            Glide.with(this).load(SharedPrefs.getEmployee().getPicUrl()).into(imageView);
+        }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProfileSettings.class));
+            }
+        });
 
 
         Menu nav_Menu = navigationView.getMenu();
@@ -439,7 +517,7 @@ public class MainActivity extends AppCompatActivity
             });
         } else {
             if (SharedPrefs.getEmployee() != null) {
-                navSubtitle.setText(CommonUtils.rolesList[SharedPrefs.getEmployee().getRole()]);
+                navSubtitle.setText(SharedPrefs.getEmployee().getRole());
 
             }
             navUsername.setText("Hi, " + SharedPrefs.getFullName());
@@ -498,7 +576,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.salarySheets) {
 
         } else if (id == R.id.profile) {
-            startActivity(new Intent(MainActivity.this,ProfileSettings.class));
+            startActivity(new Intent(MainActivity.this, ProfileSettings.class));
 
         } else if (id == R.id.openSlider) {
             PrefManager prefManager = new PrefManager(MainActivity.this);
@@ -508,7 +586,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.contactUs) {
-            Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+94 775292313"));
+            Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + SharedPrefs.getCompanyDetails().getPhone()));
             startActivity(i);
         } else if (id == R.id.aboutUs) {
             Intent i = new Intent(MainActivity.this, ViewAboutUs.class);
@@ -519,15 +597,36 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.signout) {
-            try {
-                // clearing app data
-                String packageName = getApplicationContext().getPackageName();
-                Runtime runtime = Runtime.getRuntime();
-                runtime.exec("pm clear " + packageName);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // clearing app data
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Singing out")
+                    .setContentText("Are you sure you want to sign out?")
+                    .setCancelText("No, cancel!")
+                    .setConfirmText("Yes, sign out!")
+                    .showCancelButton(true)
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            String packageName = getApplicationContext().getPackageName();
+                            Runtime runtime = Runtime.getRuntime();
+                            try {
+                                runtime.exec("pm clear " + packageName);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    })
+                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.cancel();
+                        }
+                    })
+                    .show();
+
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -540,6 +639,10 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         updateProductCount();
         updateChatCount();
+        if (SharedPrefs.getEmployee() != null) {
+            navSubtitle.setText(SharedPrefs.getEmployee().getRole());
+
+        }
     }
 
     private void updateProductCount() {

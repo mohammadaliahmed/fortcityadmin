@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
-                android:text="Admin terms and conditions"
+                android:text="Admin Terms and Conditions"
                 android:textColor="#000" />
 
             <View
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
-                android:text="User terms and coditions"
+                android:text="User Terms and Conditions"
                 android:textColor="#000" />
 
             <View
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
-                android:text="Seller Terms and conditions"
+                android:text="Seller Terms and Conditions"
                 android:textColor="#000" />
 
             <View

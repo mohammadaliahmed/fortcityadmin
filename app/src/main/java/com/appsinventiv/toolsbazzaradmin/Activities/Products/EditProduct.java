@@ -1,5 +1,6 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.Products;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,22 +17,24 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.appsinventiv.toolsbazzaradmin.Adapters.SelectedImagesAdapter;
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.ChooseMainCategory;
+import com.appsinventiv.toolsbazzaradmin.Activities.Orders.BottomAdapter;
+import com.appsinventiv.toolsbazzaradmin.Activities.Orders.BottomDialogModel;
+import com.appsinventiv.toolsbazzaradmin.Adapters.PickedPicturesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Interfaces.ProductObserver;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.Models.SelectedAdImages;
@@ -38,7 +42,6 @@ import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +59,7 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class EditProduct extends AppCompatActivity implements ProductObserver {
@@ -66,7 +70,7 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
     private static final int REQUEST_CODE_CHOOSE = 23;
     List<Uri> mSelected;
     RecyclerView recyclerView;
-    SelectedImagesAdapter adapter;
+    PickedPicturesAdapter adapter;
     Bundle extras;
     ArrayList<SelectedAdImages> selectedAdImages = new ArrayList<>();
     ArrayList<String> imageUrl = new ArrayList<>();
@@ -75,7 +79,6 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
             e_oldRetailPrice, e_oldWholesalePrice, quantityAvailable;
     String productId;
     ProgressBar progressBar;
-    Spinner spinner;
     ArrayList<VendorModel> vendorModelArrayList = new ArrayList<>();
     VendorModel vendor;
     ProductObserver observer;
@@ -91,6 +94,9 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
     TextView productIdd;
     public static int fromWhere = 0;
 
+    private ArrayList<BottomDialogModel> vendrs = new ArrayList<>();
+    TextView chooseVendor;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,7 +111,8 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         setContentView(R.layout.activity_edit_product);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Edit Product");
         Intent i = getIntent();
@@ -126,6 +133,8 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
 
             }
         });
+        chooseVendor = findViewById(R.id.chooseVendor);
+
         pick = findViewById(R.id.pick);
         productIdd = findViewById(R.id.productId);
         upload = findViewById(R.id.upload);
@@ -144,7 +153,6 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         e_oldWholesalePrice = findViewById(R.id.oldWholeSalePrice);
         e_oldRetailPrice = findViewById(R.id.oldRetailPrice);
         progressBar = findViewById(R.id.prgress);
-        spinner = findViewById(R.id.chooseVendor);
         radioGroup = findViewById(R.id.radioGroup);
         quantityAvailable = findViewById(R.id.quantityAvailable);
         brandName = findViewById(R.id.brandName);
@@ -152,6 +160,14 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         weightChosen = findViewById(R.id.weightChosen);
         warrantyChosen = findViewById(R.id.warrantyChosen);
         productIdd.setText("Product Id: " + productId);
+
+
+        chooseVendor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBottomDialog(vendrs);
+            }
+        });
 
         warrantyChosen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,6 +264,8 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                     e_subtitle.setError("Enter subtitle");
                 } else if (e_costPrice.getText().length() == 0) {
                     e_costPrice.setError("Enter price");
+                } else if (productWeight != null) {
+                    CommonUtils.showToast("Enter product weight");
                 } else {
                     List<String> container = new ArrayList<>();
                     if (e_sizes.getText().length() > 0) {
@@ -262,48 +280,32 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                         container1 = Arrays.asList(colors);
 
                     }
-
-
                     progressBar.setVisibility(View.VISIBLE);
                     int selectedId = radioGroup.getCheckedRadioButtonId();
-
                     selected = findViewById(selectedId);
-                    mDatabase.child("Products").child(productId).setValue(new Product(
-                            productId,
-                            e_title.getText().toString(),
-                            e_subtitle.getText().toString(),
-                            "true",
-                            newSku,
-                            product.getThumbnailUrl(),
-                            "",
-                            "",
-                            product.getTime(),
-                            Float.parseFloat(e_costPrice.getText().toString()),
-                            Float.parseFloat(e_wholesalePrice.getText().toString()),
-                            Float.parseFloat(e_retailPrice.getText().toString()),
-                            Long.parseLong(e_minOrderQty.getText().toString()),
-                            e_measurement.getText().toString(),
-                            vendor,
-                            selected.getText().toString(),
-                            e_description.getText().toString(),
-                            container,
-                            container1,
-                            Float.parseFloat(e_oldWholesalePrice.getText().toString()),
-                            Float.parseFloat(e_oldRetailPrice.getText().toString()),
-                            0,
-                            categoryList,
-                            Integer.parseInt(quantityAvailable.getText().toString()),
-                            brandName.getText().toString(),
-                            productContents.getText().toString(),
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("title", e_title.getText().toString());
+                    map.put("subtitle", e_subtitle.getText().toString());
+                    map.put("sku", newSku);
+                    map.put("costPrice", Float.parseFloat(e_costPrice.getText().toString()));
+                    map.put("wholeSalePrice", Float.parseFloat(e_wholesalePrice.getText().toString()));
+                    map.put("retailPrice", Float.parseFloat(e_retailPrice.getText().toString()));
+                    map.put("minOrderQuantity", Long.parseLong(e_minOrderQty.getText().toString()));
+                    map.put("measurement", e_measurement.getText().toString());
+                    map.put("description", e_description.getText().toString());
+                    map.put("sizeList", container);
+                    map.put("colorList", container1);
+                    map.put("oldWholeSalePrice", Float.parseFloat(e_oldWholesalePrice.getText().toString()));
+                    map.put("oldRetailPrice", Float.parseFloat(e_oldRetailPrice.getText().toString()));
+                    map.put("category", categoryList);
+                    map.put("quantityAvailable", Integer.parseInt(quantityAvailable.getText().toString()));
+                    map.put("brandName", brandName.getText().toString());
+                    map.put("productContents", productContents.getText().toString());
+                    map.put("warrantyType", whichWarranty);
+                    map.put("productWeight", productWeight);
+                    map.put("dimen", dimens);
 
-                            whichWarranty,
-                            productWeight,
-                            dimens,
-                            product.getUploadedBy() == null ? "admin" : product.getUploadedBy(),
-                            product.getSellerProductStatus()
-
-
-                    )).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mDatabase.child("Products").child(productId).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             int count = 0;
@@ -319,7 +321,7 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                                 }
                             } else {
 
-                                putPicturesBack();
+//                                putPicturesBack();
                             }
 
                         }
@@ -337,6 +339,40 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
 
 
     }
+
+    @SuppressLint("WrongConstant")
+    private void showBottomDialog(ArrayList<BottomDialogModel> list) {
+
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.bottom_option, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        dialog.setContentView(customView);
+        RecyclerView recyclerview = customView.findViewById(R.id.recyclerview);
+
+
+        BottomAdapter adapter = new BottomAdapter(this, list, new BottomAdapter.ShareMessageFriendsAdapterCallbacks() {
+            @Override
+            public void onChoose(int position) {
+                vendor = vendorModelArrayList.get(position);
+                dialog.dismiss();
+                chooseVendor.setText(vendor.getVendorName());
+            }
+        });
+
+//        dialog.dismiss();
+
+
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerview.setAdapter(adapter);
+
+        dialog.show();
+
+
+    }
+
 
     private void showWarrantyAlert() {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(EditProduct.this);
@@ -412,10 +448,7 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                             }
                         }
                         recyclerView.setVisibility(View.VISIBLE);
-
                         adapter.notifyDataSetChanged();
-
-
                         warrantyChosen.setText("Warranty chosen: " + product.getWarrantyType() == null ? "" : product.getWarrantyType());
                         whichWarranty = product.getWarrantyType();
                         productContents.setText(product.getProductContents());
@@ -443,14 +476,14 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(EditProduct.this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        adapter = new SelectedImagesAdapter(EditProduct.this, selectedAdImages, new SelectedImagesAdapter.ChooseOption() {
+        adapter = new PickedPicturesAdapter(EditProduct.this, imageUrl, new PickedPicturesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-                selectedAdImages.remove(position - 1);
-                product.getPictures().remove(position - 1);
+            public void onDeleteClicked(int position) {
+                product.getPictures().remove(position);
+                imageUrl.remove(position);
                 adapter.notifyDataSetChanged();
-
             }
+
         });
         recyclerView.setAdapter(adapter);
     }
@@ -465,7 +498,7 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                             VendorModel model = snapshot.getValue(VendorModel.class);
                             if (model != null) {
                                 vendorModelArrayList.add(model);
-                                setUpSpinner();
+                                setUpVendors();
                             }
                         }
                     }
@@ -480,29 +513,21 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         });
     }
 
-    private void setUpSpinner() {
-        ArrayList<String> items = new ArrayList<>();
+
+    private void setUpVendors() {
+        vendrs = new ArrayList<>();
         for (int i = 0; i < vendorModelArrayList.size(); i++) {
-            items.add("" + vendorModelArrayList.get(i).getVendorName());
+            vendrs.add(new BottomDialogModel(
+                    vendorModelArrayList.get(i).getUsername(),
+                    vendorModelArrayList.get(i).getVendorName()
+                    , vendorModelArrayList.get(i).getPhone(),
+                    vendorModelArrayList.get(i).getPicUrl()));
+
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.simple_spinner_dropdown, items);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-
-                vendor = vendorModelArrayList.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
 
     }
+
 
     public void putPictures(String path, final String key, final int count) {
         String imgName = Long.toHexString(Double.doubleToLongBits(Math.random()));

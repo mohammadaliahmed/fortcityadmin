@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_corner_white_bg"
+    android:background="@drawable/dialog_bg"
     android:orientation="vertical"
     app:cardCornerRadius="2dp"
     app:cardElevation="5dp">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="0dp"
         android:background="@color/colorRed" />
 
     <LinearLayout
@@ -20,19 +20,40 @@
         android:layout_marginLeft="10dp"
         android:orientation="vertical">
 
-
-        <TextView
-
-            android:id="@+id/title"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="110dp"
+                android:layout_marginTop="25dp"
+                android:text="Choose Option for"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="110dp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:layout_marginTop="42dp"
+                android:text="Choose Option for"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
 
@@ -54,6 +75,32 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:text="Approve"
+                android:textColor="#000"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_phone_dial" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="Inactive/Active"
                 android:textColor="#000"
                 android:textSize="18sp" />
 

@@ -1,16 +1,22 @@
 package com.appsinventiv.toolsbazzaradmin.Utils;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -183,7 +189,9 @@ public class SwipeToDeleteCallback extends Callback {
         RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
         p.setColor(Color.RED);
         c.drawRoundRect(rightButton, corners, corners, p);
+
         drawText("DELETE", c, rightButton, p);
+
 
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
@@ -200,7 +208,13 @@ public class SwipeToDeleteCallback extends Callback {
         p.setTextSize(textSize);
 
         float textWidth = p.measureText(text);
-        c.drawText(text, button.centerX() - (textWidth / 2), button.centerY() + (textSize / 2), p);
+        Bitmap tempBMP = BitmapFactory.decodeResource(ApplicationClass.getInstance().getApplicationContext().getResources(), R.drawable.delete_bin);
+//        c.drawBitmap(tempBMP, (button.centerX() - (textWidth / 2)-60), (button.centerY()-(textSize/2)-100), p);
+        c.drawBitmap(tempBMP, (button.centerX() - (textWidth / 2) -
+                (ApplicationClass.getInstance().getApplicationContext().getResources().getDimension(R.dimen.delete_button1))),
+                (button.centerY() - (textSize / 2) -
+                (ApplicationClass.getInstance().getApplicationContext().getResources().getDimension(R.dimen.delete_button2))), p);
+
     }
 
     public void onDraw(Canvas c) {

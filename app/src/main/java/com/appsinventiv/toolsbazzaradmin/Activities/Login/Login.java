@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Employees.PendingApproval;
 import com.appsinventiv.toolsbazzaradmin.Activities.MainPage.MainActivity;
+import com.appsinventiv.toolsbazzaradmin.Activities.Welcome;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
@@ -34,8 +36,8 @@ public class Login extends AppCompatActivity {
     private PrefManager prefManager;
     ArrayList<String> userlist = new ArrayList<String>();
     String username, password;
-    Button login ;
-    TextView register,back;
+    Button login;
+    TextView register, back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class Login extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(Login.this, Welcome.class));
                 finish();
             }
         });
@@ -130,8 +133,11 @@ public class Login extends AppCompatActivity {
                             Employee employee = dataSnapshot.child("" + username).getValue(Employee.class);
                             if (employee != null) {
                                 if (employee.getPassword().equals(password)) {
-                                    if (employee.getRole() == 0) {
+                                    if (!employee.isApproved()) {
                                         CommonUtils.showToast("Your account is not active\nContact Admin");
+                                        startActivity(new Intent(Login.this, PendingApproval.class));
+
+                                        finish();
                                     } else {
                                         SharedPrefs.setEmployee(employee);
                                         CommonUtils.showToast("Successfully Logged In");
@@ -141,7 +147,7 @@ public class Login extends AppCompatActivity {
                                         SharedPrefs.setRole("" + employee.getRole());
                                         if (employee.isApproved()) {
                                             launchHomeScreen();
-                                        }else{
+                                        } else {
                                             launchPendingScreen();
                                         }
 //                                        if (employee.isCodeVerified()) {
@@ -173,6 +179,12 @@ public class Login extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Login.this, Welcome.class));
+        finish();
     }
 
     private void launchPendingScreen() {

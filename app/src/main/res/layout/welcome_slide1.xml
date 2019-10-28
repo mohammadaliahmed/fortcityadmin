@@ -33,6 +33,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:fontFamily="@font/cosmic_fonts"
+        android:visibility="gone"
 
         android:text="Staff Login Ahead"
         android:textColor="@android:color/white"

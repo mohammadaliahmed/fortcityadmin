@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddSubCategories;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.bumptech.glide.Glide;
 

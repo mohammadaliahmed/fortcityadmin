@@ -3,23 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/home"
-            android:icon="@drawable/user"
-            android:title="Home" />
-        <item
-            android:id="@+id/salarySheets"
-            android:icon="@drawable/ic_dollar"
-            android:title="Salary sheets" />
-        <item
-            android:id="@+id/profile"
-            android:icon="@drawable/user"
-            android:title="Account Management" />
-        <item
-            android:id="@+id/openSlider"
-            android:icon="@drawable/ic_slider"
-            android:title="Open Slider" />
+        <item android:title="My Profile">
+            <menu>
+                <item
+                    android:id="@+id/home"
+                    android:icon="@drawable/user"
+                    android:title="Home" />
+                <item
+                    android:id="@+id/salarySheets"
+                    android:icon="@drawable/ic_dollar"
+                    android:title="Salary sheets" />
+                <item
+                    android:id="@+id/profile"
+                    android:icon="@drawable/user"
+                    android:title="Account Management" />
+                <item
+                    android:id="@+id/openSlider"
+                    android:icon="@drawable/ic_slider"
+                    android:title="Open Slider" />
+            </menu>
+        </item>
     </group>
 
     <item android:title="Help and support">

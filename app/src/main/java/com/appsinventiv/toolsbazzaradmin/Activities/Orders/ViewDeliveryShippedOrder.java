@@ -322,7 +322,7 @@ public class ViewDeliveryShippedOrder extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Employee employee = snapshot.getValue(Employee.class);
                         if (employee != null) {
-                            if (employee.getRole() == 6)
+//                            if (employee.getRole() == 6)
                                 employeeArrayList.add(employee);
                         }
                     }

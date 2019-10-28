@@ -34,7 +34,7 @@ public class AboutUs extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
         }
-        this.setTitle("Edit:  About Us");
+        this.setTitle("About Us");
         update = findViewById(R.id.update);
         about = findViewById(R.id.about);
         vision = findViewById(R.id.vision);

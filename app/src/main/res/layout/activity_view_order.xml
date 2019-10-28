@@ -587,6 +587,7 @@
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:paddingLeft="10dp"
+            android:visibility="gone"
             android:paddingRight="10dp"
             android:text="Mark as Shipped"
             android:textAllCaps="false"
@@ -644,6 +645,17 @@
             android:layout_margin="20dp"
             android:text="Creating invoice.." />
     </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/purchase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_purchase" />
+
 
 </RelativeLayout>
 

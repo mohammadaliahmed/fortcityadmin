@@ -3,7 +3,9 @@ package com.appsinventiv.toolsbazzaradmin.Adapters;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -27,6 +29,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Employees.ViewEmployee;
+import com.appsinventiv.toolsbazzaradmin.Activities.Vendors.AddVendors;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
@@ -67,7 +70,7 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
 
 
         holder.name.setText("" + model.getName());
-        holder.phone.setText("Phone: " + model.getPhone() + "\n" + "" + CommonUtils.rolesList[model.getRole()]);
+        holder.phone.setText("Phone: " + model.getPhone() + "\n" + "" +model.getRole());
 
         if (model.getPicUrl() != null) {
             Glide.with(context).load(model.getPicUrl()).into(holder.image);
@@ -75,30 +78,41 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
         } else {
             Glide.with(context).load(R.drawable.ic_profile_placeholder).into(holder.image);
         }
-        if (model.isApproved()) {
-            holder.approvedText.setText("Approved");
-            holder.approvedText.setTextColor(context.getResources().getColor(R.color.colorBlack));
-        } else {
-            holder.approvedText.setText("No Approved");
+        if (model.isBlocked()) {
+            holder.approvedText.setText("Blocked");
             holder.approvedText.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else {
+            holder.approvedText.setText("Not Blocked");
+            holder.approvedText.setTextColor(context.getResources().getColor(R.color.colorBlack));
         }
 
         holder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(context);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                View layout = layoutInflater.inflate(R.layout.popup_menu_design, null);
+                View layout = layoutInflater.inflate(R.layout.popup_employee_menu_design, null);
 
                 dialog.setContentView(layout);
 
                 TextView title = layout.findViewById(R.id.title);
                 LinearLayout call = layout.findViewById(R.id.call);
                 LinearLayout whatsapp = layout.findViewById(R.id.whatsapp);
-                Switch approveSwitch = layout.findViewById(R.id.approveSwitch);
+                CheckBox blockAccount = layout.findViewById(R.id.blockAccount);
+                CircleImageView picture = layout.findViewById(R.id.picture);
 
-                title.setText("Choose option for " + model.getName());
+                if (model.getPicUrl() != null) {
+                    try {
+                        Glide.with(context).load(model.getPicUrl()).into(picture);
+                    } catch (Exception e) {
+
+                    }
+                }
+
+                title.setText("" + model.getName());
 
 
                 whatsapp.setOnClickListener(new View.OnClickListener() {
@@ -109,15 +123,16 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
                         context.startActivity(i);
                     }
                 });
-                if (model.isApproved()) {
-                    approveSwitch.setChecked(true);
+                if (model.isBlocked()) {
+                    blockAccount.setChecked(true);
                 }
-                approveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                blockAccount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         if (compoundButton.isPressed()) {
+                            dialog.dismiss();
 //                            callbacks.onChangeStatus(model, b);
-                            callbacks.onApprove(model, b);
+                            callbacks.onBlock(model, b);
                         }
                     }
                 });
@@ -136,61 +151,7 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
         });
 
 
-//        holder.menu.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//            @Override
-//            public void onClick(View view) {
-//                LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                View layout = layoutInflater.inflate(R.layout.popup_menu_design, null);
-//                LinearLayout call = layout.findViewById(R.id.call);
-//                LinearLayout whatsapp = layout.findViewById(R.id.whatsapp);
-//                Switch approveSwitch = layout.findViewById(R.id.approveSwitch);
 //
-//
-//                whatsapp.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        String url = "https://api.whatsapp.com/send?phone=" + model.getPhone();
-//                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                        context.startActivity(i);
-//                    }
-//                });
-//                if (model.isApproved()) {
-//                    approveSwitch.setChecked(true);
-//                }
-//                approveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                        if (compoundButton.isPressed()) {
-////                            callbacks.onChangeStatus(model, b);
-//                            callbacks.onApprove(model,b);
-//                        }
-//                    }
-//                });
-//                call.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + model.getPhone()));
-//                        context.startActivity(i);
-//                    }
-//                });
-//                // Creating the PopupWindow
-//                PopupWindow changeStatusPopUp = new PopupWindow(context);
-//                changeStatusPopUp.setContentView(layout);
-//                changeStatusPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-//                changeStatusPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-//                changeStatusPopUp.setFocusable(true);
-//
-//                changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
-//                int ivHeight = holder.menu.getHeight() - 20;
-//
-////                changeStatusPopUp.showAsDropDown(layout, 200, -layout.getHeight() + changeStatusPopUp.getHeight());
-//                changeStatusPopUp.showAsDropDown(layout, 200, -layout.getHeight() ,Gravity.END);
-//
-//
-//
-//            }
-//        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,5 +192,7 @@ public class EmployeesListAdapter extends RecyclerView.Adapter<EmployeesListAdap
         public void onChangeStatus(Employee model, boolean abc);
 
         public void onApprove(Employee model, boolean value);
+
+        public void onBlock(Employee model, boolean value);
     }
 }

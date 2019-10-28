@@ -4,10 +4,18 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/StatusBarColor</item>
-        <item name="android:windowLightStatusBar">true</item>
 
     </style>
+
+    <style name="AppThemeBlackStatus.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/StatusBarColor</item>
+
+    </style>
+
+
+
 
     <style name="AppThemeRed.NoActionBar">
         <item name="windowActionBar">false</item>

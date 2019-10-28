@@ -17,8 +17,11 @@ import android.widget.Toast;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.ViewTerms;
 import com.appsinventiv.toolsbazzaradmin.Activities.Employees.PendingApproval;
+import com.appsinventiv.toolsbazzaradmin.Activities.Welcome;
+import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.PrefManager;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,8 +31,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Register extends AppCompatActivity {
     Button signup;
@@ -43,6 +48,9 @@ public class Register extends AppCompatActivity {
     TextView viewTerms;
     private View systemUIView;
 
+    HashMap<String, Employee> emailMap = new HashMap<>();
+    HashMap<String, Employee> usernameMap = new HashMap<>();
+    HashMap<String, Employee> phoneMap = new HashMap<>();
 
 
     @Override
@@ -68,32 +76,7 @@ public class Register extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
-        mDatabase.child("Admin").child("Employees").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                userslist.add(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        getEmployessFromDB();
 
         viewTerms = findViewById(R.id.viewTerms);
         viewTerms.setPaintFlags(viewTerms.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -146,29 +129,37 @@ public class Register extends AppCompatActivity {
                     phone = e_phone.getText().toString();
 
 
-                    if (userslist.contains("" + username)) {
-                        Toast.makeText(Register.this, "Username is already taken\nPlease choose another", Toast.LENGTH_SHORT).show();
+                    if (phoneMap.containsKey(phone)) {
+                        CommonUtils.showToast("We found an Existing Account under same phone number. Try to Sign in using your Password");
+
+                    } else if (emailMap.containsKey(email)) {
+                        CommonUtils.showToast("We found an Existing Account under same Email.Try to Sign in using your Password");
+                    } else if (usernameMap.containsKey(username)) {
+                        CommonUtils.showToast("Username is already taken\nPlease choose another");
                     } else {
+
                         time = System.currentTimeMillis();
                         int randomPIN = (int) (Math.random() * 900000) + 100000;
+                        final Employee employee = new Employee(username, fullname, email, password, phone,
+                                SharedPrefs.getFcmKey(), "", System.currentTimeMillis(),
+                                randomPIN,
+                                false, false, false, false
 
+                        );
                         mDatabase.child("Admin").child("Employees")
                                 .child(username)
-                                .setValue(new Employee(username, fullname, email, password, phone,
-                                                SharedPrefs.getFcmKey(), 0, System.currentTimeMillis(),
-                                                randomPIN,
-                                                false,false,false
-
-                                        )
+                                .setValue(employee
                                 )
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(Register.this, "Thank you for registering", Toast.LENGTH_SHORT).show();
+                                        SharedPrefs.setEmployee(employee);
                                         SharedPrefs.setUsername(username);
                                         SharedPrefs.setFullName(fullname);
                                         SharedPrefs.setIsLoggedIn("yes");
                                         launchHomeScreen();
+
 //                                        startActivity(new Intent(Register.this, EmployeeVerficiation.class));
 
                                     }
@@ -188,10 +179,38 @@ public class Register extends AppCompatActivity {
 
     }
 
+    private void getEmployessFromDB() {
+        mDatabase.child("Admin").child("Employees").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Employee customer = snapshot.getValue(Employee.class);
+                        if (customer != null && customer.getUsername() != null) {
+                            emailMap.put(customer.getEmail(), customer);
+                            usernameMap.put(customer.getUsername(), customer);
+                            phoneMap.put(customer.getPhone(), customer);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Register.this, Login.class));
+        finish();
+    }
 
     private void launchHomeScreen() {
-        prefManager.setFirstTimeLaunch(false);
-        prefManager.setIsFirstTimeLaunchWelcome(false);
+//        prefManager.setFirstTimeLaunch(false);
+//        prefManager.setIsFirstTimeLaunchWelcome(false);
 
         startActivity(new Intent(Register.this, PendingApproval.class));
 

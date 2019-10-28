@@ -179,7 +179,7 @@ public class ProfileSettings extends AppCompatActivity {
                         email.setText(model.getEmail());
                         username.setText(model.getUsername());
                         password.setText(model.getPassword());
-                        textRole.setText(CommonUtils.rolesList[model.getRole()]);
+                        textRole.setText(model.getRole());
                         textName.setText(model.getName());
                         if(model.getPicUrl()!=null) {
                             if (!model.getPicUrl().equalsIgnoreCase("")) {

@@ -95,6 +95,11 @@ public class EmployeeFragment extends Fragment {
             public void onApprove(Employee model, boolean value) {
                 showApproveAlert(model, value);
             }
+
+            @Override
+            public void onBlock(Employee model, boolean value) {
+                showBlockAlert(model, value);
+            }
         });
         recyclerView.setAdapter(adapter);
         swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
@@ -118,6 +123,37 @@ public class EmployeeFragment extends Fragment {
 
         return rootView;
 
+    }
+
+    private void showBlockAlert(final Employee model, final boolean value) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Alert");
+        builder.setMessage(value ? "Block employee? " : "Unblock employee");
+
+        // add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabase.child("Admin").child("Employees").child(model.getUsername()).child("blocked").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast(value ? "Employee blocked" : "Employee Unblocked");
+                        adapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        CommonUtils.showToast(e.getMessage());
+                    }
+                });
+
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showApproveAlert(final Employee model, final boolean value) {
@@ -198,7 +234,7 @@ public class EmployeeFragment extends Fragment {
                         if (model != null) {
                             if (type.equalsIgnoreCase("All")) {
                                 employeesList.add(model);
-                            } else if (CommonUtils.rolesList[model.getRole()].equalsIgnoreCase(type)) {
+                            } else if (model.getRole().equalsIgnoreCase(type)) {
                                 employeesList.add(model);
                             }
                         }

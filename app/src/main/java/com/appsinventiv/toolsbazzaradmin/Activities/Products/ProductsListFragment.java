@@ -141,6 +141,7 @@ public class ProductsListFragment extends Fragment {
                             if (product.getUploadedBy() != null) {
                                 if (product.getUploadedBy().equalsIgnoreCase("admin")) {
                                     if (map.get("Fort City") != null) {
+
                                         count = map.get("Fort City").getCount();
 
                                     } else {
@@ -148,14 +149,19 @@ public class ProductsListFragment extends Fragment {
                                     }
 
                                     if (map.containsKey("Fort City")) {
-                                        count=count+1;
-                                        map.put("Fort City", new NewProductsModel(
-                                                "Fort City", "Fort City", productStatus, "", count
-                                        ));
+                                        count = count + 1;
+                                        if (product.getSellerProductStatus().equalsIgnoreCase(productStatus)) {
+                                            map.put("Fort City", new NewProductsModel(
+
+                                                    "Fort City", "Fort City", productStatus, "", count
+                                            ));
+                                        }
                                     } else {
-                                        map.put("Fort City", new NewProductsModel(
-                                                "Fort City", "Fort City", productStatus, "", 1
-                                        ));
+                                        if (product.getSellerProductStatus().equalsIgnoreCase(productStatus)) {
+                                            map.put("Fort City", new NewProductsModel(
+                                                    "Fort City", "Fort City", productStatus, "", 1
+                                            ));
+                                        }
                                     }
 
                                 } else if (product.getUploadedBy().equalsIgnoreCase("seller")) {

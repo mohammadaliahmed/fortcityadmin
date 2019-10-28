@@ -32,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -47,7 +48,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class ListOfProducts extends AppCompatActivity {
-    private ArrayList orderStatusList = new ArrayList();
+    private ArrayList<String> orderStatusList = new ArrayList();
 
 
     @Override
@@ -57,7 +58,8 @@ public class ListOfProducts extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("List of Products");
         ViewPager viewPager = findViewById(R.id.viewpager);
@@ -73,6 +75,24 @@ public class ListOfProducts extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorRed));
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        Constants.PRODUCT_STATUS = orderStatusList.get(0);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Constants.PRODUCT_STATUS = orderStatusList.get(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 
     }

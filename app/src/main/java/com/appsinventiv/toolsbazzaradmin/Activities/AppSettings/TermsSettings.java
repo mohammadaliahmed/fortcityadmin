@@ -45,7 +45,7 @@ public class TermsSettings extends AppCompatActivity {
         sellerTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(TermsSettings.this, Terms.class));
+                startActivity(new Intent(TermsSettings.this, SellerTerms.class));
             }
         });
     }

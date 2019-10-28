@@ -3,7 +3,9 @@ package com.appsinventiv.toolsbazzaradmin.Adapters;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -89,8 +91,9 @@ public class VendorsListAdapter extends RecyclerView.Adapter<VendorsListAdapter.
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(context);
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                View layout = layoutInflater.inflate(R.layout.popup_menu_design, null);
+                View layout = layoutInflater.inflate(R.layout.popup_vendor_menu_design, null);
 
                 dialog.setContentView(layout);
 
@@ -99,7 +102,14 @@ public class VendorsListAdapter extends RecyclerView.Adapter<VendorsListAdapter.
                 LinearLayout whatsapp = layout.findViewById(R.id.whatsapp);
                 Switch approveSwitch = layout.findViewById(R.id.approveSwitch);
 
-                title.setText("Choose option for " + model.getVendorName());
+                CircleImageView picture = layout.findViewById(R.id.picture);
+
+
+                if (model.getPicUrl() != null) {
+                    Glide.with(context).load(model.getPicUrl()).into(picture);
+                }
+
+                title.setText(model.getVendorName());
 
 
                 whatsapp.setOnClickListener(new View.OnClickListener() {

@@ -1,8 +1,11 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.Orders;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +14,11 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +42,8 @@ import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationAsync;
+import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,9 +55,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ViewUnderProcessOrder extends AppCompatActivity {
     Button markAsCourier, markAsShipped, markAsOutOfStock;
-    Spinner chooseDeliveryBoy;
+    TextView chooseDeliveryBoy;
     EditText trackingNumber;
 
     ArrayList<Employee> employeeArrayList = new ArrayList<>();
@@ -75,9 +84,11 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
     ArrayList<ProductCountModel> newList = new ArrayList<>();
     long totalPrice;
 
-    Spinner shippingAgent;
+    TextView shippingAgent;
     CardView shipping_card, order_card, shipping_info_card, delivered_card;
     private ShippingCompanyModel shippingCarrier;
+    private ArrayList<BottomDialogModel> shippingCompanies = new ArrayList<>();
+    private ArrayList<BottomDialogModel> deliveryBoys = new ArrayList<>();
 
 
     @Override
@@ -111,6 +122,7 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         instructions = findViewById(R.id.instructions);
         invoice = findViewById(R.id.invoice);
         purchase = findViewById(R.id.purchase);
+        purchase.setVisibility(View.GONE);
 
         username = findViewById(R.id.ship_username);
         phone = findViewById(R.id.ship_phone);
@@ -120,6 +132,20 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         shipping_card = findViewById(R.id.shipping_card);
         order_card = findViewById(R.id.order_card);
         shipping_info_card = findViewById(R.id.shipping_info_card);
+
+
+        shippingAgent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showShippingBottomDialog(shippingCompanies);
+            }
+        });
+        chooseDeliveryBoy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDeliveryBottomDialog(deliveryBoys);
+            }
+        });
 
         selectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -147,6 +173,12 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
                     model = dataSnapshot.getValue(OrderModel.class);
 
                     if (model != null) {
+//                        if (model.getOrderFor().equalsIgnoreCase("admin")) {
+//                            purchase.setVisibility(View.VISIBLE);
+//                        } else {
+//                            purchase.setVisibility(View.GONE);
+//
+//                        }
                         orderId.setText("" + model.getOrderId());
                         orderTime.setText("" + CommonUtils.getFormattedDate(model.getTime()));
                         quantity.setText("" + model.getCountModelArrayList().size());
@@ -258,25 +290,25 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
         invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (newList.size() > 0) {
+//                if (newList.size() > 0) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewUnderProcessOrder.this);
-                    builder.setTitle("Alert");
-                    builder.setMessage("Do you want to add this order to invoices " + "?");
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            addToInvoice();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewUnderProcessOrder.this);
+                builder.setTitle("Alert");
+                builder.setMessage("Do you want to add this order to invoices " + "?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        addToInvoice();
 
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", null);
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
 
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else {
-                    CommonUtils.showToast("Nothing selected");
-                }
+                AlertDialog dialog = builder.create();
+                dialog.show();
+//                } else {
+//                    CommonUtils.showToast("Nothing selected");
+//                }
 
             }
         });
@@ -298,12 +330,12 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
                         list,
                         newList,
                         customer,
-                        model.getTotalPrice(),
+                        calculateTotal(),
                         System.currentTimeMillis(),
                         orderIdFromIntent,
                         model.getDeliveryCharges(),
                         model.getShippingCharges(),
-                        model.getTotalPrice(),
+                        calculateTotal()+model.getDeliveryCharges()+model.getShippingCharges(),
                         model.getOrderStatus(),
                         list.size(),
                         model.getDeliveryBy(),
@@ -328,6 +360,87 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
 
             }
         });
+    }
+
+    private float calculateTotal() {
+        float total = 0;
+        if (newList.size() > 0) {
+            for (ProductCountModel countModel : newList) {
+                float val = (countModel.getQuantity() * countModel.getProduct().getRetailPrice());
+                total = total + val;
+            }
+            return total;
+        } else {
+            return 0;
+        }
+    }
+
+
+    @SuppressLint("WrongConstant")
+    private void showDeliveryBottomDialog(ArrayList<BottomDialogModel> list) {
+
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.bottom_option, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        dialog.setContentView(customView);
+        RecyclerView recyclerview = customView.findViewById(R.id.recyclerview);
+
+
+        BottomAdapter adapter = new BottomAdapter(this, list, new BottomAdapter.ShareMessageFriendsAdapterCallbacks() {
+            @Override
+            public void onChoose(int position) {
+                employee = employeeArrayList.get(position);
+                dialog.dismiss();
+                chooseDeliveryBoy.setText(employee.getName());
+            }
+        });
+
+//        dialog.dismiss();
+
+
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerview.setAdapter(adapter);
+
+        dialog.show();
+
+
+    }
+
+
+    @SuppressLint("WrongConstant")
+    private void showShippingBottomDialog(ArrayList<BottomDialogModel> list) {
+
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.bottom_option, null);
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        dialog.setContentView(customView);
+        RecyclerView recyclerview = customView.findViewById(R.id.recyclerview);
+
+
+        BottomAdapter adapter = new BottomAdapter(this, list, new BottomAdapter.ShareMessageFriendsAdapterCallbacks() {
+            @Override
+            public void onChoose(int position) {
+                shippingCarrier = shippingList.get(position);
+                dialog.dismiss();
+                shippingAgent.setText(shippingCarrier.getName());
+            }
+        });
+
+//        dialog.dismiss();
+
+
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerview.setAdapter(adapter);
+
+        dialog.show();
+
+
     }
 
 
@@ -421,9 +534,9 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
     }
 
     private void updateInvoiceStatus() {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("invoiced",true);
-        map.put("invoiceNumber",invoiceNumber);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("invoiced", true);
+        map.put("invoiceNumber", invoiceNumber);
         mDatabase.child("Orders").child(orderIdFromIntent).updateChildren(map);
 
 
@@ -473,7 +586,7 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Employee employee = snapshot.getValue(Employee.class);
                         if (employee != null) {
-                            if (employee.getRole() == 6)
+//                            if (employee.getRole())
                                 employeeArrayList.add(employee);
                         }
                     }
@@ -515,54 +628,28 @@ public class ViewUnderProcessOrder extends AppCompatActivity {
     }
 
     private void setUpShippingCompanySpinner() {
-        ArrayList<String> items = new ArrayList<>();
+        shippingCompanies = new ArrayList<>();
         for (int i = 0; i < shippingList.size(); i++) {
-            items.add("" + shippingList.get(i).getName());
+            shippingCompanies.add(new BottomDialogModel(shippingList.get(i).getId(), shippingList.get(i).getName()
+                    , shippingList.get(i).getTelephone(), shippingList.get(i).getPicUrl()));
 
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        shippingAgent.setAdapter(adapter);
-
-        shippingAgent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-
-                shippingCarrier = shippingList.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
     }
 
 
     private void setUpDeliveryBoySpinner() {
-        ArrayList<String> items = new ArrayList<>();
+        deliveryBoys = new ArrayList<>();
         for (int i = 0; i < employeeArrayList.size(); i++) {
-            items.add("" + employeeArrayList.get(i).getName());
+            deliveryBoys.add(new BottomDialogModel(
+                    employeeArrayList.get(i).getUsername(),
+                    employeeArrayList.get(i).getName()
+                    , employeeArrayList.get(i).getPhone(),
+                    employeeArrayList.get(i).getPicUrl()));
 
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        chooseDeliveryBoy.setAdapter(adapter);
 
-        chooseDeliveryBoy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-
-                employee = employeeArrayList.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
     }
 
     private void markOrderAsOutOfStock() {

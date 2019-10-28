@@ -18,6 +18,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Orders.Orders;
 import com.appsinventiv.toolsbazzaradmin.Activities.SellerOrders.SellerOrders;
 import com.appsinventiv.toolsbazzaradmin.Adapters.OrdersFragmentAdapter;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 
 import java.util.ArrayList;
 
@@ -50,6 +51,22 @@ public class NewOrderScreen extends AppCompatActivity {
 
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryDark));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Constants.TAB=position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 

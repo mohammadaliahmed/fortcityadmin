@@ -4,26 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:orientation="vertical"
     tools:context=".Activities.AppSettings.CODLimit">
 
-
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_margin="20dp"
+        android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputEditText
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_cod_limit" />
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/cod"
-            android:inputType="number"
-            android:hint="COD limit" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_margin="10dp">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/cod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="COD limit"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/update"
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:layout_height="35dp"
         android:layout_gravity="center"
         android:layout_margin="20dp"

@@ -221,6 +221,7 @@ public class OrdersFragment extends Fragment {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 CommonUtils.showToast("Order status updated");
+                                getActivity().finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

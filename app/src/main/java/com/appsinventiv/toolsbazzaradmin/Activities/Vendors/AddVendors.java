@@ -241,7 +241,12 @@ public class AddVendors extends AppCompatActivity {
                         textName.setText(model.getVendorName());
                         textPhone.setText(model.getVendorPhone());
                         if (model.getPicUrl() != null) {
-                            Glide.with(AddVendors.this).load(model.getPicUrl()).into(image);
+                            try {
+                                Glide.with(AddVendors.this).load(model.getPicUrl()).into(image);
+
+                            } catch (Exception e) {
+
+                            }
                         }
                     }
                 }

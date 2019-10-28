@@ -3,11 +3,14 @@ package com.appsinventiv.toolsbazzaradmin.Activities.Chat;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,8 @@ import com.appsinventiv.toolsbazzaradmin.Adapters.ChatAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.ChatModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.KeyboardUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationAsync;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationObserver;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
@@ -45,6 +50,7 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
     String username;
     private Customer customer;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,15 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
         sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         soundId = sp.load(LiveChat.this, R.raw.tick_sound, 1);
 
+        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible) {
+                recyclerView.getLayoutManager().scrollToPosition(adapter.getItemCount() - 1);
+
+//                recyclerView.scrollToPosition(chatModelArrayList.size() - 1);
+            }
+        });
+
 
     }
 
@@ -86,6 +101,7 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
                     customer = dataSnapshot.getValue(Customer.class);
                     if (customer != null) {
                         userFcmKey = customer.getFcmKey();
+                        adapter.setCustomer(customer);
                     }
                 }
             }
@@ -125,6 +141,8 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(LiveChat.this, chatModelArrayList);
+        layoutManager.setStackFromEnd(true);
+
         recyclerView.setAdapter(adapter);
 
         mDatabase.child("Chats/ClientChats").child(username).addValueEventListener(new ValueEventListener() {
@@ -173,9 +191,9 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
                     message.setText(null);
                     final String key = mDatabase.push().getKey();
                     mDatabase.child("Chats/ClientChats").child(username).child(key)
-                            .setValue(new ChatModel(key, msg,"admin" //TODO
+                            .setValue(new ChatModel(key, msg, "admin" //TODO
                                     , System.currentTimeMillis(), "sending", username,
-                                    customer.getName(), "",
+                                    customer.getName(), customer.getPicUrl() == null ? "" : customer.getPicUrl(),
                                     SharedPrefs.getEmployee().getName()
                             )).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

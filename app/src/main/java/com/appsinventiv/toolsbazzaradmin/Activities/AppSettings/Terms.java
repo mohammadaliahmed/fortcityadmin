@@ -38,7 +38,7 @@ public class Terms extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
         }
-        this.setTitle("Edit: Terms and Conditions");
+        this.setTitle("Client T&C");
 
 
         update = findViewById(R.id.update);

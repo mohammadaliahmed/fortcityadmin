@@ -13,6 +13,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Orders.Orders;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.NewProductsModel;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.Reviews.ProductReviews;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public class NewOrdersAdapter extends RecyclerView.Adapter<NewOrdersAdapter.View
                 Intent i = new Intent(context, Orders.class);
                 i.putExtra("username", model.getStoreId());
                 i.putExtra("storename", model.getStoreName());
+                Constants.STORE_NAME=model.getStoreName();
                 context.startActivity(i);
             }
         });

@@ -28,6 +28,7 @@ import com.appsinventiv.toolsbazzaradmin.Models.OrderModel;
 import com.appsinventiv.toolsbazzaradmin.Models.ProductCountModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationAsync;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationObserver;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -70,6 +71,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
     Button transferToAccounts, transferToAccounts1, markAsDeliveredCourier, markAsRefusedCourier;
     CardView courier_card, courier_card_delivered;
     TextView courierName, trackingNumber, courierReceiverName;
+    FloatingActionButton purchase;
+    private int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         orderIdFromIntent = intent.getStringExtra("orderId");
         this.setTitle("Order # " + orderIdFromIntent);
 
+        purchase = findViewById(R.id.purchase);
         courierName = findViewById(R.id.courierName);
         trackingNumber = findViewById(R.id.trackingNumber);
         courierReceiverName = findViewById(R.id.courierReceiverName);
@@ -210,6 +214,13 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
             }
         });
 
+        if (Constants.STORE_NAME.equalsIgnoreCase("Fort City")) {
+            purchase.setVisibility(View.VISIBLE);
+            flag = 1;
+        } else {
+            flag = 0;
+            purchase.setVisibility(View.GONE);
+        }
 
         invoice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,6 +264,29 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
 //                        }
 //                    });
 //                }
+            }
+        });
+
+        purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewOrder.this);
+                builder.setTitle("Alert");
+                builder.setMessage("Do you want to add this order to purchases " + "?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        addPurchase();
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
             }
         });
 
@@ -313,7 +347,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         }
 
                         customer = model.getCustomer();
-                        adapter = new OrderedProductsAdapter(ViewOrder.this, list, model.getCustomer().getCustomerType(), 0, new OrderedProductsAdapter.OnProductSelected() {
+                        adapter = new OrderedProductsAdapter(ViewOrder.this, list, model.getCustomer().getCustomerType(), flag, new OrderedProductsAdapter.OnProductSelected() {
                             @Override
                             public void onChecked(ProductCountModel product, int position) {
                                 if (!newList.contains(product)) {

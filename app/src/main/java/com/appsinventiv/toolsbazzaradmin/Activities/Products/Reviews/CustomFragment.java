@@ -33,7 +33,7 @@ public class CustomFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        callbacks=(RejectCallbacks) getActivity();
+        callbacks = (RejectCallbacks) getActivity();
 
         View v = inflater.inflate(R.layout.fragment_sample, container, false);
         final String[] mobileArray;
@@ -41,14 +41,20 @@ public class CustomFragment extends Fragment {
             mobileArray = new String[]{"Attributes Missing", "Product Images are not clear", "Product Images are too Big",
                     "Product Images are too Small", "Product Images Inappropriate", "Second Hand products"};
         } else {
-            mobileArray = new String[]{"Alcoholic Beverages", "Animals", "Antiques", "Artwork",
-                    "Casinos and Gambling Equipment", "Corrosives", "Counterfeit Goods", "Dangerous Goods",
-                    "Drugs", "Electronics", "Explosives", "Fake Items", "Fake/ Dummy Games", "Flammable liquids"
-                    , "Flammable solids", "Fragile", "Gambling", "Gases compressed, liquefied or dissolved under pressure"
-                    , "Government Issued Documents", "Healthcare and Medicine", "Immovable Property", "Live Animals",
-                    "Minerals", "Miscellaneous", "Negotiable Currency", "Oxidizing substances and organic peroxides solids",
-                    "Packaging", "Perishables", "Plants", "Pornography", "Radioactive material"
-                    , "Remains", "Sharp Tools/Weapons", "Tobacco Products", "Toxic and infectious substances", "Traffic Devices", "Vehicles"};
+//            mobileArray = new String[]{"Alcoholic Beverages", "Animals", "Antiques", "Artwork",
+//                    "Casinos and Gambling Equipment", "Corrosives", "Counterfeit Goods", "Dangerous Goods",
+//                    "Drugs", "Electronics", "Explosives", "Fake Items", "Fake/ Dummy Games", "Flammable liquids"
+//                    , "Flammable solids", "Fragile", "Gambling", "Gases compressed, liquefied or dissolved under pressure"
+//                    , "Government Issued Documents", "Healthcare and Medicine", "Immovable Property", "Live Animals",
+//                    "Minerals", "Miscellaneous", "Negotiable Currency", "Oxidizing substances and organic peroxides solids",
+//                    "Packaging", "Perishables", "Plants", "Pornography", "Radioactive material"
+//                    , "Remains", "Sharp Tools/Weapons", "Tobacco Products", "Toxic and infectious substances", "Traffic Devices", "Vehicles"};
+            mobileArray = new String[]{"Alcoholic Beverages", "Animals", "Antiques", "Artwork", "Corrosives", "Counterfeit Goods",
+                    "Drugs & Tobacco Products", "Electronics", "Explosives or Dangerous Goods", "Flammable liquids", "Flammable solids",
+                    "Fragile", "Gambling", "Gases compressed, liquefied", "Government Issued Documents",
+                    "Healthcare & Medicine", "Immovable Property", "Minerals", "Miscellaneous", "Negotiable Currency ",
+                    "Oxidizing Substances & Organic Peroxides ", "Packaging", "Perishables", "Plants", "Pornography", "Radioactive Material  ",
+                    "Sharp Tools or Weapons", "Toxic & Infectious Substances", "Vehicles"};
         }
 
 

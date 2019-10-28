@@ -33,10 +33,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/whishlistText"
-        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:text="Thank You for Signing Up\nYour Account is Under Approval, Please Try to\nLogin After Few Minutes" />
+        android:text="Thank You for Signing Up\nYour Account is Under Approval, Please Try to\nLogin After Few Minutes"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/exit"
@@ -47,6 +48,6 @@
         android:layout_margin="10dp"
         android:background="@drawable/btn_bg_red"
         android:inputType="text"
-        android:text="Exit"
+        android:text="Back"
         android:textColor="@color/colorWhite" />
 </RelativeLayout>

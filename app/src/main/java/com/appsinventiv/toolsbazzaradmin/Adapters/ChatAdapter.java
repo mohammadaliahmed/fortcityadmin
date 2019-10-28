@@ -10,12 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.appsinventiv.toolsbazzaradmin.Models.AdminModel;
 import com.appsinventiv.toolsbazzaradmin.Models.ChatModel;
+import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import it.sephiroth.android.library.easing.Circ;
 
 /**
  * Created by AliAh on 24/06/2018.
@@ -24,6 +30,7 @@ import java.util.ArrayList;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     Context context;
     ArrayList<ChatModel> chatList;
+    Customer customer;
 
     public int RIGHT_CHAT = 1;
     public int LEFT_CHAT = 0;
@@ -32,6 +39,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         this.context = context;
         this.chatList = chatList;
     }
+    public void setCustomer(Customer customer){
+        this.customer=customer;
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -65,8 +77,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } else if (model.getStatus().equals("delivered")) {
             holder.status.setImageResource(R.drawable.ic_delivered);
         } else if (model.getStatus().equals("read")) {
-            holder.status.setImageResource(R.drawable.ic_read);
+            holder.status.setImageResource(R.drawable.ic_delivered);
         }
+
+        if(customer!=null){
+            if(getItemViewType(position)==LEFT_CHAT){
+                Glide.with(context).load(customer.getPicUrl()).into(holder.image);
+            }else{
+                Glide.with(context).load(R.drawable.admin_logo).into(holder.image);
+            }
+        }
+
+
 
     }
 
@@ -89,6 +111,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView msgtext, whoReplied, time;
         ImageView status;
+        CircleImageView image;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -96,6 +119,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             time = itemView.findViewById(R.id.time);
             status = itemView.findViewById(R.id.status);
             whoReplied = itemView.findViewById(R.id.whoReplied);
+            image = itemView.findViewById(R.id.image);
         }
     }
 }

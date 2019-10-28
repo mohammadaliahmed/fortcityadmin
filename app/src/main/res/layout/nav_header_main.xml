@@ -6,13 +6,13 @@
     android:background="@drawable/side_nav_bar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="35dp"
-        app:srcCompat="@drawable/admin_logo" />
+        android:src="@drawable/admin_logo" />
 
     <TextView
         android:id="@+id/name_drawer"

@@ -1,9 +1,14 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.Chat;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,7 +19,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Customers.SellerModel;
 import com.appsinventiv.toolsbazzaradmin.Adapters.ChatAdapter;
@@ -29,6 +38,7 @@ import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +51,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ChatFragment extends Fragment {
@@ -99,7 +111,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onRightClicked(final int position) {
 
-                deleteChat(itemList.get(position).getInitiator());
+                deleteChat(itemList.get(position).getInitiator(), itemList.get(position).getNameToShow());
 
             }
         });
@@ -119,46 +131,58 @@ public class ChatFragment extends Fragment {
 
     }
 
-    private void deleteChat(final String idd) {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setMessage("Delete chat with: " + idd);
-        builder1.setCancelable(true);
+    private void deleteChat(final String idd, String nameToShow) {
 
-        builder1.setPositiveButton(
-                "Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        final String chatName = chatWith + "Chats";
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                        mDatabase.child("Chats").child(chatName).child(idd).removeValue()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_curved, null);
+
+        dialog.setContentView(layout);
+
+        TextView message = layout.findViewById(R.id.message);
+        TextView no = layout.findViewById(R.id.no);
+        TextView yes = layout.findViewById(R.id.yes);
+
+        message.setText("Delete chat with: " + nameToShow);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                final String chatName = chatWith + "Chats";
+
+                mDatabase.child("Chats").child(chatName).child(idd).removeValue()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 CommonUtils.showToast("Chat deleted");
                             }
                         });
+            }
+        });
 
-                    }
-                });
 
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+
+
+        dialog.show();
+
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-//        if(chatWith.equalsIgnoreCase("wholesale")){
-//        }
         getDataFromServer();
     }
 

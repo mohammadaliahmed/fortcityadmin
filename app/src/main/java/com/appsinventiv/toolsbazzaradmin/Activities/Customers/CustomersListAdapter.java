@@ -14,9 +14,12 @@ import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by AliAh on 28/11/2018.
@@ -88,6 +91,13 @@ public class CustomersListAdapter extends RecyclerView.Adapter<CustomersListAdap
                 context.startActivity(i);
             }
         });
+
+        if (model.getPicUrl() != null) {
+            Glide.with(context).load(model.getPicUrl()).into(holder.imageView2);
+        } else {
+            Glide.with(context).load(R.drawable.ic_profile_placeholder).into(holder.imageView2);
+
+        }
     }
 
     @Override
@@ -99,6 +109,7 @@ public class CustomersListAdapter extends RecyclerView.Adapter<CustomersListAdap
         TextView name, info;
         Switch switchh;
         ImageView onlineStatus;
+        CircleImageView imageView2;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -106,6 +117,7 @@ public class CustomersListAdapter extends RecyclerView.Adapter<CustomersListAdap
             info = itemView.findViewById(R.id.info);
             switchh = itemView.findViewById(R.id.switchh);
             onlineStatus = itemView.findViewById(R.id.onlineStatus);
+            imageView2 = itemView.findViewById(R.id.imageView2);
 
         }
     }

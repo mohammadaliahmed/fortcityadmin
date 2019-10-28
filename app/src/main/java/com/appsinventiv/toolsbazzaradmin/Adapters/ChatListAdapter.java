@@ -123,6 +123,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
         if (model.getPicUrl() != null && !model.getPicUrl().equalsIgnoreCase("")) {
             Glide.with(context).load(model.getPicUrl()).into(holder.imageView2);
+        }else{
+            Glide.with(context).load(R.drawable.ic_profile_placeholder).into(holder.imageView2);
+
         }
     }
 

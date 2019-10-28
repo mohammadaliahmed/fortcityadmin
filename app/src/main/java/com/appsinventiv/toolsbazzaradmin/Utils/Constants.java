@@ -23,4 +23,6 @@ public class Constants {
 
 
     public static String REJECT_REASON="";
+    public static String PRODUCT_STATUS="Approved";
+    public static int TAB=0;
 }

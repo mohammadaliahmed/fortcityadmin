@@ -14,10 +14,13 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.appsinventiv.toolsbazzaradmin.Activities.Customers.SellerModel;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.ViewOrder;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
+import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationAsync;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationObserver;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
@@ -53,6 +56,8 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
     private SwipeToRejectCallback swipeController;
 
     int postion;
+    ArrayList<String> ite = new ArrayList<>();
+    SellerModel vendorModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +72,11 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
         vendorId = getIntent().getStringExtra("vendorId");
         storeName = getIntent().getStringExtra("storeName");
+
+        getSellerDetailsFromDB();
         this.setTitle(storeName);
         positiveCount = findViewById(R.id.positiveCount);
         neutralCount = findViewById(R.id.neutralCount);
@@ -85,11 +93,35 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
         adapter.setCallbacks(new ProductsReviewsAdapter.SellerProductsAdapterCallbacks() {
             @Override
             public void onStatusChange(Product product, final String status) {
+                if (!vendorId.equalsIgnoreCase("Fort City")) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("sellerProductStatus", status);
+                    map.put("vendor", vendorModel);
+                    mDatabase.child("Products").child(product.getId()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            CommonUtils.showToast(status);
+                        }
+                    });
+
+                } else {
+                    mDatabase.child("Products").child(product.getId())
+                            .child("sellerProductStatus").setValue(status).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            CommonUtils.showToast(status);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onActiveStatusChange(Product product, final boolean status) {
                 mDatabase.child("Products").child(product.getId())
-                        .child("sellerProductStatus").setValue(status).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        .child("active").setValue(status).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        CommonUtils.showToast(status);
+                        CommonUtils.showToast(status ? "Active" : "Inactive");
                     }
                 });
             }
@@ -97,16 +129,6 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
             @Override
             public void onReject(Product product) {
 
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-//                if (prev != null) {
-//                    ft.remove(prev);
-//                }
-//                ft.addToBackStack(null);
-//
-//                // Create and show the dialog.
-//                TabbedDialog dialogFragment = new TabbedDialog();
-//                dialogFragment.show(ft,"dialog");
 
             }
         });
@@ -139,13 +161,30 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
                 swipeController.onDraw(c);
             }
         });
+        if (vendorId != null) {
+            if (vendorId.equalsIgnoreCase("Fort city")) {
+                gettFortCityProductsFromDB();
+            } else {
+                getProductsFromDB();
 
-        if (vendorId.equalsIgnoreCase("Fort city")) {
-            gettFortCityProductsFromDB();
-        } else {
-            getProductsFromDB();
-
+            }
         }
+    }
+
+    private void getSellerDetailsFromDB() {
+        mDatabase.child("Sellers").child(vendorId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    vendorModel = dataSnapshot.getValue(SellerModel.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void gettFortCityProductsFromDB() {
@@ -157,21 +196,36 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Product product = snapshot.getValue(Product.class);
                         if (product != null) {
-                            if (product.getUploadedBy() == null) {
+                            if (Constants.PRODUCT_STATUS.equalsIgnoreCase("Out of stock")) {
+                                if (product.getQuantityAvailable() < 1) {
+                                    productArrayList.add(product);
+                                    performCalculations();
+                                }
+                            } else {
+                                if (product.getSellerProductStatus() != null && product.getSellerProductStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS)) {
+                                    if (product.getUploadedBy() == null) {
 
 
-                                productArrayList.add(product);
+                                        productArrayList.add(product);
 //                                performCalculations();
 
 
-                            } else if (product.getUploadedBy().equalsIgnoreCase("admin")) {
-                                productArrayList.add(product);
+                                    } else if (product.getUploadedBy().equalsIgnoreCase("admin")) {
+                                        productArrayList.add(product);
 
+                                    }
+                                    performCalculations();
+                                }
                             }
-                            performCalculations();
                         }
 
                     }
+//                    ArrayList<String> st=new ArrayList<>();
+//                    if(productArrayList.size()>0){
+//                        for(Product p:productArrayList){
+//                            st.add(p.getId());
+//                        }
+//                    }
                     Collections.sort(productArrayList, new Comparator<Product>() {
                         @Override
                         public int compare(Product listData, Product t1) {
@@ -229,9 +283,17 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
                             if (product.getVendor() != null) {
                                 if (product.getVendor() != null && product.getVendor().getVendorId() != null) {
                                     if (product.getVendor().getVendorId().equalsIgnoreCase(vendorId)) {
-
-                                        productArrayList.add(product);
-                                        performCalculations();
+                                        if (Constants.PRODUCT_STATUS.equalsIgnoreCase("Out of stock")) {
+                                            if (product.getQuantityAvailable() < 1) {
+                                                productArrayList.add(product);
+                                                performCalculations();
+                                            }
+                                        } else {
+                                            if (product.getSellerProductStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS)) {
+                                                productArrayList.add(product);
+                                                performCalculations();
+                                            }
+                                        }
 
 
                                     }

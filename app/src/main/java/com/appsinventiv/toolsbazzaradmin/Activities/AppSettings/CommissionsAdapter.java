@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.MainCategoryModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 
 import java.util.ArrayList;

@@ -3,6 +3,7 @@ package com.appsinventiv.toolsbazzaradmin.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appsinventiv.toolsbazzaradmin.Models.CompanyDetailsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.google.gson.Gson;
@@ -21,16 +22,16 @@ public class SharedPrefs {
 
     }
 
-    public static void setCommentsCount(HashMap<String,Double> model) {
+    public static void setCommentsCount(HashMap<String, Double> model) {
 
         Gson gson = new Gson();
         String json = gson.toJson(model);
         preferenceSetter("commentsCount", json);
     }
 
-    public static HashMap<String,Double> getCommentsCount() {
+    public static HashMap<String, Double> getCommentsCount() {
         Gson gson = new Gson();
-        HashMap<String,Double> map = gson.fromJson(preferenceGetter("commentsCount"), HashMap.class);
+        HashMap<String, Double> map = gson.fromJson(preferenceGetter("commentsCount"), HashMap.class);
         return map;
     }
 
@@ -48,6 +49,18 @@ public class SharedPrefs {
         return employee;
     }
 
+    public static void setCompanyDetails(CompanyDetailsModel model) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(model);
+        preferenceSetter("setCompanyDetails", json);
+    }
+
+    public static CompanyDetailsModel getCompanyDetails() {
+        Gson gson = new Gson();
+        CompanyDetailsModel employee = gson.fromJson(preferenceGetter("setCompanyDetails"), CompanyDetailsModel.class);
+        return employee;
+    }
 
 
     public static void setRole(String count) {

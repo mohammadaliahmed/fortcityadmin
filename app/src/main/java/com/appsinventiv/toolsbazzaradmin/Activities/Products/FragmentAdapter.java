@@ -36,8 +36,11 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     // This determines the fragment for each tab
     @Override
     public Fragment getItem(final int position) {
-
-        return  new ProductsListFragment(arrayList.get(position));
+        if(position==3){
+            return new OutOfStockProductsListFragment();
+        }else {
+            return new ProductsListFragment(arrayList.get(position));
+        }
 
 
 //        if (position == 0) {

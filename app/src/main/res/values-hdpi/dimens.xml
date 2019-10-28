@@ -1,0 +1,8 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="delete_button1">50dp</dimen>
+    <dimen name="delete_button2">70dp</dimen>
+
+
+</resources>

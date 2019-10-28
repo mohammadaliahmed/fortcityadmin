@@ -109,7 +109,7 @@ public class ViewSalary extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     Employee employeeModel = dataSnapshot.getValue(Employee.class);
                     if (employeeModel != null) {
-                        employee.setText(CommonUtils.rolesList[employeeModel.getRole()] + ": " + employeeModel.getName());
+                        employee.setText(employeeModel.getRole() + ": " + employeeModel.getName());
                         ViewSalary.this.setTitle("Salary Slip: " + employeeModel.getName());
                     }
                 }

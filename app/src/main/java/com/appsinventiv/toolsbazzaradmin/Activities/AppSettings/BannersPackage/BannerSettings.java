@@ -1,23 +1,31 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings;
+import com.appsinventiv.toolsbazzaradmin.Adapters.PickedPicturesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Adapters.SelectedImagesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Models.BannerPicsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.SelectedAdImages;
@@ -31,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,14 +57,14 @@ public class BannerSettings extends AppCompatActivity {
     DatabaseReference mDatabase;
     StorageReference mStorageRef;
     private static final int REQUEST_CODE_CHOOSE = 23;
-    SelectedImagesAdapter adapter;
+    PickedPicturesAdapter adapter;
     RecyclerView recyclerView;
     Bundle extras;
 
     List<Uri> mSelected;
     ArrayList<String> imageUrl = new ArrayList<>();
-    ArrayList<SelectedAdImages> banners = new ArrayList<>();
-    ArrayList<SelectedAdImages> selectedAdImages = new ArrayList<>();
+    ArrayList<BannerPicsModel> banners = new ArrayList<>();
+    ArrayList<String> selectedAdImages = new ArrayList<>();
 
     Button update, pick;
     RecyclerView recyclerviewPics;
@@ -68,7 +77,8 @@ public class BannerSettings extends AppCompatActivity {
         this.setTitle("Edit Banners");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         getPermissions();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -114,15 +124,14 @@ public class BannerSettings extends AppCompatActivity {
                 if (mSelected == null) {
                     CommonUtils.showToast("Please choose banners");
                 } else {
-                    for (String img : imageUrl) {
+                    for (String img : selectedAdImages) {
 
                         putPictures(img, "" + "", count);
                         count++;
 
                     }
-                    CommonUtils.showToast("Uploaded");
-                    Intent i = new Intent(BannerSettings.this, Settings.class);
-                    startActivity(i);
+                    CommonUtils.showToast("Uploading..");
+
                 }
             }
         });
@@ -136,41 +145,75 @@ public class BannerSettings extends AppCompatActivity {
         recyclerviewPics.setLayoutManager(horizontalLayoutManagaer);
         SelectedImagesAdapter adapter = new SelectedImagesAdapter(BannerSettings.this, banners, new SelectedImagesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-
+            public void onDeleteClicked(BannerPicsModel images, int position) {
+                showDeleteAlert(images);
             }
+
+
         });
         recyclerviewPics.setAdapter(adapter);
     }
 
-    private void getPicsFromDb() {
-        mDatabase.child("Settings").child("Banners").addChildEventListener(new ChildEventListener() {
+    private void showDeleteAlert(final BannerPicsModel bannerPicsModel) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_curved, null);
+
+        dialog.setContentView(layout);
+
+        TextView message = layout.findViewById(R.id.message);
+        TextView no = layout.findViewById(R.id.no);
+        TextView yes = layout.findViewById(R.id.yes);
+
+        message.setText("Do you want to delete this banner? ");
+
+        yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    recyclerviewPics.setVisibility(View.VISIBLE);
-                    BannerPicsModel model = dataSnapshot.getValue(BannerPicsModel.class);
-                    if (model != null) {
-                        banners.add(new SelectedAdImages(model.getUrl()));
-                        adapter.notifyDataSetChanged();
+            public void onClick(View view) {
+                dialog.dismiss();
+                mDatabase.child("Settings/Banners").child("" + bannerPicsModel.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Deleted");
                     }
+                });
+            }
+        });
+
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
+
+    }
+
+    private void getPicsFromDb() {
+        mDatabase.child("Settings").child("Banners").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    banners.clear();
+                    recyclerviewPics.setVisibility(View.VISIBLE);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        BannerPicsModel model = snapshot.getValue(BannerPicsModel.class);
+                        if (model != null) {
+                            banners.add(model);
+
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
 
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -195,10 +238,10 @@ public class BannerSettings extends AppCompatActivity {
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-
+                        String key = mDatabase.push().getKey();
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        mDatabase.child("Settings").child("Banners").child("" + count)
-                                .setValue(new BannerPicsModel("" + count, "" + downloadUrl, "", count)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        mDatabase.child("Settings").child("Banners").child(key)
+                                .setValue(new BannerPicsModel(key, "" + downloadUrl, "", count)).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
 
@@ -230,11 +273,12 @@ public class BannerSettings extends AppCompatActivity {
                 mSelected = Matisse.obtainResult(data);
                 for (Uri img :
                         mSelected) {
-                    selectedAdImages.add(new SelectedAdImages("" + img));
+//                    selectedAdImages.add(new BannerPicsModel());
                     adapter.notifyDataSetChanged();
                     CompressImage compressImage = new CompressImage(BannerSettings.this);
-                    imageUrl.add(compressImage.compressImage("" + img));
+                    selectedAdImages.add(compressImage.compressImage("" + img));
                 }
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -247,11 +291,14 @@ public class BannerSettings extends AppCompatActivity {
         LinearLayoutManager horizontalLayoutManagaer
                 = new LinearLayoutManager(BannerSettings.this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        adapter = new SelectedImagesAdapter(BannerSettings.this, selectedAdImages, new SelectedImagesAdapter.ChooseOption() {
+        adapter = new PickedPicturesAdapter(BannerSettings.this, selectedAdImages, new PickedPicturesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-
+            public void onDeleteClicked(int position) {
+                selectedAdImages.remove(position);
+                adapter.notifyDataSetChanged();
             }
+
+
         });
         recyclerView.setAdapter(adapter);
     }

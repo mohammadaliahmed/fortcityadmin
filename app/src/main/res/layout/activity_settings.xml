@@ -9,9 +9,9 @@
     tools:context="com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings">
 
     <LinearLayout
-        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -21,34 +21,76 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_setting_black" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image214" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
                 android:text="Manage Company"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Update company name, phone, email"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginLeft="65dp"
+                android:background="@color/light_grey" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/appIcons"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image135" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
+
+                android:text="App Icon"
+                android:textColor="#000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="30dp"
+                android:text="Change app icon"
+                android:textColor="#aaa"
+                android:textSize="11sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -59,37 +101,40 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_delivery_settings" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image215" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
+
                 android:text="Delivery Charge"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Create Countries &amp; Delivery Charges"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/shippingCarrier"
             android:layout_width="match_parent"
@@ -97,35 +142,77 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_shipping_carrier" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image216" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
                 android:text="Shipping Carrier"
-                android:textColor="#000" />
+
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Shipping Company Details"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
+                android:background="@color/light_grey" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/categoryAndAttributes"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image305" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
+                android:text="Product Categories &amp; Attributes"
+
+                android:textColor="#000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="30dp"
+                android:text="Create categories &amp; attributes"
+                android:textColor="#aaa"
+                android:textSize="11sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -136,36 +223,37 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:padding="2dp"
-                android:src="@drawable/translate" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image217" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
                 android:text="Languages"
-                android:textColor="#000" />
+                android:textColor="#000"
+
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Create Languages"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -176,35 +264,37 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/support" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image218" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
                 android:text="About Us"
-                android:textColor="#000" />
+                android:textColor="#000"
+
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Update Companies Vision"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
+
             <View
                 android:layout_width="match_parent"
-                android:layout_marginLeft="65dp"
-
                 android:layout_height="1dp"
+
                 android:layout_alignParentBottom="true"
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -215,35 +305,37 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/terms" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image219" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
                 android:text="Term &amp; Condition"
-                android:textColor="#000" />
+
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Update Terms &amp; Condition"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -254,36 +346,38 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
 
-                android:src="@drawable/lightbulb" />
+                android:src="@drawable/image222" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
+
                 android:text="FortCity features"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Update Features &amp; Services"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -295,35 +389,37 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_banner" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image220" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="12dp"
                 android:text="Banner"
-                android:textColor="#000" />
+
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Upload User, Seller &amp; Admin Banners"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -335,35 +431,37 @@
             android:layout_marginTop="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/fence" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image221" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
+
+                android:layout_marginTop="12dp"
                 android:text="COD limit"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Update the Minimum COD Amount"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
 
@@ -371,40 +469,42 @@
             android:id="@+id/commissions"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="15dp"
 
-            android:layout_marginTop="15dp">
+            android:layout_marginBottom="20dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-               android:layout_marginTop="12dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/commission" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/image223" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="12dp"
                 android:layout_marginLeft="65dp"
-                android:text="MultVendor commissions"
-                android:textColor="#000" />
+                android:layout_marginTop="12dp"
+
+                android:text="Multi Vendor commissions"
+                android:textColor="#000"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:textColor="#aaa"
                 android:layout_marginTop="30dp"
-                android:textSize="11sp"
                 android:text="Update Seller Product Commitions"
-                />
+                android:textColor="#aaa"
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="65dp"
-
                 android:layout_alignParentBottom="true"
+
+                android:layout_marginLeft="65dp"
                 android:background="@color/light_grey" />
         </RelativeLayout>
     </LinearLayout>

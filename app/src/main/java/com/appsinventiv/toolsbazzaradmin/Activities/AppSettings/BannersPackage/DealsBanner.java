@@ -1,21 +1,28 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.BannersPackage;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.AppSettings.Settings;
 import com.appsinventiv.toolsbazzaradmin.Adapters.SelectedImagesAdapter;
@@ -55,8 +62,8 @@ public class DealsBanner extends AppCompatActivity {
 
     List<Uri> mSelected;
     ArrayList<String> imageUrl = new ArrayList<>();
-    ArrayList<SelectedAdImages> banners = new ArrayList<>();
-    ArrayList<SelectedAdImages> selectedAdImages = new ArrayList<>();
+    ArrayList<BannerPicsModel> banners = new ArrayList<>();
+    ArrayList<BannerPicsModel> selectedAdImages = new ArrayList<>();
 
     Button update, pick;
 
@@ -68,7 +75,8 @@ public class DealsBanner extends AppCompatActivity {
         this.setTitle("Edit Deals Banners");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true); getSupportActionBar().setElevation(0);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         getPermissions();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -138,8 +146,9 @@ public class DealsBanner extends AppCompatActivity {
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
         adapter = new SelectedImagesAdapter(DealsBanner.this, selectedAdImages, new SelectedImagesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-
+            public void onDeleteClicked(BannerPicsModel images, int position) {
+                selectedAdImages.remove(position);
+                adapter.notifyDataSetChanged();
             }
         });
         recyclerView.setAdapter(adapter);
@@ -151,11 +160,59 @@ public class DealsBanner extends AppCompatActivity {
         recyclerviewPics.setLayoutManager(horizontalLayoutManagaer);
         SelectedImagesAdapter adapter = new SelectedImagesAdapter(DealsBanner.this, banners, new SelectedImagesAdapter.ChooseOption() {
             @Override
-            public void onDeleteClicked(SelectedAdImages images, int position) {
-
+            public void onDeleteClicked(BannerPicsModel images, int position) {
+                showDeleteAlert(images);
             }
         });
         recyclerviewPics.setAdapter(adapter);
+    }
+
+    private void showDeleteAlert(final BannerPicsModel bannerPicsModel) {
+
+
+
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_curved, null);
+
+        dialog.setContentView(layout);
+
+        TextView message = layout.findViewById(R.id.message);
+        TextView no = layout.findViewById(R.id.no);
+        TextView yes = layout.findViewById(R.id.yes);
+
+        message.setText("Do you want to delete this banner? ");
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                mDatabase.child("Settings/DealsBanners").child("" + bannerPicsModel.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Deleted");
+                    }
+                });
+
+            }
+        });
+
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+
+        dialog.show();
+
     }
 
 
@@ -167,7 +224,7 @@ public class DealsBanner extends AppCompatActivity {
                     recyclerviewPics.setVisibility(View.VISIBLE);
                     BannerPicsModel model = dataSnapshot.getValue(BannerPicsModel.class);
                     if (model != null) {
-                        banners.add(new SelectedAdImages(model.getUrl()));
+                        banners.add(model);
                         adapter.notifyDataSetChanged();
                     }
 
@@ -215,12 +272,13 @@ public class DealsBanner extends AppCompatActivity {
 
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         mDatabase.child("Settings").child("DealsBanners").child("" + count)
-                                .setValue(new BannerPicsModel("" + count, "" + downloadUrl, "", count)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+                                .setValue(new BannerPicsModel("" + count, "" + downloadUrl, "", count))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
 
-                            }
-                        });
+                                    }
+                                });
 
                     }
                 })
@@ -262,7 +320,7 @@ public class DealsBanner extends AppCompatActivity {
                 mSelected = Matisse.obtainResult(data);
                 for (Uri img :
                         mSelected) {
-                    selectedAdImages.add(new SelectedAdImages("" + img));
+                    selectedAdImages.add(new BannerPicsModel());
                     adapter.notifyDataSetChanged();
                     CompressImage compressImage = new CompressImage(DealsBanner.this);
                     imageUrl.add(compressImage.compressImage("" + img));
