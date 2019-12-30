@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,13 @@ public class ChooseOptionAdapter extends RecyclerView.Adapter<ChooseOptionAdapte
     Context context;
     ArrayList<String> list;
     ChooseOptionCallback callback;
+    String type;
     int selected = -1;
 
-    public ChooseOptionAdapter(Context context, ArrayList<String> list, ChooseOptionCallback callback) {
+    public ChooseOptionAdapter(Context context, ArrayList<String> list, String type, ChooseOptionCallback callback) {
         this.context = context;
         this.list = list;
+        this.type = type;
         this.callback = callback;
 
     }
@@ -43,6 +46,13 @@ public class ChooseOptionAdapter extends RecyclerView.Adapter<ChooseOptionAdapte
         final String title = list.get(position);
         holder.title.setText(title);
 
+        if (type.equalsIgnoreCase("dangerous")) {
+            Glide.with(context).load(R.drawable.ic_danger).into(holder.image);
+        } else if (type.equalsIgnoreCase("warrentyPeriod")) {
+            Glide.with(context).load(R.drawable.ic_warrent).into(holder.image);
+        } else {
+            Glide.with(context).load(R.drawable.image347).into(holder.image);
+        }
         if (selected == position) {
             holder.tick.setVisibility(View.VISIBLE);
         } else {
@@ -65,12 +75,13 @@ public class ChooseOptionAdapter extends RecyclerView.Adapter<ChooseOptionAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        ImageView tick;
+        ImageView tick, image;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             tick = itemView.findViewById(R.id.tick);
+            image = itemView.findViewById(R.id.image);
         }
     }
 

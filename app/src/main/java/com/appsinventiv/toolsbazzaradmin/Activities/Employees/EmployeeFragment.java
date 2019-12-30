@@ -232,10 +232,15 @@ public class EmployeeFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Employee model = snapshot.getValue(Employee.class);
                         if (model != null) {
-                            if (type.equalsIgnoreCase("All")) {
+                            if (model.getParentRole() != null) {
+                                if (type.equalsIgnoreCase("All")) {
+                                    employeesList.add(model);
+                                } else if (model.getParentRole().equalsIgnoreCase(type)) {
+                                    employeesList.add(model);
+                                }
+                            } else {
                                 employeesList.add(model);
-                            } else if (model.getRole().equalsIgnoreCase(type)) {
-                                employeesList.add(model);
+
                             }
                         }
                     }

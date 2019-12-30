@@ -67,7 +67,7 @@ public class WarrentyPeriod extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new ChooseOptionAdapter(this, itemList, new ChooseOptionAdapter.ChooseOptionCallback() {
+        adapter = new ChooseOptionAdapter(this, itemList,"warrentyPeriod", new ChooseOptionAdapter.ChooseOptionCallback() {
             @Override
             public void onOptionSelected(String value) {
                 AddProduct.warrantyPeriod=value;

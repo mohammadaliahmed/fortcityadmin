@@ -1,20 +1,29 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.AssignAttributes;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseAttributes;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.EditProduct;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -74,6 +83,7 @@ public class ChooseCategory extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
+
                     itemList.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String value = snapshot.getValue(String.class);
@@ -84,6 +94,8 @@ public class ChooseCategory extends AppCompatActivity {
 
                     adapter.notifyDataSetChanged();
                 } else {
+                    progress.setVisibility(View.GONE);
+
 //                    itemList.clear();
 //                    adapter.notifyDataSetChanged();
 //                    if (ChooseMainCategory.activity != null) {
@@ -91,8 +103,23 @@ public class ChooseCategory extends AppCompatActivity {
 //                    }
 //                    ChooseOtherMainCategory.activity.finish();
 //                    finish();
-                    Intent i = new Intent(ChooseCategory.this, ChooseAttributes.class);
-                    startActivity(i);
+                    if (!Constants.ADDING_PRODUCT) {
+                        showAttAlert(cate);
+
+                    } else {
+                        itemList.clear();
+                        adapter.notifyDataSetChanged();
+                        if (ChooseMainCategory.activity != null) {
+                            ChooseMainCategory.activity.finish();
+                        }
+
+                        ChooseOtherMainCategory.activity.finish();
+                        Intent i = new Intent(ChooseCategory.this, ChooseAttributes.class);
+                        startActivity(i);
+
+                        finish();
+
+                    }
 
                 }
             }
@@ -102,6 +129,52 @@ public class ChooseCategory extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void showAttAlert(final String cate) {
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_attri, null);
+
+        dialog.setContentView(layout);
+
+        RelativeLayout attribute = layout.findViewById(R.id.attribute);
+        RelativeLayout sku = layout.findViewById(R.id.sku);
+
+        attribute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent i = new Intent(ChooseCategory.this, AssignAttributes.class);
+                i.putExtra("type", "Attributes");
+                i.putExtra("category", cate);
+                startActivity(i);
+                Constants.SKU_ATT = "attributes";
+
+            }
+        });
+
+        sku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent i = new Intent(ChooseCategory.this, AssignAttributes.class);
+                i.putExtra("type", "SKU");
+                i.putExtra("category", cate);
+                Constants.SKU_ATT = "sku";
+
+
+                startActivity(i);
+
+            }
+        });
+
+
+        dialog.show();
+
     }
 
     private void getDataFromDB() {

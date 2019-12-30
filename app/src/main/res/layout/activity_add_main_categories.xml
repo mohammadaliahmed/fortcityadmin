@@ -2,9 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#fff"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,17 +42,16 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_marginLeft="10dp"
                         android:layout_height="wrap_content"
-                       >
+                        android:layout_marginLeft="10dp">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/subCategories"
                             android:layout_width="match_parent"
-                            android:textSize="11sp"
                             android:layout_height="wrap_content"
                             android:hint="Sub Categories"
-                            android:inputType="textMultiLine|textCapWords" />
+                            android:inputType="textMultiLine|textCapWords"
+                            android:textSize="11sp" />
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>

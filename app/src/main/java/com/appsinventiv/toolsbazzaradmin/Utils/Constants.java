@@ -25,4 +25,9 @@ public class Constants {
     public static String REJECT_REASON="";
     public static String PRODUCT_STATUS="Approved";
     public static int TAB=0;
+    public static String SKU_ATT="";
+    public static String LAST_CATEGORY="";
+    public static boolean ADDING_PRODUCT=false;
+    public static boolean EDITING_ATTRIBUTES=false;
+    public static boolean RE_ATTRIBUTES=false;
 }

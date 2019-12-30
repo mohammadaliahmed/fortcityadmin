@@ -92,4 +92,10 @@ public class CategoryAndAttributes extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Constants.EDITING_ATTRIBUTES=false;
+    }
 }

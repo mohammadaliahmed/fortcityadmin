@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Employee {
     String username, name, email, password, phone, fcmKey,picUrl;
-    String role;
+    String role,parentRole;
     long time;
     int code;
     boolean codeVerified;
@@ -38,6 +38,13 @@ public class Employee {
 
     }
 
+    public String getParentRole() {
+        return parentRole;
+    }
+
+    public void setParentRole(String parentRole) {
+        this.parentRole = parentRole;
+    }
 
     public long getSalary() {
         return salary;

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,6 +45,10 @@ public class ChooseAttributes extends AppCompatActivity {
     EditText manualAttribute;
     Button add;
     TextInputLayout aaa;
+    TextView text;
+    ImageView delete;
+    RelativeLayout deleteLayout;
+    public static ChooseAttributes chooseAttributes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,10 @@ public class ChooseAttributes extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         this.setTitle("Choose Attribute");
+        chooseAttributes = this;
+        deleteLayout = findViewById(R.id.deleteLayout);
+        delete = findViewById(R.id.delete);
+        text = findViewById(R.id.text);
         add = findViewById(R.id.add);
         manualAttribute = findViewById(R.id.manualAttribute);
         back = findViewById(R.id.back);
@@ -67,6 +76,16 @@ public class ChooseAttributes extends AppCompatActivity {
         wholeLayout = findViewById(R.id.wholeLayout);
         category = AddProduct.categoryList.get(AddProduct.categoryList.size() - 1);
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                manualAttribute.setText("");
+                AddProduct.productAttributesMap.remove(attributeModelArrayList.get(count).getMainCategory());
+                deleteLayout.setVisibility(View.GONE);
+
+            }
+        });
+
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +94,7 @@ public class ChooseAttributes extends AppCompatActivity {
                     count++;
                     getSubSubAttributesFromDB(attributeModelArrayList.get(count));
                 } else {
-                    startActivity(new Intent(ChooseAttributes.this, ChooseWarrenty.class));
+                    startActivity(new Intent(ChooseAttributes.this, ChooseSKU.class));
                 }
 
             }
@@ -88,7 +107,7 @@ public class ChooseAttributes extends AppCompatActivity {
                     count++;
                     getSubSubAttributesFromDB(attributeModelArrayList.get(count));
                 } else {
-                    startActivity(new Intent(ChooseAttributes.this, ChooseWarrenty.class));
+                    startActivity(new Intent(ChooseAttributes.this, ChooseSKU.class));
                 }
 
             }
@@ -111,10 +130,12 @@ public class ChooseAttributes extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new ChooseAttributeOptionAdapter(this, itemList, new ChooseAttributeOptionAdapter.ChooseOptionCallback() {
+        adapter = new ChooseAttributeOptionAdapter(this, itemList, "attribute", new ChooseAttributeOptionAdapter.ChooseOptionCallback() {
             @Override
             public void onOptionSelected(String value) {
-                AddProduct.productAttributesMap.put(attributeModelArrayList.get(count).getMainCategory(), value);
+                if (AddProduct.productAttributesMap != null) {
+                    AddProduct.productAttributesMap.put(attributeModelArrayList.get(count).getMainCategory(), value);
+                }
             }
         });
 
@@ -123,10 +144,12 @@ public class ChooseAttributes extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                aaa.setHint(attributeModelArrayList.get(count).getMainCategory());
                 AddProduct.productAttributesMap.put(attributeModelArrayList.get(count).getMainCategory(),
                         manualAttribute.getText().toString());
-                CommonUtils.showToast("Added\nGo to next");
+
+                text.setText(manualAttribute.getText().toString());
+                deleteLayout.setVisibility(View.VISIBLE);
+//                CommonUtils.showToast("Added\nGo to next");
             }
         });
 
@@ -136,7 +159,7 @@ public class ChooseAttributes extends AppCompatActivity {
     }
 
     private void getAttributesList() {
-        mDatabase.child("Settings").child("Attributes").child("SubAttributes").child(category).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Settings").child("Attributes/AssignedAttributes").child(category).child("Attributes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -164,9 +187,12 @@ public class ChooseAttributes extends AppCompatActivity {
         itemList.clear();
 
         if (subAttributeModel.getSelection().equalsIgnoreCase("userInput")) {
-
+            aaa.setHint("Enter: " + subAttributeModel.getMainCategory());
+            manualAttribute.setText("");
             userInput.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
+            deleteLayout.setVisibility(View.GONE);
+            text.setText("");
 
         } else {
             userInput.setVisibility(View.GONE);
@@ -189,6 +215,7 @@ public class ChooseAttributes extends AppCompatActivity {
                         } else if (subAttributeModel.getSelection().equalsIgnoreCase("multiple")) {
                             adapter.setMultiSelect(true);
                         }
+                        adapter.selectedText = "";
                         adapter.setSelected(-1);
                         adapter.updateList(itemList);
                         adapter.notifyDataSetChanged();

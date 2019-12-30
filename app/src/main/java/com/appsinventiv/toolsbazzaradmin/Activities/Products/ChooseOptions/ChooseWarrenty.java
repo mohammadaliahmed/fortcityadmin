@@ -43,6 +43,7 @@ public class ChooseWarrenty extends AppCompatActivity {
 
     TextView back, next;
 
+    String addingProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class ChooseWarrenty extends AppCompatActivity {
         }
         setContentView(R.layout.activity_choose_warrenty);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        addingProduct = getIntent().getStringExtra("addingProduct");
 
         back = findViewById(R.id.back);
         next = findViewById(R.id.next);
@@ -61,7 +63,7 @@ public class ChooseWarrenty extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ChooseWarrenty.this,WarrentyPeriod.class));
+                startActivity(new Intent(ChooseWarrenty.this, WarrentyPeriod.class));
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -81,14 +83,24 @@ public class ChooseWarrenty extends AppCompatActivity {
         itemList.add("Non-local Warranty");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new ChooseOptionAdapter(this, itemList, new ChooseOptionAdapter.ChooseOptionCallback() {
+        adapter = new ChooseOptionAdapter(this, itemList, "warrentyType", new ChooseOptionAdapter.ChooseOptionCallback() {
             @Override
             public void onOptionSelected(String value) {
-                AddProduct.whichWarranty=value;
+                AddProduct.whichWarranty = value;
+                if (addingProduct != null && addingProduct.equalsIgnoreCase("yes")) {
+
+                    finish();
+                }
             }
         });
 
         recyclerView.setAdapter(adapter);
+        if (addingProduct != null && addingProduct.equalsIgnoreCase("yes")) {
+            back.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
+        } else {
+
+        }
 
 
     }

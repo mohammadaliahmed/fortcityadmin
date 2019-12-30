@@ -1,7 +1,9 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.Products.Reviews;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,11 +13,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Customers.SellerModel;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.ViewOrder;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
@@ -58,6 +62,7 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
     int postion;
     ArrayList<String> ite = new ArrayList<>();
     SellerModel vendorModel;
+    FloatingActionButton addProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
 
         getSellerDetailsFromDB();
         this.setTitle(storeName);
+        addProduct = findViewById(R.id.addProduct);
         positiveCount = findViewById(R.id.positiveCount);
         neutralCount = findViewById(R.id.neutralCount);
         negativeCount = findViewById(R.id.negativeCount);
@@ -86,6 +92,13 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
         neutralBar = findViewById(R.id.neutralBar);
         negativeBar = findViewById(R.id.negativeBar);
         positiveRatingText = findViewById(R.id.positiveRatingText);
+
+        addProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProductReviews.this, AddProduct.class));
+            }
+        });
 
         recyclerView = findViewById(R.id.recycler_view_products);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

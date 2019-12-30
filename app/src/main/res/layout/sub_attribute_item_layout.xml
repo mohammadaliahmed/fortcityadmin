@@ -7,18 +7,15 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_margin="10dp"
-        android:padding="5dp"
-        android:src="@drawable/yellow_circle" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="10dp"
+        android:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/maincategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp"
         android:text=""

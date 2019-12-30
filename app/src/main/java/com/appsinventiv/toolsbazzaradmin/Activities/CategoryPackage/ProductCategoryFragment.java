@@ -82,22 +82,22 @@ public class ProductCategoryFragment extends Fragment {
         });
 
 
-        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
-            @Override
-            public void onRightClicked(final int position) {
-                showAlert(itemList.get(position));
-
-            }
-        });
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recycler);
-
-        recycler.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
+//        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
+//            @Override
+//            public void onRightClicked(final int position) {
+//                showAlert(itemList.get(position));
+//
+//            }
+//        });
+//        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+//        itemTouchhelper.attachToRecyclerView(recycler);
+//
+//        recycler.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//                swipeController.onDraw(c);
+//            }
+//        });
 
 
         recycler.setAdapter(adapter);

@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.AddSubCategories;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -23,9 +25,12 @@ public class AddSubSubAttributeAdapter extends RecyclerView.Adapter<AddSubSubAtt
     Context context;
     ArrayList<String> list;
 
-    public AddSubSubAttributeAdapter(Context context, ArrayList<String> list) {
+    AddSubSubAttributeAdapterCallbacks callbacks;
+
+    public AddSubSubAttributeAdapter(Context context, ArrayList<String> list,AddSubSubAttributeAdapterCallbacks callbacks) {
         this.context = context;
         this.list = list;
+        this.callbacks=callbacks;
     }
 
     @NonNull
@@ -40,12 +45,18 @@ public class AddSubSubAttributeAdapter extends RecyclerView.Adapter<AddSubSubAtt
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final String title = list.get(position);
         holder.title.setText(title);
+        if (Constants.SKU_ATT.toLowerCase().contains("sku")) {
+            Glide.with(context).load(R.drawable.ic_sku).into(holder.icon);
 
-        holder.title.setOnClickListener(new View.OnClickListener() {
+        } else {
+            Glide.with(context).load(R.drawable.ic_att).into(holder.icon);
+
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
+               callbacks.onItemClick(title);
             }
         });
     }
@@ -57,11 +68,18 @@ public class AddSubSubAttributeAdapter extends RecyclerView.Adapter<AddSubSubAtt
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
+        ImageView icon;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
         }
     }
+    public interface AddSubSubAttributeAdapterCallbacks{
+        public void onItemClick(String title);
+    }
+
+
 
 }

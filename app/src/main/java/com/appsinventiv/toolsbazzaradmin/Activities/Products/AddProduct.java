@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -29,15 +30,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.ChooseCategory;
 import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.ChooseMainCategory;
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.ChooseOtherMainCategory;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.BottomAdapter;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.BottomDialogModel;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseAttributes;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseAttributesAgain;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseWarrenty;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ProductVariation.ChooseProductVariation;
 import com.appsinventiv.toolsbazzaradmin.Adapters.PickedPicturesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Interfaces.ProductObserver;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
@@ -47,6 +55,7 @@ import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImageToThumnail;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -114,13 +123,18 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
     private String localThumbnail;
     EditText warrantyPolicy;
     TextView dangerousGoodsTv;
-
+    TextView productVariation;
+    TextView productVariationSubtitle;
+    public static AddProduct activity;
+    EditText productModel;
+    CardView cardAttr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         this.setTitle("Add Product");
+        activity = this;
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -130,6 +144,9 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
 
         getPermissions();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        productVariationSubtitle = findViewById(R.id.productVariationSubtitle);
+        productModel = findViewById(R.id.productModel);
+        productVariation = findViewById(R.id.productVariation);
         warrantyPeriodTv = findViewById(R.id.warrantyPeriod);
         categoryChoosen = findViewById(R.id.categoryChoosen);
         categoryChoosen.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +160,7 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
             }
         });
 
+        cardAttr = findViewById(R.id.cardAttr);
         both = findViewById(R.id.both);
         wholesale = findViewById(R.id.wholesale);
         retail = findViewById(R.id.retail);
@@ -176,6 +194,13 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
         weightChosen = findViewById(R.id.weightChosen);
         warrantyChosen = findViewById(R.id.warrantyChosen);
 
+        productVariation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AddProduct.this, ChooseProductVariation.class));
+            }
+        });
+
 
         chooseVendor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +212,10 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
         warrantyChosen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWarrantyAlert();
+//                showWarrantyAlert();
+                Intent i = new Intent(AddProduct.this, ChooseWarrenty.class);
+                i.putExtra("addingProduct", "yes");
+                startActivity(i);
             }
         });
 
@@ -342,9 +370,13 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
                     e_quantityAvailable.requestFocus();
                 } else if (vendor == null) {
                     CommonUtils.showToast("Please choose vendor");
-                } else if (!checkk()) {
-                    CommonUtils.showToast("Please fix errors");
-                } else if (whichWarranty == null) {
+                }
+
+//                else if (!checkk()) {
+//                    CommonUtils.showToast("Please fix errors");
+//                }
+
+                else if (whichWarranty == null) {
                     CommonUtils.showToast("Please select warranty type");
 
                 } else if (productWeight == null) {
@@ -356,6 +388,18 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
                 }
 
 
+            }
+        });
+
+        cardAttr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Constants.RE_ATTRIBUTES = true;
+                ChooseOtherMainCategory.activity.finish();
+                Intent i = new Intent(AddProduct.this, ChooseAttributes.class);
+                startActivity(i);
+
+                finish();
             }
         });
 
@@ -438,7 +482,8 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
                 dimens, "admin",
                 "Approved", warrantyPeriod,
                 warrantyPolicy.getText().toString(),
-                dangerousGoods
+                dangerousGoods,
+                productModel.getText().toString()
 
 
         )).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -447,6 +492,8 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
                 int count = 0;
                 putThumbnail(localThumbnail, productId);
                 mDatabase.child("Products").child(productId).child("productAttributes").updateChildren(productAttributesMap);
+                mDatabase.child("Products").child(productId).child("attributesWithPics").updateChildren(ChooseProductVariation.uploadedMap);
+                mDatabase.child("Products").child(productId).child("newAttributes").updateChildren(ChooseProductVariation.hashMapHashMap);
                 categoryList.clear();
                 productAttributesMap.clear();
                 for (String img : imageUrl) {
@@ -764,23 +811,42 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
     @Override
     protected void onResume() {
         super.onResume();
+        Constants.RE_ATTRIBUTES = false;
         if (productWeight != null) {
             weightChosen.setText("Weight: " + productWeight + "Kg");
         }
-        if (productAttributesMap.size() > 0) {
-            LinearLayout options_layout = (LinearLayout) findViewById(R.id.layout);
+        if (productAttributesMap != null && productAttributesMap.size() > 0) {
+            final LinearLayout options_layout = (LinearLayout) findViewById(R.id.layout);
             options_layout.removeAllViews();
-            for (Map.Entry<String, Object> entry : productAttributesMap.entrySet()) {
-                String key = entry.getKey();
+            for (final Map.Entry<String, Object> entry : productAttributesMap.entrySet()) {
+                final String key = entry.getKey();
                 String value = entry.getValue().toString();
                 LayoutInflater inflater = LayoutInflater.from(this);
-                View to_add = inflater.inflate(R.layout.product_attributes_layout,
+                final View to_add = inflater.inflate(R.layout.product_attributes_layout,
                         options_layout, false);
+//                ImageView  delete = to_add.findViewById(R.id.delete);
                 TextInputEditText subtitle = to_add.findViewById(R.id.subtitle);
                 TextInputLayout keu = to_add.findViewById(R.id.TextInputLayout);
+                ImageView delete = to_add.findViewById(R.id.delete);
+                ImageView edit = to_add.findViewById(R.id.edit);
                 keu.setHint(key);
                 subtitle.setText(value);
                 options_layout.addView(to_add);
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        options_layout.removeView(to_add);
+                        productAttributesMap.remove(entry.getKey());
+                    }
+                });
+                edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(AddProduct.this, ChooseAttributesAgain.class);
+                        i.putExtra("attribute", key);
+                        startActivity(i);
+                    }
+                });
             }
 
         }
@@ -797,12 +863,19 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
         if (dangerousGoods != null) {
             dangerousGoodsTv.setText("Dangerous:" + dangerousGoods);
         }
-        if (productAttributesMap!=null && productAttributesMap.size() > 0) {
 
+        if (categoryList != null && categoryList.size() > 0) {
+            Constants.ADDING_PRODUCT = false;
         } else {
+            Constants.ADDING_PRODUCT = true;
             Intent i = new Intent(AddProduct.this, ChooseMainCategory.class);
             categoryList.clear();
             startActivityForResult(i, 1);
+        }
+        if (ChooseProductVariation.hashMapHashMap != null && ChooseProductVariation.hashMapHashMap.size() > 0) {
+            productVariationSubtitle.setText("Color and size selected");
+        } else {
+
         }
     }
 

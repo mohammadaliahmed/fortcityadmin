@@ -17,6 +17,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.EditProduct;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -76,7 +77,13 @@ public class SubAttributesAdapter extends RecyclerView.Adapter<SubAttributesAdap
         final SubAttributeModel model = itemList.get(position);
         holder.maincategory.setText(model.getMainCategory());
         holder.subtitle.setText(model.getSelection());
-//        Glide.with(context).load(model.getUrl()).into(holder.icon);
+        if (Constants.SKU_ATT.toLowerCase().contains("sku")) {
+            Glide.with(context).load(R.drawable.ic_sku).into(holder.icon);
+
+        } else {
+            Glide.with(context).load(R.drawable.ic_att).into(holder.icon);
+
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +126,7 @@ public class SubAttributesAdapter extends RecyclerView.Adapter<SubAttributesAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView maincategory, subtitle;
         ImageView icon, delete;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

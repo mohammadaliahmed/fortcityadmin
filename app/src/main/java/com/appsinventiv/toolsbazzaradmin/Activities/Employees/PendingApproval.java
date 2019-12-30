@@ -35,7 +35,6 @@ public class PendingApproval extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
-            getSupportActionBar().setElevation(0);
 
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();

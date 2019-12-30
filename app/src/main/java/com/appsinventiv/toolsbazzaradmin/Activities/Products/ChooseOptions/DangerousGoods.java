@@ -40,6 +40,7 @@ public class DangerousGoods extends AppCompatActivity {
         back = findViewById(R.id.back);
         next = findViewById(R.id.next);
 
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +65,7 @@ public class DangerousGoods extends AppCompatActivity {
         itemList.add("None");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new ChooseOptionAdapter(this, itemList, new ChooseOptionAdapter.ChooseOptionCallback() {
+        adapter = new ChooseOptionAdapter(this, itemList, "dangerous",new ChooseOptionAdapter.ChooseOptionCallback() {
             @Override
             public void onOptionSelected(String value) {
                 AddProduct.dangerousGoods=value;

@@ -138,7 +138,7 @@ public class ViewEmployee extends AppCompatActivity {
                     if (employee != null) {
                         ViewEmployee.this.setTitle(employee.getName());
 
-                        if(SharedPrefs.getEmployee().getUsername().equalsIgnoreCase(employee.getUsername())){
+                        if (SharedPrefs.getEmployee().getUsername().equalsIgnoreCase(employee.getUsername())) {
                             SharedPrefs.setEmployee(employee);
                         }
                         name.setText(employee.getName());
@@ -227,6 +227,8 @@ public class ViewEmployee extends AppCompatActivity {
     private void updateEmployeRolesToDB() {
         int count = 0;
         List<String> roles = new ArrayList<>();
+        String finalRole = "";
+        String parentRole = "";
         for (int i = 0; i < MyCategoriesExpandableListAdapter.parentItems.size(); i++) {
 
             String isChecked = MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.IS_CHECKED);
@@ -236,22 +238,30 @@ public class ViewEmployee extends AppCompatActivity {
             }
 
             for (int j = 0; j < MyCategoriesExpandableListAdapter.childItems.get(i).size(); j++) {
-                count++;
                 String isChildChecked = MyCategoriesExpandableListAdapter.childItems.get(i).get(j).get(ConstantManager.Parameter.IS_CHECKED);
 
                 if (isChildChecked.equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
                     roles.add(ViewEmployee.newRoleList[count]);
+                    finalRole = ViewEmployee.newRoleList[count];
+                    parentRole = MyCategoriesExpandableListAdapter.parentItems.get(i).get("category_name");
 //                    tvChild.setText(tvChild.getText() + " , " + MyCategoriesExpandableListAdapter.parentItems.get(i).get(ConstantManager.Parameter.CATEGORY_NAME) + " " + (j + 1));
                 }
+                count++;
+
 
             }
 
         }
         if (roles.size() > 0) {
-            mDatabase.child("Admin").child("Employees").child(username).child("roles").setValue(roles).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mDatabase.child("Admin").child("Employees").child(username).child("role").setValue(finalRole).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     CommonUtils.showToast("Roles updated");
+                }
+            });
+            mDatabase.child("Admin").child("Employees").child(username).child("parentRole").setValue(parentRole).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
                 }
             });
         }

@@ -3,6 +3,7 @@ package com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.Attributes;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.MainCategory
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
+import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
+import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,6 +57,7 @@ public class AddMainAttributes extends AppCompatActivity {
     MainAttributesAdapter adapter;
     private ArrayList<MainCategoryModel> itemList = new ArrayList<>();
     StorageReference mStorageRef;
+    private SwipeToDeleteCallback swipeController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,23 @@ public class AddMainAttributes extends AppCompatActivity {
                 showAlert(model);
             }
         });
+        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
+            @Override
+            public void onRightClicked(final int position) {
+                showAlert(itemList.get(position));
+
+            }
+        });
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
+
         recyclerView.setAdapter(adapter);
 
         pickImage.setOnClickListener(new View.OnClickListener() {

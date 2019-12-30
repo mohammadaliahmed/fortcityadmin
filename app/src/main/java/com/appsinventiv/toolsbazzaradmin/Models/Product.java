@@ -36,6 +36,7 @@ public class Product {
     boolean active;
     String warrantyPeriod, warrantyPolicy, dangerousGood;
     HashMap<String, String> productAttributes;
+    String productModel;
 
 
     public Product() {
@@ -78,7 +79,7 @@ public class Product {
                    ArrayList<String> category, int quantityAvailable,
                    String brandName, String productContents, String warrantyType, String productWeight,
                    String dimen, String uploadedBy, String sellerProductStatus,
-                   String warrantyPeriod, String warrantyPolicy, String dangerousGood
+                   String warrantyPeriod, String warrantyPolicy, String dangerousGood,String productModel
 
 
     ) {
@@ -116,6 +117,7 @@ public class Product {
         this.dimen = dimen;
         this.uploadedBy = uploadedBy;
         this.sellerProductStatus = sellerProductStatus;
+        this.productModel = productModel;
     }
 
     public String getWarrantyPeriod() {

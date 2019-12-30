@@ -22,6 +22,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.Attributes.A
 import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.Attributes.MainAttributesAdapter;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,6 +64,7 @@ public class AttributesFragment extends Fragment {
         addd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.EDITING_ATTRIBUTES=true;
                 Intent i = new Intent(context, AddMainAttributes.class);
                 startActivity(i);
             }
@@ -78,22 +80,22 @@ public class AttributesFragment extends Fragment {
         });
 
 
-        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
-            @Override
-            public void onRightClicked(final int position) {
-                showAlert(itemList.get(position));
-
-            }
-        });
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerview);
-
-        recyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
+//        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
+//            @Override
+//            public void onRightClicked(final int position) {
+//                showAlert(itemList.get(position));
+//
+//            }
+//        });
+//        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+//        itemTouchhelper.attachToRecyclerView(recyclerview);
+//
+//        recyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//                swipeController.onDraw(c);
+//            }
+//        });
 
 
         recyclerview.setAdapter(adapter);

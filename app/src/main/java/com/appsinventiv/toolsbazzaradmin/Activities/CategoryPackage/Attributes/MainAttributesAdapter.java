@@ -20,6 +20,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.MainCategory
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.EditProduct;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -91,7 +92,21 @@ public class MainAttributesAdapter extends RecyclerView.Adapter<MainAttributesAd
 //                    i.putExtra("mainAttribute", model.getMainCategory());
 //
 //                    context.startActivity(i);
-                    showWarrantyAlert(model);
+                    if (!Constants.EDITING_ATTRIBUTES) {
+                        Intent i = new Intent(context, AddSubAttributes.class);
+                        i.putExtra("mainAttribute", model.getMainCategory());
+                        String abc = "single";
+
+                        abc = "userInput";
+
+                        i.putExtra("option", abc);
+//                        i.putExtra("alaw", ab.get(which));
+                        Constants.SKU_ATT = model.getMainCategory();
+                        context.startActivity(i);
+                    } else {
+                        showWarrantyAlert(model);
+
+                    }
 //                    ((ChooseMainCategory) context).finish();
                 } else if (to == 0) {
 //                    Intent i = new Intent(context, ChooseOtherMainCategory.class);
@@ -146,7 +161,7 @@ public class MainAttributesAdapter extends RecyclerView.Adapter<MainAttributesAd
                 }
                 i.putExtra("option", abc);
                 i.putExtra("alaw", ab.get(which));
-
+                Constants.SKU_ATT = model.getMainCategory();
                 context.startActivity(i);
 
             }

@@ -1,6 +1,7 @@
 package com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.Attributes;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,10 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.AddCategoryAdapter;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +45,7 @@ public class AddSubSubAttributes extends AppCompatActivity {
     String categories = "";
     String subAttribute;
     SwipeToDeleteCallback swipeController;
+    LinearLayout editing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,36 +64,45 @@ public class AddSubSubAttributes extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         mainCategories = findViewById(R.id.mainCategories);
+        editing = findViewById(R.id.editing);
         update = findViewById(R.id.update);
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new AddSubSubAttributeAdapter(this, itemList);
+        adapter = new AddSubSubAttributeAdapter(this, itemList, new AddSubSubAttributeAdapter.AddSubSubAttributeAdapterCallbacks() {
+            @Override
+            public void onItemClick(String title) {
+                getClickSubSubAttributesDataFromDB(title);
+            }
+        });
 
         recyclerView.setAdapter(adapter);
-        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
-            @Override
-            public void onRightClicked(final int position) {
-
-                showAlert(itemList.get(position));
-
-            }
-        });
 
 
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
+        if (!Constants.EDITING_ATTRIBUTES) {
+            editing.setVisibility(View.GONE);
 
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
+        } else {
+            swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
+                @Override
+                public void onRightClicked(final int position) {
 
-        getSubSubAttributesDataFromDB();
+                    showAlert(itemList.get(position));
 
+                }
+            });
+            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+            itemTouchhelper.attachToRecyclerView(recyclerView);
 
+            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                    swipeController.onDraw(c);
+                }
+            });
+        }
+        getSubSubAttributesDataFromDB(subAttribute);
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +110,6 @@ public class AddSubSubAttributes extends AppCompatActivity {
                     mainCategories.setError("Enter category");
                 } else {
                     List<String> container = new ArrayList<>();
-
                     String[] sizes = mainCategories.getText().toString().split("\n");
                     container = Arrays.asList(sizes);
                     if (subAttribute != null) {
@@ -149,12 +161,13 @@ public class AddSubSubAttributes extends AppCompatActivity {
         });
     }
 
-    private void getSubSubAttributesDataFromDB() {
-        mDatabase.child("Settings/Attributes").child("SubSubAttributes").child(subAttribute).addValueEventListener(new ValueEventListener() {
+    private void getClickSubSubAttributesDataFromDB(final String subb) {
+        mDatabase.child("Settings/Attributes").child("SubSubAttributes").child(subb).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     itemList.clear();
+                    categories = "";
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String value = snapshot.getValue(String.class);
                         itemList.add(value);
@@ -164,6 +177,48 @@ public class AddSubSubAttributes extends AppCompatActivity {
                     }
 
                     adapter.notifyDataSetChanged();
+                } else {
+                    if (Constants.EDITING_ATTRIBUTES) {
+                        Intent i = new Intent(AddSubSubAttributes.this, AddSubSubAttributes.class);
+                        i.putExtra("subAttribute", subb);
+                        startActivity(i);
+                    } else {
+                        CommonUtils.showToast("No more data");
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getSubSubAttributesDataFromDB(final String subb) {
+        mDatabase.child("Settings/Attributes").child("SubSubAttributes").child(subb).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    itemList.clear();
+                    categories = "";
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String value = snapshot.getValue(String.class);
+                        itemList.add(value);
+
+                        categories = categories + value + "\n";
+                        mainCategories.setText(categories);
+                    }
+
+                    adapter.notifyDataSetChanged();
+                } else {
+//                        if(Constants.EDITING_ATTRIBUTES){
+//
+//                        }
+//                        CommonUtils.showToast("No more data");
+
                 }
             }
 

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.MainCategory
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
 import com.bumptech.glide.Glide;
@@ -66,6 +68,7 @@ public class AddSubAttributes extends AppCompatActivity {
     SwipeToDeleteCallback swipeController;
     TextView optionTv;
     String option, alaw;
+    LinearLayout eiditing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,7 @@ public class AddSubAttributes extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        eiditing = findViewById(R.id.eiditing);
         pickImage = findViewById(R.id.pickImage);
         update = findViewById(R.id.update);
         mainCategories = findViewById(R.id.mainCategories);
@@ -91,6 +95,8 @@ public class AddSubAttributes extends AppCompatActivity {
         alaw = getIntent().getStringExtra("alaw");
 
         optionTv.setText("Option: " + alaw);
+
+
 
 
         single.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -126,25 +132,34 @@ public class AddSubAttributes extends AppCompatActivity {
                 showAlert(model);
             }
         });
-        swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
-            @Override
-            public void onRightClicked(final int position) {
-
-                showAlert(itemList.get(position));
-
-            }
-        });
 
 
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
 
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });
+        if (!Constants.EDITING_ATTRIBUTES) {
+            eiditing.setVisibility(View.GONE);
+
+        } else {
+            swipeController = new SwipeToDeleteCallback(new SwipeControllerActions() {
+                @Override
+                public void onRightClicked(final int position) {
+
+                    showAlert(itemList.get(position));
+
+                }
+            });
+
+            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+            itemTouchhelper.attachToRecyclerView(recyclerView);
+
+            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                    swipeController.onDraw(c);
+                }
+            });
+        }
+
+
         recyclerView.setAdapter(adapter);
 
         pickImage.setOnClickListener(new View.OnClickListener() {

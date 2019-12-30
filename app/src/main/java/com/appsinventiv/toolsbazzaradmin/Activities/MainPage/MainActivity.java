@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     LinearLayout chats, customers, delivery, orders, products,
             notifications, signout, vendors, settings, purchases,
             employees, accounts, courier;
-    TextView productNotificationsCount, chatNotificationsCount;
+    TextView productNotificationsCount, chatNotificationsCount, employeNotification;
     private Toolbar toolbar;
     private ViewPager banner;
     private MainSliderAdapter mViewPagerAdapter;
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
+        employeNotification = findViewById(R.id.employeNotification);
         aboutUsMain = findViewById(R.id.aboutUsMain);
         contactUsMain = findViewById(R.id.contactUsMain);
         termsMain = findViewById(R.id.termsMain);
@@ -332,18 +333,47 @@ public class MainActivity extends AppCompatActivity
         getBannerImagesFromDb();
 
         if (SharedPrefs.getEmployee() != null) {
-            mDatabase.child("Admin").child("Employees").child(SharedPrefs.getEmployee().getUsername()).addValueEventListener(new ValueEventListener() {
+            mDatabase.child("Admin").child("Employees").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        Employee employee = dataSnapshot.getValue(Employee.class);
-                        if (employee != null) {
-                            SharedPrefs.setEmployee(employee);
-                            if (employee.isBlocked()) {
-                                startActivity(new Intent(MainActivity.this, AccountBlocked.class));
-                                finish();
+                        ArrayList<Integer> unApprovedCount = new ArrayList<>();
+                        int count = 0;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Employee employee1 = dataSnapshot.child(SharedPrefs.getEmployee().getUsername()).getValue(Employee.class);
+                            if (employee1 != null) {
+                                SharedPrefs.setEmployee(employee1);
+                                if (employee1.isBlocked()) {
+                                    Intent i = new Intent(MainActivity.this, AccountBlocked.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(i);
+                                    finish();
+                                } else {
+//                                    Intent i = new Intent(MainActivity.this, Splash.class);
+//                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    startActivity(i);
+//                                    finish();
+                                }
+                            }
+
+                            Employee employee = snapshot.getValue(Employee.class);
+                            if (!employee.isApproved()) {
+                                count++;
+                                unApprovedCount.add(count);
                             }
                         }
+                        if (count > 0) {
+                            employeNotification.setVisibility(View.VISIBLE);
+                            employeNotification.setText("" + count);
+                        }
+//                        Employee employee = dataSnapshot.getValue(Employee.class);
+//                        if (employee != null) {
+//                            SharedPrefs.setEmployee(employee);
+//                            if (employee.isBlocked()) {
+//                                startActivity(new Intent(MainActivity.this, AccountBlocked.class));
+//                                finish();
+//                            }
+//                        }
                     }
                 }
 
@@ -485,7 +515,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.name_drawer);
-         navSubtitle = (TextView) headerView.findViewById(R.id.customerType);
+        navSubtitle = (TextView) headerView.findViewById(R.id.customerType);
         CircleImageView imageView = headerView.findViewById(R.id.imageView);
 
         if (SharedPrefs.getEmployee() != null && (SharedPrefs.getEmployee().getPicUrl() != null && !SharedPrefs.getEmployee().getPicUrl().equalsIgnoreCase(""))) {

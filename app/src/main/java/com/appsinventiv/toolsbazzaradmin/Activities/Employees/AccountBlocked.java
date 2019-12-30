@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Accounts.Accounts;
 import com.appsinventiv.toolsbazzaradmin.Activities.Login.Login;
+import com.appsinventiv.toolsbazzaradmin.Activities.Login.Splash;
 import com.appsinventiv.toolsbazzaradmin.Activities.MainPage.MainActivity;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
 import com.appsinventiv.toolsbazzaradmin.R;
@@ -51,38 +52,38 @@ public class AccountBlocked extends AppCompatActivity {
             }
         });
 
-        if (SharedPrefs.getEmployee() != null) {
-            mDatabase.child("Admin").child(SharedPrefs.getEmployee().getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        Employee employee = dataSnapshot.getValue(Employee.class);
-                        if (employee != null) {
-                            if (!employee.isActive()) {
-                                CommonUtils.showToast("Account approval pending");
-                            } else {
-                                CommonUtils.showToast("Your account is approved");
-                                SharedPrefs.setEmployee(employee);
-                                startActivity(new Intent(AccountBlocked.this, MainActivity.class));
-                                finish();
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
+//        if (SharedPrefs.getEmployee() != null) {
+//            mDatabase.child("Admin").child(SharedPrefs.getEmployee().getUsername()).addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.getValue() != null) {
+//                        Employee employee = dataSnapshot.getValue(Employee.class);
+//                        if (employee != null) {
+//                            if (!employee.isActive()) {
+//                                CommonUtils.showToast("Account approval pending");
+//                            } else {
+//                                CommonUtils.showToast("Your account is approved");
+//                                SharedPrefs.setEmployee(employee);
+//                                startActivity(new Intent(AccountBlocked.this, MainActivity.class));
+//                                finish();
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
 
 
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(AccountBlocked.this,Login.class));
+        startActivity(new Intent(AccountBlocked.this, Splash.class));
         finish();
     }
 
@@ -90,7 +91,7 @@ public class AccountBlocked extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (item.getItemId() == android.R.id.home) {
-            startActivity(new Intent(AccountBlocked.this,Login.class));
+            startActivity(new Intent(AccountBlocked.this, Splash.class));
             finish();
         }
 

@@ -4,6 +4,8 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+
 
     </style>
 
@@ -11,10 +13,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/StatusBarColor</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+
 
     </style>
-
-
 
 
     <style name="AppThemeRed.NoActionBar">
@@ -22,6 +24,8 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/colorAccentRed</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+
 
     </style>
 
@@ -51,6 +55,8 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="drawerArrowStyle">@style/DrawerIcon</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+
     </style>
 
 </resources>
