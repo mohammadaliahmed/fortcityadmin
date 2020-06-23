@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.Attributes.SubAttributeModel;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
+import com.appsinventiv.toolsbazzaradmin.Models.OrderModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ChooseAttributes extends AppCompatActivity {
     DatabaseReference mDatabase;
@@ -141,6 +144,7 @@ public class ChooseAttributes extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,9 +220,18 @@ public class ChooseAttributes extends AppCompatActivity {
                             adapter.setMultiSelect(true);
                         }
                         adapter.selectedText = "";
-                        adapter.setSelected(-1);
+                        Collections.sort(itemList, new Comparator<String>() {
+                            @Override
+                            public int compare(String listData, String t1) {
+
+
+                                return listData.compareTo(t1);
+
+                            }
+                        });
                         adapter.updateList(itemList);
-                        adapter.notifyDataSetChanged();
+                        adapter.setSelected(-1);
+//                        adapter.notifyDataSetChanged();
                         wholeLayout.setVisibility(View.GONE);
                     }
                 }

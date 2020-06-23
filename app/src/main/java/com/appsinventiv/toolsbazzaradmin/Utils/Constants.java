@@ -28,6 +28,9 @@ public class Constants {
     public static String SKU_ATT="";
     public static String LAST_CATEGORY="";
     public static boolean ADDING_PRODUCT=false;
+    public static boolean EDITING_PRODUCT=false;
     public static boolean EDITING_ATTRIBUTES=false;
     public static boolean RE_ATTRIBUTES=false;
+    public static boolean ADDING_PRODUCT_BACK=false;
+
 }

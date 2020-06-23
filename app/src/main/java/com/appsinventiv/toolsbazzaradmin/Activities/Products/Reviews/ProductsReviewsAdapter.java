@@ -30,6 +30,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Products.EditProduct;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 
@@ -113,6 +114,8 @@ public class ProductsReviewsAdapter extends RecyclerView.Adapter<ProductsReviews
             public void onClick(View view) {
                 Intent i = new Intent(context, EditProduct.class);
                 i.putExtra("productId", model.getId());
+                Constants.PRODUCT_ID=model.getId();
+
                 context.startActivity(i);
 //                callbacks.onReject(model);
 

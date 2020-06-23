@@ -34,6 +34,7 @@ import com.appsinventiv.toolsbazzaradmin.Models.InvoiceModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -102,6 +103,8 @@ public class ProductsListFragment extends Fragment {
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.ADDING_PRODUCT_BACK = false;
+
                 Intent i = new Intent(context, AddProduct.class);
                 startActivity(i);
             }

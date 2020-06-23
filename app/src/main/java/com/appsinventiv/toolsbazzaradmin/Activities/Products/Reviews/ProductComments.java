@@ -23,6 +23,7 @@ import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.NotificationObserver;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
@@ -79,6 +80,7 @@ public class ProductComments extends AppCompatActivity implements NotificationOb
             public void onClick(View view) {
 
                 Intent intent = new Intent(ProductComments.this, EditProduct.class);
+                Constants.PRODUCT_ID=productId;
                 intent.putExtra("productId", productId);
                 startActivity(intent);
                 finish();

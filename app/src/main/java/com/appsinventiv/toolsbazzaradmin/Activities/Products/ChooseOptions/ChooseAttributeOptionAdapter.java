@@ -101,6 +101,7 @@ public class ChooseAttributeOptionAdapter extends RecyclerView.Adapter<ChooseAtt
         }
 
 
+
         if (!multiSelect) {
             holder.arrow.setVisibility(View.VISIBLE);
             holder.tick.setVisibility(View.GONE);
@@ -117,6 +118,13 @@ public class ChooseAttributeOptionAdapter extends RecyclerView.Adapter<ChooseAtt
             holder.tick.setVisibility(View.GONE);
         }
 
+        if(selected==-1){
+            holder.checkBox.setChecked(false);
+
+        }else{
+
+
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

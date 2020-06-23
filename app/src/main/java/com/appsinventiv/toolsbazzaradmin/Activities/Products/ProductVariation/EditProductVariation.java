@@ -3,12 +3,9 @@ package com.appsinventiv.toolsbazzaradmin.Activities.Products.ProductVariation;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -25,13 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Orders.NewOrder.NewOrderModel;
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.NewProductsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.NewProductModel;
+import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImageToThumnail;
+import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,8 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChooseProductVariation extends AppCompatActivity {
-    public static HashMap<String, ArrayList<String>> hashMap = new HashMap<>();
+public class EditProductVariation extends AppCompatActivity {
+    public static HashMap<String, ArrayList<String>> edithashMap = new HashMap<>();
     RelativeLayout color, size;
     DatabaseReference mDatabase;
     ArrayList<String> colorList = new ArrayList<>();
@@ -65,22 +61,25 @@ public class ChooseProductVariation extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 23;
     private List<Uri> mSelected = new ArrayList<>();
     String colorSelecred = "";
-    public static HashMap<String, Object> uploadedMap = new HashMap<>();
+    public static HashMap<String, String> uploadedMap = new HashMap<>();
     HorizontalScrollView hori;
     HashMap<String, NewProductModel> newProductModelHashMap = new HashMap<>();
-    HashMap<String, NewProductModel> anotherMap = new HashMap<>();
     public static HashMap<String, Object> hashMapHashMap = new HashMap<>();
-
 
     Button ok;
 
     String colorss, sizess;
+    Product product = SharedPrefs.getProduct();
+    private ArrayList<String> colorArray = new ArrayList<>();
+    private ArrayList<String> sizeArray = new ArrayList<>();
+    HashMap<String, NewProductModel> anotherMap = new HashMap<>();
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (hashMap.get("size") != null && hashMap.get("size").size() > 0
-                && hashMap.get("color") != null && hashMap.get("color").size() > 0) {
+        if (edithashMap.get("size") != null && edithashMap.get("size").size() > 0
+                && edithashMap.get("color") != null && edithashMap.get("color").size() > 0) {
             addSKULayout();
         }
     }
@@ -96,6 +95,7 @@ public class ChooseProductVariation extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
 
+        uploadedMap = product.getAttributesWithPics();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         hori = findViewById(R.id.hori);
         ok = findViewById(R.id.ok);
@@ -116,24 +116,48 @@ public class ChooseProductVariation extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                showSizeAlert();
-                startActivity(new Intent(ChooseProductVariation.this, ChooseSiz.class));
+                startActivity(new Intent(EditProductVariation.this, ChooseSiz.class));
             }
         });
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 hashMapHashMap.clear();
                 for (Map.Entry<String, NewProductModel> entry : anotherMap.entrySet()) {
                     hashMapHashMap.put(entry.getValue().getColor(), anotherMap);
                 }
-
-
                 finish();
             }
         });
 
         getSizeFromDB();
+        edithashMap.clear();
+
+        if (product.getProductCountHashmap() != null && product.getProductCountHashmap().size() > 0) {
+            sizeArray = new ArrayList<>();
+            colorArray = new ArrayList<>();
+            for (Map.Entry<String, ArrayList<NewProductModel>> entry : product.getProductCountHashmap().entrySet()) {
+
+                for (NewProductModel model : entry.getValue()) {
+//                    if(model.get)
+                    if (!sizeArray.contains(model.getSize())) {
+                        sizeArray.add(model.getSize());
+
+                    }
+                    if (!colorArray.contains(model.getColor())) {
+                        colorArray.add(model.getColor());
+                    }
+                    newProductModelHashMap.put(model.getColor() + model.getSize(), model);
+                }
+
+
+            }
+            edithashMap.put("size", sizeArray);
+            edithashMap.put("color", colorArray);
+            addSKULayout();
+        }
 
 
     }
@@ -161,119 +185,106 @@ public class ChooseProductVariation extends AppCompatActivity {
         });
     }
 
-    private void showSizeAlert() {
-        // setup the alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose sizes");
-
-// add a checkbox list
-        final String[] animals = sizeList.toArray(new String[0]);
-
-        boolean[] checkedItems = new boolean[sizeList.size()];
-        final ArrayList<String> checked = new ArrayList<>();
-        builder.setMultiChoiceItems(animals, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                // user checked or unchecked a box
-                if (isChecked) {
-                    checked.add(animals[which]);
-                } else {
-                    checked.remove(animals[which]);
-                }
-                hashMap.put("size", checked);
-            }
-        });
-
-// add OK and Cancel buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // user clicked OK
-//                CommonUtils.showToast("" + hashMap);
-                sizeSubtitle.setText("" + hashMap.get("size"));
-                dialog.dismiss();
-                if (hashMap.get("size") != null && hashMap.get("size").size() > 0
-                        && hashMap.get("color") != null && hashMap.get("color").size() > 0) {
-                    addSKULayout();
-                }
-
-            }
-        });
-        builder.setNegativeButton("Cancel", null);
-
-// create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
     private void addSKULayout() {
+        addLayouts();
         final LinearLayout options_layout = (LinearLayout) findViewById(R.id.skuInfo);
         options_layout.removeAllViews();
-        for (int j = 0; j < hashMap.get("color").size(); j++) {
-            for (int k = 0; k < hashMap.get("size").size(); k++) {
+        if (edithashMap != null) {
+            for (int j = 0; j < edithashMap.get("color").size(); j++) {
+                for (int k = 0; k < edithashMap.get("size").size(); k++) {
 
 
-                final LayoutInflater inflater = LayoutInflater.from(this);
-                final View to_add = inflater.inflate(R.layout.product_sku_layout,
-                        options_layout, false);
-                ImageView delete = to_add.findViewById(R.id.delete);
-                TextView color = to_add.findViewById(R.id.color);
-                TextView size = to_add.findViewById(R.id.size);
-                color.setText(hashMap.get("color").get(j));
-                size.setText(hashMap.get("size").get(k));
+                    final LayoutInflater inflater = LayoutInflater.from(this);
+                    final View to_add = inflater.inflate(R.layout.product_sku_layout,
+                            options_layout, false);
+                    ImageView delete = to_add.findViewById(R.id.delete);
+                    TextView color = to_add.findViewById(R.id.color);
+                    TextView size = to_add.findViewById(R.id.size);
+                    color.setText(edithashMap.get("color").get(j));
+                    size.setText(edithashMap.get("size").get(k));
 
 
-                Button setValues = to_add.findViewById(R.id.setValues);
-                final EditText sku = to_add.findViewById(R.id.sku);
-                final EditText quantityAvailable = to_add.findViewById(R.id.quantityAvailable);
-                final EditText wholesalePrice = to_add.findViewById(R.id.wholesalePrice);
-                final EditText oldWholeSalePrice = to_add.findViewById(R.id.oldWholeSalePrice);
-                final EditText minOrder = to_add.findViewById(R.id.minOrder);
-                final EditText retailPrice = to_add.findViewById(R.id.retailPrice);
-                final EditText oldRetailPrice = to_add.findViewById(R.id.oldRetailPrice);
+                    Button setValues = to_add.findViewById(R.id.setValues);
+                    final EditText sku = to_add.findViewById(R.id.sku);
+                    final EditText quantityAvailable = to_add.findViewById(R.id.quantityAvailable);
+                    final EditText wholesalePrice = to_add.findViewById(R.id.wholesalePrice);
+                    final EditText oldWholeSalePrice = to_add.findViewById(R.id.oldWholeSalePrice);
+                    final EditText minOrder = to_add.findViewById(R.id.minOrder);
+                    final EditText retailPrice = to_add.findViewById(R.id.retailPrice);
+                    final EditText oldRetailPrice = to_add.findViewById(R.id.oldRetailPrice);
 
-//                final NewProductModel newProductsModel = new NewProductModel();
-//                newProductsModel.setColor(hashMap.get("color").get(j));
-//                newProductsModel.setSize(hashMap.get("size").get(k));
-
-
-                final int finalK = k;
-                final int finalJ = j;
-                setValues.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        NewProductModel newProductsModel = new NewProductModel();
-                        newProductsModel.setSku(sku.getText().toString());
-                        newProductsModel.setQty(Integer.parseInt(quantityAvailable.getText().length() == 0 ? "1" : quantityAvailable.getText().toString()));
-                        newProductsModel.setWholesalePrice(Integer.parseInt(wholesalePrice.getText().length() == 0 ? "1" : wholesalePrice.getText().toString()));
-                        newProductsModel.setOldWholesalePrice(Integer.parseInt(oldWholeSalePrice.getText().length() == 0 ? "1" : oldWholeSalePrice.getText().toString()));
-                        newProductsModel.setMinOrderQuantity(Integer.parseInt(minOrder.getText().length() == 0 ? "1" : minOrder.getText().toString()));
-                        newProductsModel.setRetailPrice(Integer.parseInt(retailPrice.getText().length() == 0 ? "1" : retailPrice.getText().toString()));
-                        newProductsModel.setOldRetailPrice(Integer.parseInt(oldRetailPrice.getText().length() == 0 ? "1" : oldRetailPrice.getText().toString()));
-                        newProductsModel.setColor(hashMap.get("color").get(finalJ));
-                        newProductsModel.setSize(hashMap.get("size").get(finalK));
+                    final int finalK = k;
+                    final int finalJ = j;
+                    if (product.getProductCountHashmap() != null && product.getProductCountHashmap().size() > 0) {
+                        String colo = edithashMap.get("color").get(finalJ);
+                        String si = edithashMap.get("size").get(finalK);
+                        if (newProductModelHashMap != null) {
+                            if (newProductModelHashMap.get(colo + si) != null) {
+                                sku.setText("" + newProductModelHashMap.get(colo + si).getSku());
+                                quantityAvailable.setText("" + newProductModelHashMap.get(colo + si).getQty());
+                                wholesalePrice.setText("" + newProductModelHashMap.get(colo + si).getWholesalePrice());
+                                oldWholeSalePrice.setText("" + newProductModelHashMap.get(colo + si).getOldWholesalePrice());
+                                minOrder.setText("" + newProductModelHashMap.get(colo + si).getMinOrderQuantity());
+                                retailPrice.setText("" + newProductModelHashMap.get(colo + si).getRetailPrice());
+                                oldRetailPrice.setText("" + newProductModelHashMap.get(colo + si).getOldRetailPrice());
 
 
-                        newProductModelHashMap.put(hashMap.get("size").get(finalK), newProductsModel);
-                        anotherMap.put(hashMap.get("color").get(finalJ) + hashMap.get("size").get(finalK), newProductsModel);
+                                NewProductModel newProductsModel = new NewProductModel();
+                                newProductsModel.setSku(newProductModelHashMap.get(colo + si).getSku());
+                                newProductsModel.setQty(newProductModelHashMap.get(colo + si).getQty());
+                                newProductsModel.setWholesalePrice(newProductModelHashMap.get(colo + si).getWholesalePrice());
+                                newProductsModel.setOldWholesalePrice(newProductModelHashMap.get(colo + si).getOldWholesalePrice());
+                                newProductsModel.setMinOrderQuantity(newProductModelHashMap.get(colo + si).getMinOrderQuantity());
+                                newProductsModel.setRetailPrice(newProductModelHashMap.get(colo + si).getRetailPrice());
+                                newProductsModel.setOldRetailPrice(newProductModelHashMap.get(colo + si).getOldRetailPrice());
+                                newProductsModel.setColor(edithashMap.get("color").get(finalJ));
+                                newProductsModel.setSize(edithashMap.get("size").get(finalK));
+
+                                newProductModelHashMap.put(edithashMap.get("size").get(finalK), newProductsModel);
+                                anotherMap.put(edithashMap.get("color").get(finalJ) + edithashMap.get("size").get(finalK), newProductsModel);
 //                        hashMapHashMap.put(hashMap.get("color").get(finalJ), newProductModelHashMap);
-                        CommonUtils.showToast("Value set");
+//                            CommonUtils.showToast("Value set");
+                            }
+                        }
+
                     }
-                });
+                    setValues.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
 
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        options_layout.removeView(to_add);
-                        newProductModelHashMap.remove(hashMap.get("color"));
-                    }
-                });
+                            NewProductModel newProductsModel = new NewProductModel();
+                            newProductsModel.setSku(sku.getText().toString());
+                            newProductsModel.setQty(Integer.parseInt(quantityAvailable.getText().length() == 0 ? "1" : quantityAvailable.getText().toString()));
+                            newProductsModel.setWholesalePrice(Integer.parseInt(wholesalePrice.getText().length() == 0 ? "1" : wholesalePrice.getText().toString()));
+                            newProductsModel.setOldWholesalePrice(Integer.parseInt(oldWholeSalePrice.getText().length() == 0 ? "1" : oldWholeSalePrice.getText().toString()));
+                            newProductsModel.setMinOrderQuantity(Integer.parseInt(minOrder.getText().length() == 0 ? "1" : minOrder.getText().toString()));
+                            newProductsModel.setRetailPrice(Integer.parseInt(retailPrice.getText().length() == 0 ? "1" : retailPrice.getText().toString()));
+                            newProductsModel.setOldRetailPrice(Integer.parseInt(oldRetailPrice.getText().length() == 0 ? "1" : oldRetailPrice.getText().toString()));
+                            newProductsModel.setColor(edithashMap.get("color").get(finalJ));
+                            newProductsModel.setSize(edithashMap.get("size").get(finalK));
 
-                options_layout.addView(to_add);
+
+                            newProductModelHashMap.put(edithashMap.get("size").get(finalK), newProductsModel);
+                            anotherMap.put(edithashMap.get("color").get(finalJ) + edithashMap.get("size").get(finalK), newProductsModel);
+                            CommonUtils.showToast("Value set");
+                        }
+                    });
 
 
+                    delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            options_layout.removeView(to_add);
+                            newProductModelHashMap.remove(edithashMap.get("color"));
+                        }
+                    });
+
+                    options_layout.addView(to_add);
+
+
+                }
             }
         }
         hori.setVisibility(View.VISIBLE);
@@ -301,7 +312,7 @@ public class ChooseProductVariation extends AppCompatActivity {
                 } else {
                     checked.remove(animals[which]);
                 }
-                hashMap.put("color", checked);
+                edithashMap.put("color", checked);
 
             }
         });
@@ -312,11 +323,11 @@ public class ChooseProductVariation extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // user clicked OK
 //                CommonUtils.showToast("" + hashMap);
-                colorSubtitle.setText("" + hashMap.get("color"));
+                colorSubtitle.setText("" + edithashMap.get("color"));
                 dialog.dismiss();
                 addLayouts();
-                if (hashMap.get("size") != null && hashMap.get("size").size() > 0
-                        && hashMap.get("color") != null && hashMap.get("color").size() > 0) {
+                if (edithashMap.get("size") != null && edithashMap.get("size").size() > 0
+                        && edithashMap.get("color") != null && edithashMap.get("color").size() > 0) {
                     addSKULayout();
                 }
             }
@@ -331,7 +342,7 @@ public class ChooseProductVariation extends AppCompatActivity {
     private void addLayouts() {
         LinearLayout options_layout = (LinearLayout) findViewById(R.id.layout);
         options_layout.removeAllViews();
-        for (final String color : hashMap.get("color")) {
+        for (final String color : edithashMap.get("color")) {
 
 
             final LayoutInflater inflater = LayoutInflater.from(this);
@@ -344,13 +355,14 @@ public class ChooseProductVariation extends AppCompatActivity {
             colorName.setText(color);
             options_layout.addView(to_add);
             viewMap.put(color, to_add);
+            Glide.with(EditProductVariation.this).load(product.getAttributesWithPics().get(color)).into(image);
 
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     uploadedMap.remove(color);
-                    Glide.with(ChooseProductVariation.this).load(R.drawable.ic_fort_placeholder).into(image);
+                    Glide.with(EditProductVariation.this).load(R.drawable.ic_fort_placeholder).into(image);
                 }
             });
             selectImage.setOnClickListener(new View.OnClickListener() {

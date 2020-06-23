@@ -36,6 +36,7 @@ import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -284,6 +285,8 @@ public class CompanyScreen extends AppCompatActivity {
         addProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.ADDING_PRODUCT_BACK = false;
+
                 startActivity(new Intent(CompanyScreen.this, AddProduct.class));
 
             }

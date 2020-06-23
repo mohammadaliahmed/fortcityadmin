@@ -2,17 +2,13 @@ package com.appsinventiv.toolsbazzaradmin.Activities.Products.ProductVariation;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
-import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseAttributeOptionAdapter;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -64,7 +60,7 @@ public class ChooseSiz extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-
+                    newSizeList.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String abc = snapshot.getValue(String.class);
                         newSizeList.add(abc);
@@ -126,6 +122,7 @@ public class ChooseSiz extends AppCompatActivity {
                     checked.remove(animals[which]);
                 }
                 ChooseProductVariation.hashMap.put("size", checked);
+                EditProductVariation.edithashMap.put("size", checked);
             }
         });
 
@@ -134,7 +131,13 @@ public class ChooseSiz extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // user clicked OK
-                ChooseProductVariation.sizeSubtitle.setText("" + ChooseProductVariation.hashMap.get("size"));
+                if (ChooseProductVariation.sizeSubtitle != null) {
+                    ChooseProductVariation.sizeSubtitle.setText("" + ChooseProductVariation.hashMap.get("size"));
+
+                } else if (EditProductVariation.sizeSubtitle != null) {
+                    EditProductVariation.sizeSubtitle.setText("" + ChooseProductVariation.hashMap.get("size"));
+
+                }
                 dialog.dismiss();
                 finish();
 //                if ( ChooseProductVariation.hashMap.get("size") != null &&  ChooseProductVariation.hashMap.get("size").size() > 0

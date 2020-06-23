@@ -36,68 +36,82 @@
             android:name=".Activities.Products.AddProduct"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Activities.Products.ProductUploaded"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Chat.Chats"
+        <activity
+            android:name=".Activities.Products.ProductUploaded"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Chat.LiveChat"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Chat.SellerChat"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Chat.WholesaleChat"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.Chat.Chats"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Chat.LiveChat"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Chat.SellerChat"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Chat.WholesaleChat"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Orders.Orders"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.Orders.ViewOrder"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.Products.ListOfProducts"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Products.ListOfProducts"
+        <activity
+            android:name=".Activities.SalesReport"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.SalesReport"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.Languages"
+        <activity
+            android:name=".Activities.AppSettings.Languages"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Products.EditProduct" />
+        <activity
+            android:name=".Activities.Products.EditProduct"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Activities.Vendors.Vendors" />
         <activity
             android:name=".Activities.Vendors.AddVendors"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Activities.AppSettings.Settings"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.AppSettings.Settings"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AppSettings.AboutUs"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.AppSettings.Terms"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.AppSettings.Terms"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.AdminTerms"
+        <activity
+            android:name=".Activities.AppSettings.AdminTerms"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Invoicing.ViewInvoice"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Purchases.Purchases"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Purchases.Purchases"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Purchases.ViewPurchaseOrder"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Login.Login"
-            android:theme="@style/AppTheme.NoActionBar1"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar1" />
         <activity
             android:name=".Activities.Login.EmployeeVerficiation"
-            android:theme="@style/AppTheme.NoActionBar1"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar1" />
         <activity
             android:name=".Activities.Login.Register"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar1"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activities.Login.Splash"
             android:theme="@style/AppTheme.NoActionBar">
@@ -107,195 +121,249 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.Employees.ListOfEmployees"
+        <activity
+            android:name=".Activities.Employees.ListOfEmployees"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Employees.ViewEmployee"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.BannersPackage.BannerSettings"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.BannersPackage.HomeBannerSettings"
+        <activity
+            android:name=".Activities.Employees.ViewEmployee"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Employees.PendingApproval"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Utils.NoInternet"
+        <activity
+            android:name=".Activities.AppSettings.BannersPackage.BannerSettings"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Purchases.EditPurchase"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.BannersPackage.ClientBanners"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.BannersPackage.SellerBanners"
+        <activity
+            android:name=".Activities.AppSettings.BannersPackage.HomeBannerSettings"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Products.Reviews.ProductReviews"
+        <activity
+            android:name=".Activities.Employees.PendingApproval"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Products.Reviews.ProductComments"
+        <activity
+            android:name=".Utils.NoInternet"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Invoicing.ListOfInvoices"
+        <activity
+            android:name=".Activities.Purchases.EditPurchase"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.AppSettings.AddLocationAndCharges"
+        <activity
+            android:name=".Activities.AppSettings.BannersPackage.ClientBanners"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.AppSettings.ListOfLocationAndCharges"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.AppSettings.BannersPackage.SellerBanners"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Products.Reviews.ProductReviews"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Products.Reviews.ProductComments"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Invoicing.ListOfInvoices"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.AppSettings.AddLocationAndCharges"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.AppSettings.ListOfLocationAndCharges"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Employees.ProfileSettings"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Accounts.Accounts"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.Accounts.Accounts"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AppSettings.CompanySettings"
 
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.Orders.OrdersDelivery"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Orders.OrdersDelivery"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Orders.OrdersCourier"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Orders.ViewUnderProcessOrder"
+        <activity
+            android:name=".Activities.Orders.OrdersCourier"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Orders.ViewDeliveryShippedOrder"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.Orders.ViewUnderProcessOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Orders.ViewDeliveryShippedOrder"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AppSettings.ShippingCarriers.AddShippingCarriers"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.ShippingCarriers.ListOfShippingCarriers"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.AppSettings.ShippingCarriers.ListOfShippingCarriers"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Accounts.ExpensesAndRevenue.Salaries"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.Accounts.ExpensesAndRevenue.Transportation"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Transportation"
+        <activity
+            android:name=".Activities.Accounts.ExpensesAndRevenue.Rent"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Rent"
-            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.AppSettings.FortCityFeatures"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.BannersPackage.Banners"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.TermsSettings"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.AppSettings.BannersPackage.Banners"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Accounts.ExpensesAndRevenue.UtilityBills"
+        <activity
+            android:name=".Activities.AppSettings.TermsSettings"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Stationaries"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Accounts.ExpensesAndRevenue.Miscellaneous"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.Accounts.ExpensesAndRevenue.UtilityBills"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Accounts.ExpensesAndRevenue.Stationaries"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Accounts.ExpensesAndRevenue.Miscellaneous"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Accounts.ExpensesAndRevenue.ViewSalary"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Accounts.ExpensesAndRevenue.ViewExpensesReport"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Accounts.ExpensesAndRevenue.ExpensesDetail"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Accounts.ExpensesAndRevenue.ExpensesDetail"
-            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.CategoryPackage.AddSubCategories"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.CategoryPackage.ChooseCategory"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.CategoryPackage.ChooseCategory"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Customers.ViewCustomer"
-            android:theme="@style/AppThemeRed.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.BannersPackage.DealsBanner"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeRed.NoActionBar" />
+        <activity
+            android:name=".Activities.AppSettings.BannersPackage.DealsBanner"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Products.AddProductWeight"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Accounts.TransferToAccountsDone"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.CategoryPackage.AddMainCategories"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.Accounts.TransferToAccountsDone"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.CategoryPackage.ChooseMainCategory"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Employees.CheckedActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Accounts.SODetails.NewSOScreen"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.CategoryPackage.AddMainCategories"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.CategoryPackage.ChooseMainCategory"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Employees.CheckedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Accounts.SODetails.NewSOScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Locations.AddProvinces"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.Locations.AddDistricts"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.Locations.AddCityAndDeliveryCharges"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Locations.ListOfCountries"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.Locations.ListOfCountries"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.Locations.AddCountry"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Customers.Customers"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.Locations.AddCountry"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Customers.Customers"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Customers.ViewSeller"
-            android:theme="@style/AppThemeRed.NoActionBar"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Activities.SellerOrders.SellerOrders"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeRed.NoActionBar" />
+        <activity
+            android:name=".Activities.SellerOrders.SellerOrders"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Welcome"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.Commissions"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Accounts.NewAccounts.NewAccountsScreen"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AppSettings.CODLimit"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Orders.NewOrder.NewOrderScreen"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.AppSettings.Commissions"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Accounts.NewAccounts.NewAccountsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.AppSettings.CODLimit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Orders.NewOrder.NewOrderScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AppSettings.ViewTerms"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Activities.AppSettings.ViewAboutUs"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activities.AppSettings.SellerTerms"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Employees.AccountBlocked"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.AppSettings.SellerTerms"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Employees.AccountBlocked"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AppSettings.CompanyScreen"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ProductImages"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.ProductImages"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.CategoryImages"
+        <activity
+            android:name=".Activities.CategoryImages"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.AppSettings.AppIcons"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activities.AppSettings.AppIcons"
+            android:screenOrientation="portrait" />
         <activity android:name=".Activities.CategoryPackage.CategoryAndAttributes" />
         <activity android:name=".Activities.CategoryPackage.AddOtherMainCategories" />
         <activity android:name=".Activities.CategoryPackage.ChooseOtherMainCategory" />
         <activity android:name=".Activities.CategoryPackage.Attributes.AddMainAttributes" />
-        <activity android:name=".Activities.CategoryPackage.Attributes.AddSubAttributes"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Activities.CategoryPackage.Attributes.AddSubSubAttributes"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".Activities.CategoryPackage.Attributes.AddSubAttributes"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.CategoryPackage.Attributes.AddSubSubAttributes"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Activities.Products.ChooseOptions.ChooseWarrenty" />
         <activity android:name=".Activities.Products.ChooseOptions.WarrentyPeriod" />
         <activity android:name=".Activities.Products.ChooseOptions.DangerousGoods" />
-        <activity android:name=".Activities.Products.ChooseOptions.ChooseAttributes"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".Activities.Products.ChooseOptions.ChooseAttributes"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Activities.TestActivity" />
         <activity android:name=".Activities.Products.ChooseOptions.AssignAttributes" />
         <activity android:name=".Activities.Products.ChooseOptions.ChooseSKU" />
         <activity android:name=".Activities.Products.ProductVariation.ChooseProductVariation" />
         <activity android:name=".Activities.Products.ProductVariation.ChooseSiz" />
         <activity android:name=".Activities.Products.ChooseOptions.ChooseAttributesAgain" />
-        <activity android:name=".Activities.Products.ChooseOptions.SearchAttributes" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activities.Products.ChooseOptions.SearchAttributes"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.Products.ProductVariation.EditProductVariation" />
     </application>
 
 </manifest>

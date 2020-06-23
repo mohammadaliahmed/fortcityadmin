@@ -24,6 +24,7 @@ import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.EditProduct;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeControllerActions;
 import com.appsinventiv.toolsbazzaradmin.Utils.SwipeToDeleteCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -205,9 +206,9 @@ public class ChooseMainCategory extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-
             AddProduct.categoryList.clear();
             EditProduct.categoryList.clear();
+            Constants.ADDING_PRODUCT_BACK = true;
             finish();
         }
 
@@ -220,7 +221,10 @@ public class ChooseMainCategory extends AppCompatActivity {
         AddProduct.categoryList.clear();
         EditProduct.categoryList.clear();
         AddProduct.activity.finish();
+        Constants.ADDING_PRODUCT_BACK = true;
+
         finish();
+
 
     }
 

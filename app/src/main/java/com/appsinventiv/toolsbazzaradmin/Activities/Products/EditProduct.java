@@ -10,10 +10,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -26,22 +29,34 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.ChooseMainCategory;
+import com.appsinventiv.toolsbazzaradmin.Activities.CategoryPackage.ChooseOtherMainCategory;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.BottomAdapter;
 import com.appsinventiv.toolsbazzaradmin.Activities.Orders.BottomDialogModel;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseAttributes;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseAttributesAgain;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ChooseOptions.ChooseWarrenty;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ProductVariation.ChooseProductVariation;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ProductVariation.EditProductVariation;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.ProductVariation.EditProductVariation;
 import com.appsinventiv.toolsbazzaradmin.Adapters.PickedPicturesAdapter;
 import com.appsinventiv.toolsbazzaradmin.Interfaces.ProductObserver;
+import com.appsinventiv.toolsbazzaradmin.Models.NewProductModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.appsinventiv.toolsbazzaradmin.Models.SelectedAdImages;
 import com.appsinventiv.toolsbazzaradmin.Models.VendorModel;
 import com.appsinventiv.toolsbazzaradmin.R;
 import com.appsinventiv.toolsbazzaradmin.Utils.CommonUtils;
 import com.appsinventiv.toolsbazzaradmin.Utils.CompressImage;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
+import com.appsinventiv.toolsbazzaradmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +76,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EditProduct extends AppCompatActivity implements ProductObserver {
     TextView categoryChoosen;
@@ -97,13 +113,110 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
     private ArrayList<BottomDialogModel> vendrs = new ArrayList<>();
     TextView chooseVendor;
 
+
+    int sellingTo = 1;
+
+    RadioButton both, wholesale, retail;
+    LinearLayout retailArea, wholesaleArea;
+    private String localThumbnail;
+    EditText warrantyPolicy;
+    TextView dangerousGoodsTv;
+    TextView productVariation;
+    TextView productVariationSubtitle;
+    public static AddProduct activity;
+    EditText productModel;
+    CardView cardAttr;
+    TextView warrantyPeriodTv;
+
+    public static String warrantyPeriod, dangerousGoods;
+
+
     @Override
     protected void onResume() {
         super.onResume();
+//        if (productWeight != null) {
+//            weightChosen.setText("Weight: " + productWeight + "Kg");
+//        }
+        Constants.RE_ATTRIBUTES = false;
         if (productWeight != null) {
             weightChosen.setText("Weight: " + productWeight + "Kg");
         }
+        if (AddProduct.productAttributesMap != null && AddProduct.productAttributesMap.size() > 0) {
+            setupAttributesLayout();
+
+        }
+        if (categoryList.size() > 0) {
+            categoryChoosen.setText("Category: " + categoryList);
+
+        }
+        if (whichWarranty != null) {
+            warrantyChosen.setText("Warranty: " + whichWarranty);
+        }
+        if (warrantyPeriod != null) {
+            warrantyPeriodTv.setText("Period:" + warrantyPeriod);
+        }
+        if (dangerousGoods != null) {
+            dangerousGoodsTv.setText("Dangerous:" + dangerousGoods);
+        }
+
+        if (categoryList != null && categoryList.size() > 0) {
+            Constants.ADDING_PRODUCT = false;
+        } else {
+//            Constants.ADDING_PRODUCT = true;
+//            Intent i = new Intent(AddProduct.this, ChooseMainCategory.class);
+//            categoryList.clear();
+//            startActivityForResult(i, 1);
+            Constants.EDITING_PRODUCT = true;
+
+            if (!Constants.ADDING_PRODUCT_BACK) {
+                Constants.ADDING_PRODUCT = true;
+                sellingTo = 1;
+            } else {
+                finish();
+            }
+        }
+        if (EditProductVariation.hashMapHashMap != null && EditProductVariation.hashMapHashMap.size() > 0) {
+            productVariationSubtitle.setText("Color and size selected");
+        } else {
+
+        }
     }
+
+    private void setupAttributesLayout() {
+        final LinearLayout options_layout = (LinearLayout) findViewById(R.id.layout);
+        options_layout.removeAllViews();
+        for (final Map.Entry<String, Object> entry : AddProduct.productAttributesMap.entrySet()) {
+            final String key = entry.getKey();
+            String value = entry.getValue().toString();
+            LayoutInflater inflater = LayoutInflater.from(this);
+            final View to_add = inflater.inflate(R.layout.product_attributes_layout,
+                    options_layout, false);
+//                ImageView  delete = to_add.findViewById(R.id.delete);
+            TextInputEditText subtitle = to_add.findViewById(R.id.subtitle);
+            TextInputLayout keu = to_add.findViewById(R.id.TextInputLayout);
+            ImageView delete = to_add.findViewById(R.id.delete);
+            ImageView edit = to_add.findViewById(R.id.edit);
+            keu.setHint(key);
+            subtitle.setText(value);
+            options_layout.addView(to_add);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    options_layout.removeView(to_add);
+                    AddProduct.productAttributesMap.remove(entry.getKey());
+                }
+            });
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(EditProduct.this, ChooseAttributesAgain.class);
+                    i.putExtra("attribute", key);
+                    startActivity(i);
+                }
+            });
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +227,8 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
         }
+        Constants.ADDING_PRODUCT = true;
+        Constants.EDITING_PRODUCT = true;
         this.setTitle("Edit Product");
         Intent i = getIntent();
         productId = i.getStringExtra("productId");
@@ -127,6 +242,7 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
             @Override
             public void onClick(View view) {
                 fromWhere = 1;
+                Constants.ADDING_PRODUCT = true;
                 Intent i = new Intent(EditProduct.this, ChooseMainCategory.class);
                 categoryList.clear();
                 startActivityForResult(i, 1);
@@ -159,6 +275,30 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         productContents = findViewById(R.id.productContents);
         weightChosen = findViewById(R.id.weightChosen);
         warrantyChosen = findViewById(R.id.warrantyChosen);
+
+
+        productVariationSubtitle = findViewById(R.id.productVariationSubtitle);
+
+        productModel = findViewById(R.id.productModel);
+        productVariation = findViewById(R.id.productVariation);
+        warrantyPeriodTv = findViewById(R.id.warrantyPeriod);
+        cardAttr = findViewById(R.id.cardAttr);
+
+
+        cardAttr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Constants.RE_ATTRIBUTES = true;
+                if (ChooseOtherMainCategory.activity != null) {
+                    ChooseOtherMainCategory.activity.finish();
+                }
+                Intent i = new Intent(EditProduct.this, ChooseAttributes.class);
+                startActivity(i);
+
+                finish();
+            }
+        });
+
         productIdd.setText("Product Id: " + productId);
 
 
@@ -172,7 +312,11 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
         warrantyChosen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWarrantyAlert();
+//                showWarrantyAlert();
+//                showWarrantyAlert();
+                Intent i = new Intent(EditProduct.this, ChooseWarrenty.class);
+                i.putExtra("addingProduct", "yes");
+                startActivity(i);
             }
         });
 
@@ -184,6 +328,12 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
             }
         });
 
+        productVariation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(EditProduct.this, EditProductVariation.class));
+            }
+        });
 
         showPickedPictures();
 
@@ -300,23 +450,28 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                     map.put("category", categoryList);
                     map.put("quantityAvailable", Integer.parseInt(quantityAvailable.getText().toString()));
                     map.put("brandName", brandName.getText().toString());
+                    map.put("model", productModel.getText().toString());
                     map.put("productContents", productContents.getText().toString());
                     map.put("warrantyType", whichWarranty);
                     map.put("productWeight", productWeight);
                     map.put("dimen", dimens);
+                    map.put("productAttributes", product.getProductAttributes());
+                    map.put("attributesWithPics", EditProductVariation.uploadedMap);
+                    map.put("newAttributes", EditProductVariation.hashMapHashMap);
 
                     mDatabase.child("Products").child(productId).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             int count = 0;
-
+                            progressBar.setVisibility(View.GONE);
                             if (imageUrl.size() != 0) {
 
                                 for (String img : imageUrl) {
-
-                                    putPictures(img, "" + productId, count);
-                                    count++;
-                                    observer.onUploaded(count, imageUrl.size());
+                                    if (!img.contains("firebasestorage")) {
+                                        putPictures(img, "" + productId, count);
+                                        count++;
+                                        observer.onUploaded(count, imageUrl.size());
+                                    }
 
                                 }
                             } else {
@@ -416,12 +571,30 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
     }
 
     private void getDataFromServer() {
-        mDatabase.child("Products").child(productId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Products").child(Constants.PRODUCT_ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     product = dataSnapshot.getValue(Product.class);
                     if (product != null) {
+                        if (product.getAttributesWithPics() != null && dataSnapshot.child("newAttributes").getValue() != null) {
+                            HashMap<String, ArrayList<NewProductModel>> newMap = new HashMap<>();
+                            for (DataSnapshot color : dataSnapshot.child("newAttributes").getChildren()) {
+                                ArrayList<NewProductModel> newProductModelArrayList = new ArrayList<>();
+                                for (DataSnapshot size : color.getChildren()) {
+                                    NewProductModel countModel = size.getValue(NewProductModel.class);
+                                    if (countModel != null) {
+                                        newProductModelArrayList.add(countModel);
+                                    }
+                                    newMap.put(color.getKey(), newProductModelArrayList);
+                                }
+
+                            }
+                            product.setProductCountHashmap(newMap);
+
+                        }
+                        SharedPrefs.setProduct(product);
+
                         e_title.setText(product.getTitle());
                         e_subtitle.setText(product.getSubtitle() + "");
                         e_costPrice.setText(product.getCostPrice() + "");
@@ -442,17 +615,26 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
                         e_oldWholesalePrice.setText("" + product.getOldWholeSalePrice());
                         e_oldRetailPrice.setText("" + product.getOldRetailPrice());
                         newSku = product.getSku();
-                        if (product.getPictures() != null) {
-                            for (int i = 0; i < product.getPictures().size(); i++) {
-                                selectedAdImages.add(new SelectedAdImages(product.getPictures().get(i)));
-                            }
+                        AddProduct.categoryList = product.getCategory();
+                        if (product.getProductAttributes() != null && product.getProductAttributes().size() > 0) {
+                            AddProduct.productAttributesMap = product.getProductAttributes();
+                            setupAttributesLayout();
                         }
+//                        if (product.getPictures() != null) {
+//                            for (int i = 0; i < product.getPictures().size(); i++) {
+//                                selectedAdImages.add(new SelectedAdImages(product.getPictures().get(i)));
+//                                imageUrl.add(product.getPictures())
+//                            }
+//                        }
+                        imageUrl = product.getPictures();
                         recyclerView.setVisibility(View.VISIBLE);
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
+                        adapter.setMobileAds(imageUrl);
                         warrantyChosen.setText("Warranty chosen: " + product.getWarrantyType() == null ? "" : product.getWarrantyType());
                         whichWarranty = product.getWarrantyType();
                         productContents.setText(product.getProductContents());
                         brandName.setText(product.getBrandName());
+                        chooseVendor.setText(product.getVendor().getStoreName() == null ? product.getVendor().getVendorName() : product.getVendor().getStoreName());
                         weightChosen.setText(product.getProductWeight() == null ? "Choose weight" : "Product Weight: " + product.getProductWeight());
                         if (product.getCategory() != null) {
                             categoryList = product.getCategory();
@@ -619,6 +801,8 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (item.getItemId() == android.R.id.home) {
+            Constants.ADDING_PRODUCT = false;
+            Constants.EDITING_PRODUCT = false;
 
             finish();
         }
@@ -632,8 +816,18 @@ public class EditProduct extends AppCompatActivity implements ProductObserver {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Constants.ADDING_PRODUCT = false;
+        Constants.EDITING_PRODUCT = false;
+
+    }
+
+    @Override
     public void onUploaded(int count, int arraySize) {
         if (count == arraySize) {
+            Constants.ADDING_PRODUCT = false;
+            Constants.EDITING_PRODUCT = false;
             Intent i = new Intent(EditProduct.this, ProductUploaded.class);
             startActivity(i);
             finish();

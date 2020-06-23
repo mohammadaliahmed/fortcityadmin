@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.appsinventiv.toolsbazzaradmin.Models.CompanyDetailsModel;
 import com.appsinventiv.toolsbazzaradmin.Models.Customer;
 import com.appsinventiv.toolsbazzaradmin.Models.Employee;
+import com.appsinventiv.toolsbazzaradmin.Models.Product;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -46,6 +47,19 @@ public class SharedPrefs {
     public static Employee getEmployee() {
         Gson gson = new Gson();
         Employee employee = gson.fromJson(preferenceGetter("employeeModel"), Employee.class);
+        return employee;
+    }
+
+    public static void setProduct(Product model) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(model);
+        preferenceSetter("Product", json);
+    }
+
+    public static Product getProduct() {
+        Gson gson = new Gson();
+        Product employee = gson.fromJson(preferenceGetter("Product"), Product.class);
         return employee;
     }
 

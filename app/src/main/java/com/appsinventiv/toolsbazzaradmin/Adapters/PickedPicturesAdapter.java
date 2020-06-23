@@ -33,6 +33,12 @@ public class PickedPicturesAdapter extends RecyclerView.Adapter<PickedPicturesAd
         this.option = option;
     }
 
+
+    public void setMobileAds(List<String> mobileAds) {
+        this.mobileAds = mobileAds;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.picked_images, parent, false);

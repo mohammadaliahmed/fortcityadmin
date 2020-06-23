@@ -96,6 +96,8 @@ public class ProductReviews extends AppCompatActivity implements RejectCallbacks
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.ADDING_PRODUCT_BACK = false;
+
                 startActivity(new Intent(ProductReviews.this, AddProduct.class));
             }
         });

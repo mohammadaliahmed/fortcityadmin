@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.appsinventiv.toolsbazzaradmin.Activities.Products.AddProduct;
+import com.appsinventiv.toolsbazzaradmin.Activities.Products.EditProduct;
 import com.appsinventiv.toolsbazzaradmin.R;
+import com.appsinventiv.toolsbazzaradmin.Utils.Constants;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,7 +46,13 @@ public class DangerousGoods extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DangerousGoods.this, AddProduct.class));
+                Constants.ADDING_PRODUCT_BACK = false;
+                if (Constants.EDITING_PRODUCT) {
+                    startActivity(new Intent(DangerousGoods.this, EditProduct.class));
+                } else {
+                    startActivity(new Intent(DangerousGoods.this, AddProduct.class));
+
+                }
 
             }
         });
@@ -65,10 +73,10 @@ public class DangerousGoods extends AppCompatActivity {
         itemList.add("None");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        adapter = new ChooseOptionAdapter(this, itemList, "dangerous",new ChooseOptionAdapter.ChooseOptionCallback() {
+        adapter = new ChooseOptionAdapter(this, itemList, "dangerous", new ChooseOptionAdapter.ChooseOptionCallback() {
             @Override
             public void onOptionSelected(String value) {
-                AddProduct.dangerousGoods=value;
+                AddProduct.dangerousGoods = value;
 
             }
         });

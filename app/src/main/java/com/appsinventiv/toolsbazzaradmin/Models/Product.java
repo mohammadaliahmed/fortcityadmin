@@ -35,11 +35,57 @@ public class Product {
     int positiveCount, neutralCount, negativeCount;
     boolean active;
     String warrantyPeriod, warrantyPolicy, dangerousGood;
-    HashMap<String, String> productAttributes;
+    HashMap<String, Object> productAttributes;
     String productModel;
+    HashMap<String, ArrayList<NewProductModel>> newMap = new HashMap<>();
+    ArrayList<NewProductModel> newProductModelArrayList = new ArrayList<>();
+    HashMap<String,ArrayList<NewProductModel>> productCountHashmap;
+    HashMap<String,String> attributesWithPics;
+
+
 
 
     public Product() {
+    }
+
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel;
+    }
+
+    public HashMap<String, ArrayList<NewProductModel>> getNewMap() {
+        return newMap;
+    }
+
+    public void setNewMap(HashMap<String, ArrayList<NewProductModel>> newMap) {
+        this.newMap = newMap;
+    }
+
+    public ArrayList<NewProductModel> getNewProductModelArrayList() {
+        return newProductModelArrayList;
+    }
+
+    public void setNewProductModelArrayList(ArrayList<NewProductModel> newProductModelArrayList) {
+        this.newProductModelArrayList = newProductModelArrayList;
+    }
+
+    public HashMap<String, ArrayList<NewProductModel>> getProductCountHashmap() {
+        return productCountHashmap;
+    }
+
+    public void setProductCountHashmap(HashMap<String, ArrayList<NewProductModel>> productCountHashmap) {
+        this.productCountHashmap = productCountHashmap;
+    }
+
+    public HashMap<String, String> getAttributesWithPics() {
+        return attributesWithPics;
+    }
+
+    public void setAttributesWithPics(HashMap<String, String> attributesWithPics) {
+        this.attributesWithPics = attributesWithPics;
     }
 
     @Override
@@ -66,6 +112,16 @@ public class Product {
         return id != null ? id.hashCode() : 0;
     }
 
+    public HashMap<String, Object> getProductAttributes() {
+        return productAttributes;
+    }
+
+    public void setProductAttributes(HashMap<String, Object> productAttributes) {
+        this.productAttributes = productAttributes;
+    }
+
+
+
     public Product(String id, String title, String subtitle, boolean active,
                    int sku, String thumbnailUrl, String mainCategory, String subCategory,
                    long time, float costPrice, float wholeSalePrice, float retailPrice,
@@ -79,7 +135,7 @@ public class Product {
                    ArrayList<String> category, int quantityAvailable,
                    String brandName, String productContents, String warrantyType, String productWeight,
                    String dimen, String uploadedBy, String sellerProductStatus,
-                   String warrantyPeriod, String warrantyPolicy, String dangerousGood,String productModel
+                   String warrantyPeriod, String warrantyPolicy, String dangerousGood, String productModel
 
 
     ) {

@@ -476,7 +476,6 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
                 categoryList, Integer.parseInt(e_quantityAvailable.getText().toString()),
                 brandName.getText().toString(),
                 productContents.getText().toString(),
-
                 whichWarranty,
                 productWeight,
                 dimens, "admin",
@@ -867,10 +866,19 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
         if (categoryList != null && categoryList.size() > 0) {
             Constants.ADDING_PRODUCT = false;
         } else {
-            Constants.ADDING_PRODUCT = true;
-            Intent i = new Intent(AddProduct.this, ChooseMainCategory.class);
-            categoryList.clear();
-            startActivityForResult(i, 1);
+//            Constants.ADDING_PRODUCT = true;
+//            Intent i = new Intent(AddProduct.this, ChooseMainCategory.class);
+//            categoryList.clear();
+//            startActivityForResult(i, 1);
+            if (!Constants.ADDING_PRODUCT_BACK) {
+                Constants.ADDING_PRODUCT = true;
+                sellingTo = 1;
+                Intent i = new Intent(AddProduct.this, ChooseMainCategory.class);
+                categoryList.clear();
+                startActivityForResult(i, 1);
+            } else {
+                finish();
+            }
         }
         if (ChooseProductVariation.hashMapHashMap != null && ChooseProductVariation.hashMapHashMap.size() > 0) {
             productVariationSubtitle.setText("Color and size selected");
@@ -944,6 +952,7 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            categoryList.clear();
 
             finish();
         }
@@ -973,6 +982,8 @@ public class AddProduct extends AppCompatActivity implements ProductObserver {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        categoryList.clear();
+
 
     }
 }
